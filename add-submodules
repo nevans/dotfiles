@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# this can be useful e.g. when adding plugin repos that have already been cloned
+
+gitDirs=`find -type d -name ".git" |
+  sed -e 's|.git$||' -e 's|./||' -e 's|/$||' |
+  grep -v "^$"`
+
+for i in ${gitDirs[@]}; do
+  echo handling $i
+  pushd $i >/dev/null
+  fetchUrl=`git remote -v | awk '/fetch/ {print $2}'`
+  popd>/dev/null
+  if [[ -z $fetchUrl ]]; then
+    continue
+  else
+    echo "    Fetch URL = $fetchUrl"
+  fi
+  existing=`grep -A5  $i ./.gitmodules | grep $fetchUrl`
+  if [[ -z $existing ]]; then
+    echo "    Adding missing submodule"
+    git submodule add "$fetchUrl" "$i"
+  fi
+done
