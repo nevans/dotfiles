@@ -140,7 +140,7 @@ let ruby_space_errors = 1
 let ruby_minlines = 100
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Local customizations                                                   {{{1
+" Local customizations (per-machine or private config)                   {{{1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " local customizations in ~/.vimrc_local

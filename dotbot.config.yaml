@@ -6,12 +6,17 @@
 - clean: ['~', '~/.config']
 
 - create:
-    - ~/.config
     - ~/.cache
+    - ~/.config
+    - ~/.config/bash.d
+    - ~/.config/shell
+    - ~/.config/zsh.d
+    - ~/src
 
 - link:
-    ~/.vim:   vim
-    ~/.vimrc: vimrc
+    ~/.bash_profile:
+    ~/.vim:
+    ~/.vimrc:
 
 - shell:
   - git submodule sync --recursive
