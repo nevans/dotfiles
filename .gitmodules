@@ -2,3 +2,60 @@
 	path = dotbot
 	url = https://github.com/anishathalye/dotbot
 	ignore = dirty
+[submodule "vim/pack/tpope/start/sensible"]
+	path = vim/pack/tpope/start/sensible
+	url = https://tpope.io/vim/sensible.git
+[submodule "vim/pack/tpope/start/vim-endwise"]
+	path = vim/pack/tpope/start/vim-endwise
+	url = git://github.com/tpope/vim-endwise.git
+[submodule "vim/pack/tpope/start/sleuth"]
+	path = vim/pack/tpope/start/sleuth
+	url = https://tpope.io/vim/sleuth.git
+[submodule "vim/pack/tpope/start/unimpaired"]
+	path = vim/pack/tpope/start/unimpaired
+	url = https://tpope.io/vim/unimpaired.git
+[submodule "vim/pack/tpope/start/surround"]
+	path = vim/pack/tpope/start/surround
+	url = https://tpope.io/vim/surround.git
+[submodule "vim/pack/tpope/start/commentary"]
+	path = vim/pack/tpope/start/commentary
+	url = https://tpope.io/vim/commentary.git
+[submodule "vim/pack/tpope/start/characterize"]
+	path = vim/pack/tpope/start/characterize
+	url = https://tpope.io/vim/characterize.git
+[submodule "vim/pack/tpope/start/eunuch"]
+	path = vim/pack/tpope/start/eunuch
+	url = https://tpope.io/vim/eunuch.git
+[submodule "vim/pack/tpope/start/fugitive"]
+	path = vim/pack/tpope/start/fugitive
+	url = https://tpope.io/vim/fugitive.git
+[submodule "vim/pack/tpope/start/bundler"]
+	path = vim/pack/tpope/start/bundler
+	url = https://tpope.io/vim/bundler.git
+[submodule "vim/pack/tpope/start/rake"]
+	path = vim/pack/tpope/start/rake
+	url = https://tpope.io/vim/rake.git
+[submodule "vim/pack/tpope/start/projectionist"]
+	path = vim/pack/tpope/start/projectionist
+	url = https://tpope.io/vim/projectionist.git
+[submodule "vim/pack/tpope/start/endwise"]
+	path = vim/pack/tpope/start/endwise
+	url = https://tpope.io/vim/endwise.git
+[submodule "vim/pack/tpope/start/repeat"]
+	path = vim/pack/tpope/start/repeat
+	url = https://tpope.io/vim/repeat.git
+[submodule "vim/pack/ui/start/vim-airline"]
+	path = vim/pack/ui/start/vim-airline
+	url = https://github.com/vim-airline/vim-airline
+[submodule "vim/pack/ui/start/papercolor-theme"]
+	path = vim/pack/ui/start/papercolor-theme
+	url = https://github.com/NLKNguyen/papercolor-theme.git
+[submodule "vim/pack/ui/start/jellybeans.vim"]
+	path = vim/pack/ui/start/jellybeans.vim
+	url = https://github.com/nanotech/jellybeans.vim.git
+[submodule "vim/pack/ui/start/tempus-themes-vim"]
+	path = vim/pack/ui/start/tempus-themes-vim
+	url = https://gitlab.com/protesilaos/tempus-themes-vim
+[submodule "vim/pack/dist/start/vim-ruby"]
+	path = vim/pack/dist/start/vim-ruby
+	url = https://github.com/vim-ruby/vim-ruby.git
