@@ -8,13 +8,12 @@
 - create:
     - ~/.cache
     - ~/.config
-    - ~/.config/bash.d
-    - ~/.config/shell
-    - ~/.config/zsh.d
     - ~/src
 
 - link:
     ~/.bash_profile:
+    ~/.bashrc:
+    ~/.bash.d:
     ~/.vim:
     ~/.vimrc:
 
