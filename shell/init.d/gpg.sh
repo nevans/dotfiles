@@ -1,3 +1,1 @@
-# vim:ft=bash
-
 export GPG_TTY=$(tty)

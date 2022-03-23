@@ -13,7 +13,8 @@
 - link:
     ~/.bash_profile:
     ~/.bashrc:
-    ~/.bash.d:
+    ~/.config/bash:
+    ~/.config/shell:
     ~/.vim:
     ~/.vimrc:
 

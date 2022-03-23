@@ -62,7 +62,7 @@ function sshagent_init {
     unset agentsocket
 
     # Finally, show what keys are currently in the agent
-    ssh-add -l
+    ssh-add -l || true
 }
 
 alias sagent="sshagent_init"

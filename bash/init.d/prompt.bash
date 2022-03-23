@@ -67,9 +67,9 @@ PROMPT_FINAL_SEGMENTS=( debian_chroot ruby last_status )
 
 # for 256 color chart, see e.g. https://robotmoon.com/256-colors/
 
-declare -A THEME_BG
-declare -A THEME_FG
-declare -A THEME_ICO
+declare -gA THEME_BG
+declare -gA THEME_FG
+declare -gA THEME_ICO
 
 THEME_ICO["error_status"]='❌ \$?:'
 THEME_BG[error_status]="3"
@@ -290,25 +290,25 @@ function __prompt_begin_part() {
 
 function __prompt_end_part() {
   local part="$1"
-  local -n prompt="$2"
+  local -n ppart="$2"
   case "$part" in
     left)
-      if [[ -n "${prompt}" ]]; then
-        prompt+="$(__prompt_set_fg_bg ${PROMPT_LAST_SEGMENT_BG} -)"
-        prompt+="${THEME_ICO[l-cap-hard]}\[${RESET_ATTRS}\]"
+      if [[ -n "${ppart}" ]]; then
+        ppart+="$(__prompt_set_fg_bg ${PROMPT_LAST_SEGMENT_BG} -)"
+        ppart+="${THEME_ICO[l-cap-hard]}\[${RESET_ATTRS}\]"
       fi
       ;;
     right)
       :
       ;;
     final)
-      prompt+=$(__prompt_theme_colors prompt)
-      prompt+="${THEME_ICO[prompt]}$_c_reset"
+      ppart+=$(__prompt_theme_colors prompt)
+      ppart+="${THEME_ICO[prompt]}$_c_reset"
       ;;
   esac
 }
 
-declare -A __PROMPT_SEP_CACHE=()
+declare -gA __PROMPT_SEP_CACHE=()
 
 # saves to __PROMPT_SEP_CACHE[${dir}${first}-${last}-${fg}-${bg}]
 #   cache[begin > foo]; cache[foo > bar]; cache[bar > end]
