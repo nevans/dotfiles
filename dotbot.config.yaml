@@ -3,22 +3,35 @@
       relink: true
       create: true
 
+- shell:
+  - - |
+      if [ "$CODESPACES" = true ] && [ -f ~/.bashrc ] && [ ! -f ~/codespace.bashrc ];
+      then
+        mv ~/.bashrc ~/codespace.bashrc
+      fi
+    - Check for Github Codespaces ~/.bashrc
+
 - clean: ['~', '~/.config']
 
 - create:
     - ~/.cache
     - ~/.config
+    - ~/.local
+    - ~/.local/bin
+    - ~/bin
     - ~/src
+    - ~/tmp
 
 - link:
     ~/.bash_profile:
     ~/.bashrc:
     ~/.config/bash:
     ~/.config/shell:
-    ~/.vim:
-    ~/.vimrc:
+    ~/.dotfiles: ''
     ~/.gitconfig:
     ~/.gitignore:
+    ~/.vim:
+    ~/.vimrc:
 
 - shell:
   - git submodule sync --recursive
