@@ -3,10 +3,10 @@
 # for examples
 
 # If not running interactively, don't do anything
-case $- in
-    *i*) ;;
-      *) return;;
-esac
+case $- in *i*) ;; *) return;; esac
+[ -z "$PS1" ] && return
+[ -n "$bashrc_loaded" ] && return
+export bashrc_loaded=1
 
 # common functions used by other init scripts
 . "$HOME/.config/shell/fns.sh"

@@ -75,6 +75,16 @@ set expandtab           " and always use spaces rather than tabs
 set tabstop=8           " but show me tab chars as great big 8-spaced monsters
 set textwidth=80
 
+" As of version 8, vim enables the mouse by default - but only if no ~/.vimrc
+" is found. Enable that unconditionally for Termux as it's useful with touch:
+set mouse=a
+
+" Scroll only one line for mouse wheel events to get smooth scrolling on touch screens
+map <ScrollWheelUp> <C-Y>
+imap <ScrollWheelUp> <C-X><C-Y>
+map <ScrollWheelDown> <C-E>
+imap <ScrollWheelDown> <C-X><C-E>
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " State config                                                           {{{1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
