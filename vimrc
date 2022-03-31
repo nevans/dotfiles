@@ -103,9 +103,9 @@ set secure " ":autocmd", shell and write commands are not allowed in ".vimrc" in
 
 " Move swapfiles, persistent undofile, and backup files
 try
-    set directory=~/.vim/swap//,~/tmp//,tmp,/tmp//,.
-    set undodir=~/.vim/undo//
-    set backupdir=~/.vim/backup//,~/tmp//,tmp,/tmp//,.
+    set directory=~/.vim/swap/,~/tmp/,tmp,/tmp/,.
+    set undodir=~/.vim/undo/
+    set backupdir=~/.vim/backup/,~/tmp/,tmp,/tmp/,.
     set undofile
 catch
 endtry
