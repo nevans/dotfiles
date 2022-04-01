@@ -45,13 +45,13 @@
 	path = vim/pack/ui/start/vim-airline
 	url = https://github.com/vim-airline/vim-airline
 [submodule "vim/pack/ui/start/papercolor-theme"]
-	path = vim/pack/ui/start/papercolor-theme
+	path = vim/pack/colorschemes/start/papercolor-theme
 	url = https://github.com/NLKNguyen/papercolor-theme.git
 [submodule "vim/pack/ui/start/jellybeans.vim"]
-	path = vim/pack/ui/start/jellybeans.vim
+	path = vim/pack/colorschemes/start/jellybeans.vim
 	url = https://github.com/nanotech/jellybeans.vim.git
 [submodule "vim/pack/ui/start/tempus-themes-vim"]
-	path = vim/pack/ui/start/tempus-themes-vim
+	path = vim/pack/colorschemes/start/tempus-themes-vim
 	url = https://gitlab.com/protesilaos/tempus-themes-vim
 [submodule "vim/pack/dist/start/vim-ruby"]
 	path = vim/pack/dist/start/vim-ruby

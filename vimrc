@@ -121,6 +121,7 @@ set background=dark
 set termguicolors
 let g:tempus_enforce_background_color=1
 
+" n.b: colorschemes are stored in ~/.vim/pack/colorschemes
 " colorscheme tempus_warp
 colorscheme tempus_night
 
@@ -142,7 +143,7 @@ endif
 
 let g:markdown_fenced_languages = ['ruby']
 
-let g:airline_statusline_ontop=1
+" let g:airline_statusline_ontop=1
 let g:airline#extensions#tabline#enabled = 1
 
 let ruby_operators = 1

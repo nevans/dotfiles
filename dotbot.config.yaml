@@ -4,12 +4,14 @@
       create: true
 
 - shell:
-  - - |
+  - description: Check for Github Codespaces ~/.bashrc
+    quiet: true
+    stderr: true
+    command: |
       if [ "$CODESPACES" = true ] && [ -f ~/.bashrc ] && [ ! -f ~/codespace.bashrc ];
       then
         mv ~/.bashrc ~/codespace.bashrc
       fi
-    - Check for Github Codespaces ~/.bashrc
 
 - clean: ['~', '~/.config']
 
