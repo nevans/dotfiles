@@ -6,7 +6,6 @@
 [[ $- =~ "i" ]] || return 0
 [[ -z "$PS1" ]] && return 0
 [[ -n "$bashrc_loaded" ]] && return 0
-export bashrc_loaded=1
 
 # common functions used by other init scripts
 # TODO: move "shell" stuff to "profile"
@@ -28,4 +27,5 @@ source_config_dir "local/bash/init.d"
 path_prepend PATH "$HOME/.local/bin"
 path_prepend PATH "$HOME/bin"
 
+bashrc_loaded=1
 # vim:ft=bash
