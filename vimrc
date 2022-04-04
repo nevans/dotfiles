@@ -39,12 +39,30 @@ set listchars=trail:_,tab:>-,precedes:<,extends:>
 
 set foldlevelstart=99   " always start unfolded
 
-" and don't bounce around for the sign column; override the number column
-" but fallback to permanent signcolumn for older versions of vim
-if has('signs')
-  set signcolumn=yes
-  silent! set signcolumn=number
-endif
+set signcolumn=yes
+" above this width, signcolumn will be "yes"
+" below this width, signcolumn will be "number"
+let g:dynamic_signcolumn_width=100
+function! UpdateDynamicSignColumns()
+  let currwin=winnr()
+  windo call UpdateDynamicSignColumn()
+  execute currwin .. 'wincmd w'
+endfunction
+
+function! UpdateDynamicSignColumn()
+  if g:dynamic_signcolumn_width && g:dynamic_signcolumn_width < winwidth(0)
+    if &signcolumn != 'yes'
+      setlocal signcolumn=yes
+    endif
+  elseif &signcolumn != 'number'
+    setlocal signcolumn=number
+  endif
+endfunction
+
+augroup dynsigns
+  autocmd!
+  autocmd CursorHold * noautocmd call UpdateDynamicSignColumns()
+augroup END
 
 set wildmode=list:longest,full
 set completeopt=menu,menuone,popup
