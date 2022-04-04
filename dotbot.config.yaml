@@ -38,3 +38,16 @@
 - shell:
   - git submodule sync --recursive
   - git submodule update --init --recursive
+
+  - description: Update vim helptags
+    quiet: true
+    stdin: true
+    stderr: true
+    stdout: true
+    command: vim -e "+packload | helptags ALL | qall"
+
+  - description: Install fzf
+    quiet: true
+    stderr: true
+    stdout: true
+    command: ./vim/pack/fzf/start/fzf/install --bin

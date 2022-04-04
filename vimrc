@@ -7,8 +7,16 @@
 " Basic editor config                                                    {{{1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" The most important "baseline" settings are in "sensible.vim".  So I've
-" (mostly) removed setting those values explicitly, below.
+" Starting with 7.4.2111 & 8.0. vim's defaults were much improved.  Howev
+" "defaults.vim" isn't auto-loaded when vimrc is present., since vim 8.0.  Of
+" course, I diidn't learn about that until six years later... (2022)!
+"
+" The next most important "baseline" settings are in "sensible.vim".
+" rWhere the two overlap, I'll mostly prefer "sensible.vim".
+"
+" In 2022, I *finally* removed my own redundant settings from this file.
+unlet! skip_defaults_vim
+source $VIMRUNTIME/defaults.vim
 runtime! plugin/sensible.vim
 
 " I used comma as mapleader for two decades.  When I got a keyboard with a
@@ -18,7 +26,6 @@ runtime! plugin/sensible.vim
 " let mapleader=","
 let mapleader = " "
 
-set showcmd             " always show the partial command in progress, below the status line
 set showtabline=2       " always show tabline
 set cmdheight=2         " avoids some unnecessary <hit-enter> prompts
 set shortmess=atIoO     " abbreviate and truncate messages, avoiding 'hit enter' prompts
@@ -31,15 +38,6 @@ set list                " show tabs and trailing whitespace explicitly
 set listchars=trail:_,tab:>-,precedes:<,extends:>
 
 set foldlevelstart=99   " always start unfolded
-
-" show line numbers relative to current line  {{{2
-" BUT, only in current buffer, and not in insert mode.
-" set relativenumber      " trying out relative numbers (shows current number)
-" augroup numbertoggle
-"   autocmd!
-"   autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
-"   autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
-" augroup END " }}}2
 
 " and don't bounce around for the sign column; override the number column
 " but fallback to permanent signcolumn for older versions of vim
@@ -54,7 +52,6 @@ set completeopt=menu,menuone,popup
 set updatetime=200      " default of 4000 doesn't play as well with coc.nvim
 
 set hlsearch            " highlight all searches
-set incsearch           " shows results before hitting enter
 set magic               " use vim-style regex excaping
 
 set visualbell          " beeps are annoying; flashes less so.
@@ -75,14 +72,10 @@ set expandtab           " and always use spaces rather than tabs
 set tabstop=8           " but show me tab chars as great big 8-spaced monsters
 set textwidth=80
 
-" As of version 8, vim enables the mouse by default - but only if no ~/.vimrc
-" is found. Enable that unconditionally for Termux as it's useful with touch:
-set mouse=a
-
 " Scroll only one line for mouse wheel events to get smooth scrolling on touch screens
-map <ScrollWheelUp> <C-Y>
-imap <ScrollWheelUp> <C-X><C-Y>
-map <ScrollWheelDown> <C-E>
+map  <ScrollWheelUp>   <C-Y>
+imap <ScrollWheelUp>   <C-X><C-Y>
+map  <ScrollWheelDown> <C-E>
 imap <ScrollWheelDown> <C-X><C-E>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -109,9 +102,6 @@ try
     set undofile
 catch
 endtry
-
-" from :help last-position-jump
-au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal g'\"" | endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Colors, highlighting, colorscheme, etc                                 {{{1
@@ -141,14 +131,77 @@ endif
 " Plugin configs                                                         {{{1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-let g:markdown_fenced_languages = ['ruby']
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Plugin: airline                                          {{{2
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " let g:airline_statusline_ontop=1
 let g:airline#extensions#tabline#enabled = 1
+let g:airline_exclude_preview = 0
+let g:airline_section_c_only_filename = 0
+" let g:airline_experimental = 1  " enable new vim9 implementation
+let g:airline_powerline_fonts = 1
+let g:airline_symbols_ascii = 0
+
+" NB: no*, cv, ce, r? and ! do not actually display
+"  I added extra space where either vim or my terminal were ignorant of double
+"  wide characters.
+let g:airline_mode_map = {
+      \ '__':    '----',
+      \ 'n':     'N ✅', 'c':   'C :…',
+      \ 'i':     'I 📝', 'ic':  'I 🎱', 'ix':  'I 🔮',
+      \ 'R':     'R 📝', 'Rc':  'R 🎱', 'Rx':  'R 🔮',
+      \ 'Rv':    'Rv📝', 'Rvc': 'Rv🎱', 'Rvx': 'Rv🔮',
+      \ 'niI':   'N<<I', 'niR': 'N<<R', 'niV': 'N<<V',
+      \ 's':     'S ……', 'S':   'S ☰☰', '':  'S ▒▒',
+      \ 'vs':    'V…<S', 'Vs':  'V☰<S', 's': 'V▒<S',
+      \ 'v':     'V ……', 'V':   'V ☰☰', '':  'V ▒▒',
+      \ 't':     'T 💻', 'nt':  'N 💻',
+      \ 'multi': 'M 🎛️ ',
+      \ }
+
+" my symbols
+" opied and pasted from :help airline-customization
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
+
+let g:airline_symbols.spell    = '📖'   " see, it's a dictionary...
+let g:airline_symbols.paste    = '📋'   " from the clipboard
+let g:airline_symbols.readonly = '🔒✍️' " locked from writing
+let g:airline_symbols.crypt    = '🔓🔑' " unlocked with keyboard
+
+let g:airline#extensions#branch#format   = 1 " feature/foo -> foo
+let g:airline#extensions#branch#sha1_len = 6
+
+" TODO: fix unreadably low contrast of inactive splits
+" TODO: fix skinny width components
+" TODO: slimmer linenr, maxlinenr, colnr
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" TODO: move ft configs to ftplugins                       {{{2
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+let g:markdown_fenced_languages = ['ruby']
 
 let ruby_operators = 1
 let ruby_space_errors = 1
 let ruby_minlines = 100
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Custom mappings                                                        {{{1
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Enable TAB indent and SHIFT-TAB unindent
+"inoremap <S-TAB> <C-O><<
+vnoremap <silent> <TAB>   >gv
+vnoremap <silent> <S-TAB> <gv
+
+" quick search for visual selection
+vnoremap / y/<C-R>"<CR>
+
+" quick dirname in command mode
+cnoremap %% <c-r>=expand('%:h').'/'<cr>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Local customizations (per-machine or private config)                   {{{1

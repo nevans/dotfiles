@@ -54,5 +54,41 @@
 	path = vim/pack/colorschemes/start/tempus-themes-vim
 	url = https://gitlab.com/protesilaos/tempus-themes-vim
 [submodule "vim/pack/dist/start/vim-ruby"]
-	path = vim/pack/dist/start/vim-ruby
+	path = vim/pack/filetypes/start/vim-ruby
 	url = https://github.com/vim-ruby/vim-ruby.git
+[submodule "vim/pack/dir_views/start/nerdtree"]
+	path = vim/pack/dir_views/start/nerdtree
+	url = https://github.com/preservim/nerdtree
+[submodule "vim/pack/ui/start/vim-devicons"]
+	path = vim/pack/ui/start/vim-devicons
+	url = https://github.com/ryanoasis/vim-devicons.git
+[submodule "vim/pack/dir_views/start/nerdtree-git-plugin"]
+	path = vim/pack/dir_views/start/nerdtree-git-plugin
+	url = https://github.com/Xuyuanp/nerdtree-git-plugin.git
+[submodule "vim/pack/vim/pack/dir_views/start/vim-nerdtree-syntax-highlight"]
+	path = vim/pack/dir_views/start/vim-nerdtree-syntax-highlight
+	url = https://github.com/tiagofumo/vim-nerdtree-syntax-highlight.git
+[submodule "vim/pack/vim/pack/dir_views/start/nerdtree-buffer-ops"]
+	path = vim/pack/dir_views/start/nerdtree-buffer-ops
+	url = https://github.com/PhilRunninger/nerdtree-buffer-ops.git
+[submodule "vim/pack/vim/pack/fzf/start/fzf"]
+	path = vim/pack/fzf/start/fzf
+	url = https://github.com/junegunn/fzf.git
+[submodule "vim/pack/fzf/start/fzf.-vim"]
+	path = vim/pack/fzf/start/fzf.vim
+	url = https://github.com/junegunn/fzf.vim.git
+[submodule "vim/pack/ui/start/vim-airline-themes"]
+	path = vim/pack/ui/start/vim-airline-themes
+	url = https://github.com/vim-airline/vim-airline-themes.git
+[submodule "vim/pack/ui/start/vim-line-no-indicator"]
+	path = vim/pack/ui/start/vim-line-no-indicator
+	url = https://github.com/drzel/vim-line-no-indicator.git
+[submodule "vim/pack/ui/start/vim-devicons-emoji"]
+	path = vim/pack/ui/start/vim-devicons-emoji
+	url = https://github.com/adelarsq/vim-devicons-emoji.git
+[submodule "vim/pack/commands/start/vim-easy-align"]
+	path = vim/pack/commands/start/vim-easy-align
+	url = https://github.com/junegunn/vim-easy-align.git
+[submodule "vim/pack/ui/start/vim-gitgutter"]
+	path = vim/pack/ui/start/vim-gitgutter
+	url = https://github.com/airblade/vim-gitgutter.git
