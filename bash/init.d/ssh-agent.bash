@@ -1,5 +1,14 @@
+function sshagent_findsockets_in {
+    if [ -n "$1" ] && [ -d "$1" ]; then
+        find "$1" -uid $(id -u) -type s -name agent.\* 2>/dev/null
+    fi
+}
+
 function sshagent_findsockets {
-    find /tmp -uid $(id -u) -type s -name agent.\* 2>/dev/null
+    sshagent_findsockets_in "$TMPDIR"
+    if [ "$TMPDIR" != "/tmp" ]; then
+        sshagent_findsockets_in /tmp
+    fi
 }
 
 function sshagent_testsocket {
