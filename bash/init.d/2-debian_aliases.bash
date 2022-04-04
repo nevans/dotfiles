@@ -4,9 +4,13 @@
 
 # enable color support of ls and also add handy aliases
 if hash vivid 2>/dev/null; then
-    export LS_COLORS="$(vivid generate one-dark)"
+    LS_COLORS="$(vivid generate one-dark)"
+    export LS_COLORS
 elif hash dircolors 2>/dev/null; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+fi
+ncolors=$(tput colors)
+if [ -n "$ncolors" ] && [ "$ncolors" -ge 8 ]; then
     alias ls='ls --color=auto'
     #alias dir='dir --color=auto'
     #alias vdir='vdir --color=auto'
