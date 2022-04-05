@@ -7,7 +7,7 @@
 " Basic editor config                                                    {{{1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" Starting with 7.4.2111 & 8.0. vim's defaults were much improved.  Howev
+" Starting with 7.4.2111 & 8.0. vim's defaults were much improved.  However
 " "defaults.vim" isn't auto-loaded when vimrc is present., since vim 8.0.  Of
 " course, I diidn't learn about that until six years later... (2022)!
 "
@@ -39,30 +39,7 @@ set listchars=trail:_,tab:>-,precedes:<,extends:>
 
 set foldlevelstart=99   " always start unfolded
 
-set signcolumn=yes
-" above this width, signcolumn will be "yes"
-" below this width, signcolumn will be "number"
-let g:dynamic_signcolumn_width=100
-function! UpdateDynamicSignColumns()
-  let currwin=winnr()
-  windo call UpdateDynamicSignColumn()
-  execute currwin .. 'wincmd w'
-endfunction
-
-function! UpdateDynamicSignColumn()
-  if g:dynamic_signcolumn_width && g:dynamic_signcolumn_width < winwidth(0)
-    if &signcolumn != 'yes'
-      setlocal signcolumn=yes
-    endif
-  elseif &signcolumn != 'number'
-    setlocal signcolumn=number
-  endif
-endfunction
-
-augroup dynsigns
-  autocmd!
-  autocmd CursorHold * noautocmd call UpdateDynamicSignColumns()
-augroup END
+set signcolumn=yes      " managed dynamically via plugin/dynamic_signs.vim
 
 set wildmode=list:longest,full
 set completeopt=menu,menuone,popup
