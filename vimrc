@@ -72,6 +72,10 @@ map  <ScrollWheelUp>   <C-Y>
 imap <ScrollWheelUp>   <C-X><C-Y>
 map  <ScrollWheelDown> <C-E>
 imap <ScrollWheelDown> <C-X><C-E>
+if &mouse =~# 'a'
+  set mouse-=a          " some terminals won't or can't override app mouse control
+  set mouse+=nvi        " let terminal control mouse (& clipboard) in command mode
+endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " State config                                                           {{{1
@@ -102,13 +106,13 @@ endtry
 " Colors, highlighting, colorscheme, etc                                 {{{1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-set background=dark
-set termguicolors
-let g:tempus_enforce_background_color=1
+if $COLORTERM ==# 'truecolor'
+  set termguicolors
+endif
 
-" n.b: colorschemes are stored in ~/.vim/pack/colorschemes
-" colorscheme tempus_warp
-colorscheme tempus_night
+set background=dark
+
+let g:tempus_enforce_background_color=1
 
 let g:jellybeans_overrides = {
 \  'background': {
@@ -119,8 +123,18 @@ let g:jellybeans_overrides = {
 if has('termguicolors') && &termguicolors
     let g:jellybeans_overrides['background']['guibg'] = 'none'
 endif
-" colorscheme torte
-" colorscheme PaperColor
+
+" n.b: colorscheme plugins are stored in ~/.vim/pack/colorschemes
+try
+  " colorscheme torte
+  " colorscheme PaperColor
+  " colorscheme tempus_warp
+  colorscheme tempus_night
+catch /^Vim\%((\a\+)\)\=:E185/
+  colorscheme default
+  set background=dark
+endtry
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plugin configs                                                         {{{1
