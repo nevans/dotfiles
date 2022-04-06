@@ -92,3 +92,21 @@
 [submodule "vim/pack/ui/start/vim-gitgutter"]
 	path = vim/pack/ui/start/vim-gitgutter
 	url = https://github.com/airblade/vim-gitgutter.git
+[submodule "vim-capslock"]
+	path = vim/pack/tpope/start/capslock
+	url = https://github.com/tpope/vim-capslock.git
+[submodule "vim-jdaddy"]
+	path = vim/pack/tpope/start/jdaddy
+	url = https://github.com/tpope/vim-jdaddy.git
+[submodule "vim/pack/tpope/start/obsession"]
+	path = vim/pack/tpope/start/obsession
+	url = https://github.com/tpope/vim-obsession.git
+[submodule "vim/pack/tpope/start/dispatch"]
+	path = vim/pack/tpope/start/dispatch
+	url = https://github.com/tpope/vim-dispatch.git
+[submodule "vim/pack/tpope/start/dotenv"]
+	path = vim/pack/tpope/start/dotenv
+	url = https://github.com/tpope/vim-dotenv.git
+[submodule "vim/pack/tpope/opt/flagship"]
+	path = vim/pack/tpope/opt/flagship
+	url = https://github.com/tpope/vim-flagship.git
