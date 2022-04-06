@@ -180,7 +180,7 @@ let g:airline_symbols.linenr    = ''
 let g:airline_symbols.colnr     = ''
 let g:airline_symbols.maxlinenr = '☰'
 
-# emoji > powerline or other nerd font symbols
+" emoji > powerline or other nerd font symbols
 let g:airline_symbols.spell    = '📖'   " see, it's a dictionary...
 let g:airline_symbols.paste    = '📋'   " from the clipboard
 let g:airline_symbols.readonly = '🔒✍️' " locked from writing
