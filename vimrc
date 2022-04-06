@@ -130,11 +130,11 @@ endif
 " Plugin: airline                                          {{{2
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" let g:airline_statusline_ontop=1
+" let g:airline_experimental = 1  " enable new vim9 implementation
+
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_exclude_preview = 0
 let g:airline_section_c_only_filename = 0
-" let g:airline_experimental = 1  " enable new vim9 implementation
 let g:airline_powerline_fonts = 1
 let g:airline_symbols_ascii = 0
 
@@ -161,6 +161,12 @@ if !exists('g:airline_symbols')
   let g:airline_symbols = {}
 endif
 
+" shrink to single char, removing superfluous whitespace and ':'
+let g:airline_symbols.linenr    = ''
+let g:airline_symbols.colnr     = ''
+let g:airline_symbols.maxlinenr = '☰'
+
+# emoji > powerline or other nerd font symbols
 let g:airline_symbols.spell    = '📖'   " see, it's a dictionary...
 let g:airline_symbols.paste    = '📋'   " from the clipboard
 let g:airline_symbols.readonly = '🔒✍️' " locked from writing
