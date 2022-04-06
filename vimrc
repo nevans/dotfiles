@@ -182,6 +182,20 @@ catch /^Vim\%((\a\+)\)\=:E185/
   set background=dark
 endtry
 
+augroup vimrc_colors
+  autocmd!
+
+  if !has('gui_running')
+    " I prefer to turn off bg (transparent) most of the time:
+    if $TERMUX_VERSION !~ '\d'
+      autocmd ColorScheme * hi! Normal  ctermbg=NONE guibg=NONE
+      autocmd ColorScheme * hi! NonText ctermbg=NONE guibg=NONE
+    else
+      " nevermind... nothing to see here
+    endif
+  endif
+
+augroup END
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plugin configs                                                         {{{1
