@@ -37,6 +37,11 @@ set number              " nice to know what line number I'm on
 set list                " show tabs and trailing whitespace explicitly
 set listchars=trail:_,tab:>-,precedes:<,extends:>
 
+if has('multi_byte') && &encoding ==# 'utf-8'
+  set fillchars+=vert:║
+endif
+" see also after/plugin/auto-origami
+
 set foldlevelstart=99   " always start unfolded
 
 set signcolumn=yes      " managed dynamically via plugin/dynamic_signs.vim

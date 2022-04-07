@@ -110,3 +110,6 @@
 [submodule "vim/pack/tpope/opt/flagship"]
 	path = vim/pack/tpope/opt/flagship
 	url = https://github.com/tpope/vim-flagship.git
+[submodule "vim/pack/ui/start/vim-auto-origami"]
+	path = vim/pack/ui/start/vim-auto-origami
+	url = https://github.com/benknoble/vim-auto-origami.git
