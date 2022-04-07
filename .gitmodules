@@ -113,3 +113,6 @@
 [submodule "vim/pack/ui/start/vim-auto-origami"]
 	path = vim/pack/ui/start/vim-auto-origami
 	url = https://github.com/benknoble/vim-auto-origami.git
+[submodule "vim/pack/colorschemes/opt/gruvbox"]
+	path = vim/pack/colorschemes/opt/gruvbox
+	url = https://github.com/morhetz/gruvbox.git

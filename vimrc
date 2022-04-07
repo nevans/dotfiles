@@ -81,6 +81,9 @@ if &mouse =~# 'a'
   set mouse-=a          " some terminals won't or can't override app mouse control
   set mouse+=nvi        " let terminal control mouse (& clipboard) in command mode
 endif
+if $TERM =~# 'tmux'
+  set ttymouse=sgr
+endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " State config                                                           {{{1
