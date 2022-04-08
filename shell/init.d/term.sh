@@ -1,6 +1,6 @@
 # only when sourced for interactive shells
-[ -t 0 ]      && return 0
-[ -z "$PS1" ] && return 0
+[ -t 0 ]      || return 0
+[ -n "$PS1" ] || return 0
 
 # Ideally apps would just query the terminal during initialization, e.g. using
 # DECRQSS.  Unfortunately, that isn't simple or reliable.
