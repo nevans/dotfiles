@@ -72,17 +72,60 @@ set expandtab           " and always use spaces rather than tabs
 set tabstop=8           " but show me tab chars as great big 8-spaced monsters
 set textwidth=80
 
-" Scroll only one line for mouse wheel events to get smooth scrolling on touch screens
-map  <ScrollWheelUp>   <C-Y>
-imap <ScrollWheelUp>   <C-X><C-Y>
-map  <ScrollWheelDown> <C-E>
-imap <ScrollWheelDown> <C-X><C-E>
-if &mouse =~# 'a'
-  set mouse-=a          " some terminals won't or can't override app mouse control
-  set mouse+=nvi        " let terminal control mouse (& clipboard) in command mode
-endif
-if $TERM =~# 'tmux'
-  set ttymouse=sgr
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" TERM/TERMINFO/COLORTERM, mouse, tmux, etc                              {{{1
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+if !has('gui_running')
+
+  " Scroll only one line for mouse wheel events to get smooth scrolling on touch screens
+  map  <ScrollWheelUp>   <C-Y>
+  imap <ScrollWheelUp>   <C-X><C-Y>
+  map  <ScrollWheelDown> <C-E>
+  imap <ScrollWheelDown> <C-X><C-E>
+
+  if &mouse =~# 'a'
+    set mouse-=a     " some terminals won't or can't override app mouse control
+    set mouse+=nvi   " let terminal control mouse (& clipboard) in command mode
+  endif
+
+  if $COLORTERM =~ '^\%(truecolor|24bit)$' || $TERM =~# '-direct$'
+    if &t_Co < 16777216
+      let &t_Co = 16777216 " terminfo probably returned 256!
+    endif
+  endif
+
+  if &term =~ '^\%(screen\|tmux\)'
+      let &t_Co = 16777216 " terminfo probably returned 256!
+      " Better mouse support, see  :help 'ttymouse'
+      set ttymouse=sgr
+
+      " Enable bracketed paste mode, see  :help xterm-bracketed-paste
+      let &t_BE = "\<Esc>[?2004h"
+      let &t_BD = "\<Esc>[?2004l"
+      let &t_PS = "\<Esc>[200~"
+      let &t_PE = "\<Esc>[201~"
+
+      " Enable focus event tracking, see  :help xterm-focus-event
+      let &t_fe = "\<Esc>[?1004h"
+      let &t_fd = "\<Esc>[?1004l"
+      execute "set <FocusGained>=\<Esc>[I"
+      execute "set <FocusLost>=\<Esc>[O"
+
+      " Enable modified arrow keys, see  :help arrow_modifiers
+      execute "silent! set <xUp>=\<Esc>[@;*A"
+      execute "silent! set <xDown>=\<Esc>[@;*B"
+      execute "silent! set <xRight>=\<Esc>[@;*C"
+      execute "silent! set <xLeft>=\<Esc>[@;*D"
+  endif
+
+  if &t_Co == 16777216
+    " these are only set automatically for xterm-*... :(
+    if empty(&t_8f) | let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum" | endif
+    if empty(&t_88) | let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum" | endif
+    let &termguicolors = v:true
+  endif
+
 endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -91,7 +134,7 @@ endif
 
 " !: Save and restore global variables that start with an uppercase letter, and don't contain a lowercase letter.
 " ': Maximum number of previously edited files for which the marks are remembered.
-" <: Maximum number of lines saved for each register.
+Tc, " <: Maximum number of lines saved for each register.
 " s: Maximum size of an item in Kbyte.  If zero then registers are
 " %: saves and restores the buffer list
 " h: Disable the effect of 'hlsearch' when loading the viminfo file.
@@ -113,10 +156,6 @@ endtry
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Colors, highlighting, colorscheme, etc                                 {{{1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-if $COLORTERM ==# 'truecolor'
-  set termguicolors
-endif
 
 set background=dark
 
