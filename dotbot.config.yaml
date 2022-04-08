@@ -41,6 +41,9 @@
       glob: true
       path: terminfo/**
 
+    ~/.ssh/ssh_config:
+      path: ssh/ssh_config
+
 - shell:
   - git submodule sync --recursive
   - git submodule update --init --recursive

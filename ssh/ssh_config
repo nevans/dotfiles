@@ -1,0 +1,23 @@
+#######################################################################
+# The first match for any setting is used; later matches are ignored.
+# So most settings at the top can only be overridden by CLI flags.
+
+#######################################################################
+# SendEnv
+# Needs AcceptEnv on server.  Can be removed later with "SendEnv -VAR".
+#
+SendEnv COLORTERM # gets weird if TERM isn't in server's terminfo db.
+SendEnv TERMINFO  # a path, or ncurses 6.1+ can read a base64 encoded entry.
+# use TERMINFO=$(infocmp -0qQ2) to populate the variable.
+
+#######################################################################
+# Includes
+# This is public, so Match and Host (etc) configs come from another repo.
+#
+# Files are sorted lexographically.
+Include ssh_config.d/*.conf
+
+#######################################################################
+# Defaults
+# At the bottom, so they can be overridden by included configs.
+#
