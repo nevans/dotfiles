@@ -1,3 +1,5 @@
 *.swp
+terminfo
+terminfo.tar
 vim/.netrwhist
 vim/pack/**/tags

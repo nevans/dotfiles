@@ -11,6 +11,7 @@
       if [ "$CODESPACES" = true ] && [ -f ~/.bashrc ] && [ ! -f ~/codespace.bashrc ];
       then
         mv ~/.bashrc ~/codespace.bashrc
+        scripts/dl-terminfo
       fi
 
 - clean: ['~', '~/.config']
@@ -34,6 +35,11 @@
     ~/.gitignore:
     ~/.vim:
     ~/.vimrc:
+
+    ~/.terminfo/:
+      if: test -d terminfo # run scripts/dl-terminfo to populate this
+      glob: true
+      path: terminfo/**
 
 - shell:
   - git submodule sync --recursive

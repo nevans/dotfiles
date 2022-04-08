@@ -1,0 +1,21 @@
+ARG UBUNTU_RELEASE=devel
+FROM ubuntu:$UBUNTU_RELEASE
+
+ENV LANG=C.UTF-8
+
+RUN set -ex; \
+    apt-get -y update; \
+    apt-get -y install --no-install-recommends \
+      ncurses-base \
+      ncurses-term \
+    ; \
+    apt-get -y clean; \
+    apt-get -y autoclean; \
+    apt-get -y autoremove; \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*; \
+    tar -cvf /terminfo-base.tar -C /lib/       terminfo; \
+    tar -cvf /terminfo-term.tar -C /usr/share/ terminfo; \
+    tar -Avf /terminfo-base.tar /terminfo-term.tar; \
+    mv /terminfo-base.tar terminfo.tar; \
+    rm /terminfo-term.tar; \
+    ls -halF /terminfo.tar

@@ -1,0 +1,43 @@
+#!/bin/bash
+set -euo pipefail
+
+cd "$( dirname "${BASH_SOURCE[0]}" )"
+
+terminfo_dir="$(readlink -f ../terminfo)"
+if [ -e "$terminfo_dir" ]; then
+  echo "Terminfo dir already exists: $terminfo_dir"
+  echo "Delete or move dir in order to download latest."
+  exit 1
+fi
+
+img=tmp-download-terminfo
+
+printf "Downloading terminfo into docker image ... "
+docker build \
+  --pull \
+  --quiet \
+  -t "$img" \
+  -f Dockerfile.terminfo . \
+  >/dev/null
+echo "✅"
+
+printf "Preparing container... "
+cid="$(docker create $img true)"
+echo "✅"
+
+cd ..
+
+printf "Copying terminfo ... "
+docker cp "$cid:/terminfo.tar" "$terminfo_dir.tar"
+echo "✅"
+
+printf "Extracting terminfo ... "
+tar xvf "$terminfo_dir.tar"
+echo "✅"
+
+printf "Removing container ... "
+docker container rm "$cid" >/dev/null
+echo "✅"
+
+echo "Downloaded!"
+tree terminfo
