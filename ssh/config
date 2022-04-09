@@ -1,0 +1,42 @@
+#######################################################################
+# The first match for any setting is used; later matches are ignored.
+# So most settings at the top can only be overridden by CLI flags.
+
+Host *
+  #####################################################################
+  # Control files
+  # use "ssh -MN user@host" to create a master connection
+  #
+  ControlMaster no
+  ControlPath ~/.ssh/control/%C
+  ControlPersist no
+
+  #####################################################################
+  # SendEnv
+  # Needs AcceptEnv on server.  Can be removed later with "SendEnv -VAR".
+  #
+  SendEnv LANG LC_* # already default for Ubuntu & Debian
+  SendEnv LANGUAGE
+  SendEnv COLORTERM # gets weird if TERM isn't in server's terminfo db.
+  SendEnv TERMINFO  # a path or (ncurses 6.1+) a base64 encoded entry.
+  # Can use TERMINFO=$(infocmp -0qQ2) to populate the variable.
+
+#######################################################################
+# Includes
+# This is public, so Match and Host (etc) configs come from another repo.
+#
+# Files are sorted lexographically.
+Include config.d/*.conf
+
+#######################################################################
+# Defaults
+# At the bottom, so they can be overridden by included configs.
+#
+
+# these are already the system default for Ubuntu & Debian,
+# but this config might be installed on a different OS.
+Host *
+    HashKnownHosts yes
+    GSSAPIAuthentication yes
+
+# vim: ft=sshconfig
