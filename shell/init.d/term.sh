@@ -1,42 +1,15 @@
-# only when sourced for interactive shells
+# only when stdin and stdout are TTY
 [ -t 0 ]      || return 0
+[ -t 1 ]      || return 0
+# only when sourced for interactive shells
 [ -n "$PS1" ] || return 0
 
-# Ideally apps would just query the terminal during initialization, e.g. using
-# DECRQSS.  Unfortunately, that isn't simple or reliable.
-#
-# In order to make everything work properly, the basic approach is as follows:
-# 1) an up-to-date terminfo DB (possibly in ~/.terminfo)
-# 2) an *appropriate* TERM variable for each terminal emulator, e.g: not xterm-*
+# See term.md for a "discussion" of the approach taken here.
 
-# TODO: query the terminal... but not in this file...
-# probably not safe to do inside
+# TODO: query the terminal... but maybe not in this file?
+# This may be unwise to do inside .profile scripts?
 
-# Unfortunately, the primary terminfo DB maintainer has been reluctant to
-# accomodate certain new extensions, even though they have achieved widespread
-# support elsewhere among terminal emulator implementations.  Most notably:
-# 24bit RGB support via Tc, rgb, setrgbf, and setrgbb.  And for whatever reason,
-# people often just skip terminfo/termcap and hardcode anyway.  So, instead of
-# using terminfo, many programs look at the $TERM and $COLORTERM environment
-# variables.
-#
-# So we'll also set a matching COLORTERM, for compatibility:
-# 1) always set $COLORTERM in supporting terminals (easy)
-# 2) always send $COLORTERM through SSH (not always possible)
-# 3) If we can trust our terminfo DB, we can use `tput colors` to set COLORTERM
-
-if [ -n "${COLORTERM-}" ]; then
-  if [ "$COLORTERM" = "truecolor" ] || [ "$COLORTERM" = "24bit" ]; then
-    # Many terminals set COLORTERM=truecolor, but use TERM=$term-256color.
-    # WEIRD.  Just use $term-direct or $term-truecolor instead!
-    case $TERM in
-      xterm-256color) TERM=xterm-direct ;; # in ncurses-term package
-      tmux-256color)  TERM=tmux-direct  ;; # in ncurses-term package
-      # I'm cheating with the above. It'll break older versions of tmux, etc.
-      # So... use up-to-date tmux!
-    esac
-  fi
-else
+if [ -z "${COLORTERM-}" ]; then
   case $TERM in
     *alacritty*  |\
     iTerm*.app   |\
@@ -50,20 +23,33 @@ else
     vscode*      |\
     iterm*       |\
     *truecolor   |\
-    *direct      )
-      # this is a lousy way to handle it... but it works!
+    *direct      |\
+    *-256color   )
+      # Strictly speaking, this is wrong.  Pragmatically: there isn't a single
+      # terminal I'd use in 2022 that supports 256color but not 24bit RGB.
+      #
+      # Normally, these terminals all set COLORTERM already.
+      # The most likely reason to be here is in an ssh session which lost the var.
       export COLORTERM=truecolor
       ;;
   esac
-
-  # Unfortunately, `tput colors` only returns 256--the result needs to fit in a
-  # 16-bit integer!
+else
+  if [ "$COLORTERM" = "24bit" ]; then
+    COLORTERM=truecolor # this seems to be more widely supported
+  fi
+  if [ "$COLORTERM" = "truecolor" ]; then
+    # Many terminals set COLORTERM=truecolor, but use TERM=$term-256color.
+    # "official" terminfo recommendation seems to be to use TERM=$term-direct
+    # instead.  But that's backwards incompatible with ANSI 8/16/256 colors!
+    #
+    # Better solution: add "Tc", "setrgbf", and "setrgbb" to 256color terminfos.
+    case $TERM in
+      xterm) TERM=xterm-256color ;; # TODO: add "Tc", "setrgbf", and "setrgbb"
+      tmux)  TERM=tmux-256color  ;; # TODO: add "Tc", "setrgbf", and "setrgbb"
+    esac
+  fi
 fi
 
-# Unfortunately, some apps will always check against hardcoded TERM names,
-# without querying terminfo or tput.  Some options for these programs:
-# 1) or update their config (or send a PR) to do it "the right way"
-# 2) create a shell script or alias that sets a different TERM env var
-# 3) create a terminfo alias like xterm-$REALTERM => $REALTERM
-#
-# e.g. my vimrc sets various termcap values based on TERM or COLORTERM
+# Unfortunately, some apps still rely at least partially on hardcoded TERM
+# names, without querying terminfo or the terminal.  This is one reason why so
+# many terminal emulators report "TERM-xterm-$term".
