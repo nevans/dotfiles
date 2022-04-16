@@ -1,0 +1,82 @@
+#!/bin/sh
+# Yeah, I should probably just convert this to bats. 😉
+# But creating a mini test runner from scratch was kinda fun!
+
+script_dir=$(CDPATH="" cd -- "$(dirname -- "$0")" && pwd)
+exec_dir=$(pwd)
+
+cd "$script_dir" || exit 1
+. ./fns.sh
+cd "$exec_dir" || exit 1
+
+red=$(tput setaf 1)
+green=$(tput setaf 2)
+sgr0=$(tput sgr0)
+
+COUNT_TESTS=0
+COUNT_PASSED=0
+COUNT_FAILED=0
+
+# foo bar; EXPECT $? to be 0   $LINENO
+# foo baz; EXPECT $? to be 1   $LINENO
+EXPECT () {
+  COUNT_TESTS=$(( COUNT_TESTS + 1 ))
+  actual=$1
+  shift
+  [ "$1" = "to" ] && shift
+  [ "$1" = "be" ] && shift
+  expected=$1
+  if [ -n "$2" ]; then
+    code=$(awk -F ';' "$2"'==NR{ print $1}' "$0")
+  else
+    # Debian's dash didn't support $LINENO prior to Nov 2021!
+    code='unknown $LINENO?'
+  fi
+  if [ "$actual" = "$expected" ]; then
+    COUNT_PASSED=$(( COUNT_PASSED + 1 ))
+    printf "%sPASS%s: \$(%s) => %s\n" "✅$green" "$sgr0" "$code" "$actual"
+  else
+    COUNT_FAILED=$(( COUNT_FAILED + 1 ))
+    printf "%sFAIL%s: \$(%s) => %s (expected %s)\n" "🛑$red" "$sgr0" "$code" "$actual" "$expected"
+  fi
+}
+
+TEST_SUMMARY () {
+  [ "$COUNT_FAILED" = 0 ] && color=$green || color=$red
+  echo "${color}Passed ${COUNT_PASSED}/${COUNT_TESTS}.  ${COUNT_FAILED} failed.${sgr0}"
+  [ "$COUNT_FAILED" = 0 ] && exit 0 || exit 1
+}
+
+# testing the tests...
+true ; EXPECT $? to be 0      49 # $LINENO
+:    ; EXPECT $? to be 0      50 # $LINENO
+false; EXPECT $? to be 1      51 # $LINENO
+false; EXPECT $? to be 1      51 # $LINENO
+
+# testing path_remove
+path=foo:bar:baz
+path_remove path "baz" ; EXPECT "$path" to be "foo:bar"  $LINENO
+path_remove path "foo" ; EXPECT "$path" to be "bar"      $LINENO
+path_remove path "bar" ; EXPECT "$path" to be ""         $LINENO
+path=foo:bar:baz
+path_remove path "bar" ; EXPECT "$path" to be "foo:baz"  $LINENO
+
+path=foo::bar::baz
+path_remove path ""    ; EXPECT "$path" to be "foo:bar:baz" $LINENO
+path=:foo:bar:baz
+path_remove path ""    ; EXPECT "$path" to be "foo:bar:baz" $LINENO
+
+# testing path_prepend
+path=foo:bar:baz
+path_prepend path "abc"; EXPECT "$path" to be "abc:foo:bar:baz"     $LINENO
+path_prepend path "abc"; EXPECT "$path" to be "abc:foo:bar:baz"     $LINENO
+path_prepend path "foo"; EXPECT "$path" to be "foo:abc:bar:baz"     $LINENO
+path_prepend path "baz"; EXPECT "$path" to be "baz:foo:abc:bar"     $LINENO
+
+# testing path_append
+path_append  path "baz"; EXPECT "$path" to be "foo:abc:bar:baz"     $LINENO
+path_append  path "etc"; EXPECT "$path" to be "foo:abc:bar:baz:etc" $LINENO
+path_append  path "abc"; EXPECT "$path" to be "foo:bar:baz:etc:abc" $LINENO
+path_remove  path "abc"; EXPECT "$path" to be "foo:bar:baz:etc"     $LINENO
+
+TEST_SUMMARY

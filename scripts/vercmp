@@ -37,9 +37,9 @@ if [ "$0" = "$BASH_SOURCE" ]; then
   if [ "--test" = "${1-}" ]; then
     # All tests
 
-    function P { printf "$@"; }
+    function P      { printf "$@"; }
     function EXPECT { printf "$@"; }
-    function CODE { awk $BASH_LINENO'==NR{print " "$2,$3,$4}' "$0"; }
+    function CODE   { awk $BASH_LINENO'==NR{print " "$2,$3,$4}' "$0"; }
     P 'Note: ++ (true) and __ (false) mean that V works correctly.\n'
 
     V 2.5    '!='  2.5      && P + || P _; EXPECT _; CODE

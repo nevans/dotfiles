@@ -1,12 +1,9 @@
-source_config_dir () {
-  local path="$HOME/.config/$1"
-  if [ -d "$path" ]; then
-    for script in $path/*; do
-      [ -f "$script" ] || continue
-      # shellcheck source=/dev/null
-      . "$script"
-    done
-  fi
+source_config_files () {
+  for script in "$@"; do
+    [ -f "$script" ] || continue
+    # shellcheck source=/dev/null
+    . "$script"
+  done
 }
 
 # This is *so* complicated compared to modern shells!
@@ -16,9 +13,9 @@ source_config_dir () {
 #
 # Modified to return result via variable named by $1, to avoid subshells.
 esc_posixly () {
-  local ref=$1
-  local unescaped=$2
-  local escaped=
+  ref=$1
+  unescaped=$2
+  escaped=
   while :
   do
     case $unescaped in
@@ -50,33 +47,49 @@ posixly_varlike () {
 
 # TODO: loop to remove all matches.
 path_remove () {
-  local ref="${1:?missing path var ref}"
-  local dir="${2:?missing removed dir}"
+  ref="${1:?missing path var ref}"
+  if [ -z ${2+set} ]; then : "${2?missing removed dir}"; fi
 
-  eval "local dirs=\$$ref"
-  # echo "$ref=$dirs removing $dir"
-  dirs=":$dirs:"
+  dir=$2
+  eval "orig=\$$ref"
+  updated=
+  while :
+  do
+    case $orig in
+      $dir:*)
+        : removing "$dir":
+        orig=${orig#$dir:}
+        ;;
+      *:$dir:*)
+        : removing :"$dir": -- ${orig%%:$dir:*}
+        updated="${updated}${orig%%:$dir:*}:"
+        orig=${orig#*:$dir:}
+        ;;
+      *:$dir)
+        : removing :"$dir"
+        updated="${updated}${orig%%":$dir"}"
+        break;
+        ;;
+      "$dir")
+        : remove only "$dir"
+        break
+        ;;
+      *)
+        : no "$dir" found
+        updated="${updated}${orig}"
+        break
+        ;;
+    esac
+  done
 
-  # bash: dirs="${dirs//:$dir:/:}"
-  local prefix="${dirs%%:$dir:*}"
-  local suffix="${dirs#*:$dir:}"
-  if [ "$prefix" != "$suffix" ]; then
-    dirs="${prefix}:${suffix}"
-  fi
-  # unlike bash, only removes first match
-  # and empty segments aren't removed.
-
-  dirs="${dirs%:}"
-  dirs="${dirs#:}"
-
-  # echo "$ref=$dirs removed $dir"
-  eval "$ref=\$dirs"
+  # echo "$ref=$updated removed $dir"
+  eval "$ref=\$updated"
 }
 
 path_append ()  {
   path_remove "${@}"
-  local ref="${1:?missing path var ref}"
-  local dir="${2:?missing appended dir}"
+  ref="${1:?missing path var ref}"
+  if [ -z ${2+set} ]; then : "${2?missing appended dir}"; fi
   eval "local dirs=\"\${${ref}:-}\""
   if [ -z "$dirs" ]; then
     dirs="$dir"
@@ -89,8 +102,8 @@ path_append ()  {
 
 path_prepend () {
   path_remove "${@}"
-  local ref="${1:?missing path var ref}"
-  local dir="${2:?missing prepended dir}"
+  ref="${1:?missing path var ref}"
+  if [ -z ${2+set} ]; then : "${2?missing prepended dir}"; fi
   eval "local dirs=\"\${${ref}:-}\""
   if [ -z "$dirs" ]; then
     dirs="$dir"

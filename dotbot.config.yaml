@@ -38,6 +38,7 @@
     ~/.dotfiles: ''
     ~/.gitconfig:
     ~/.gitignore:
+    ~/.profile:
     ~/.vim:
     ~/.vimrc:
 
