@@ -2,11 +2,13 @@
     link:
       relink: true
       create: true
+    shell:
+      stdin: true
+      stderr: true
+      stdout: true
 
 - shell:
   - description: Check for Github Codespaces ~/.bashrc
-    quiet: true
-    stderr: true
     command: |
       if [ "$CODESPACES" = true ] && [ -f ~/.bashrc ] && [ ! -f ~/codespace.bashrc ];
       then
@@ -65,4 +67,4 @@
     quiet: true
     stderr: true
     stdout: true
-    command: ./vim/pack/fzf/start/fzf/install --bin
+    command: ./vim/pack/fzf/start/fzf/install --xdg --completion --key-bindings --no-update-rc

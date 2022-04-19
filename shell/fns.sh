@@ -45,7 +45,6 @@ posixly_varlike () {
   esac
 }
 
-# TODO: loop to remove all matches.
 path_remove () {
   ref="${1:?missing path var ref}"
   if [ -z ${2+set} ]; then : "${2?missing removed dir}"; fi
