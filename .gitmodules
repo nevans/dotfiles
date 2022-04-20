@@ -4,43 +4,43 @@
 	ignore = dirty
 [submodule "vim/pack/tpope/start/sensible"]
 	path = vim/pack/tpope/start/sensible
-	url = https://tpope.io/vim/sensible.git
+	url = https://github.com/tpope/vim-sensible.git
 [submodule "vim/pack/tpope/start/sleuth"]
 	path = vim/pack/tpope/start/sleuth
-	url = https://tpope.io/vim/sleuth.git
+	url = https://github.com/tpope/vim-sleuth.git
 [submodule "vim/pack/tpope/start/unimpaired"]
 	path = vim/pack/tpope/start/unimpaired
-	url = https://tpope.io/vim/unimpaired.git
+	url = https://github.com/tpope/vim-unimpaired.git
 [submodule "vim/pack/tpope/start/surround"]
 	path = vim/pack/tpope/start/surround
-	url = https://tpope.io/vim/surround.git
+	url = https://github.com/tpope/vim-surround.git
 [submodule "vim/pack/tpope/start/commentary"]
 	path = vim/pack/tpope/start/commentary
-	url = https://tpope.io/vim/commentary.git
+	url = https://github.com/tpope/vim-commentary.git
 [submodule "vim/pack/tpope/start/characterize"]
 	path = vim/pack/tpope/start/characterize
-	url = https://tpope.io/vim/characterize.git
+	url = https://github.com/tpope/vim-characterize.git
 [submodule "vim/pack/tpope/start/eunuch"]
 	path = vim/pack/tpope/start/eunuch
-	url = https://tpope.io/vim/eunuch.git
+	url = https://github.com/tpope/vim-eunuch.git
 [submodule "vim/pack/tpope/start/fugitive"]
 	path = vim/pack/tpope/start/fugitive
-	url = https://tpope.io/vim/fugitive.git
+	url = https://github.com/tpope/vim-fugitive.git
 [submodule "vim/pack/tpope/start/bundler"]
-	path = vim/pack/tpope/start/bundler
-	url = https://tpope.io/vim/bundler.git
+	path = vim/pack/ruby/start/bundler
+	url = https://github.com/tpope/vim-bundler.git
 [submodule "vim/pack/tpope/start/rake"]
-	path = vim/pack/tpope/start/rake
-	url = https://tpope.io/vim/rake.git
+	path = vim/pack/ruby/start/rake
+	url = https://github.com/tpope/vim-rake.git
 [submodule "vim/pack/tpope/start/projectionist"]
 	path = vim/pack/tpope/start/projectionist
-	url = https://tpope.io/vim/projectionist.git
+	url = https://github.com/tpope/vim-projectionist.git
 [submodule "vim/pack/tpope/start/endwise"]
 	path = vim/pack/tpope/start/endwise
-	url = https://tpope.io/vim/endwise.git
+	url = https://github.com/tpope/vim-endwise.git
 [submodule "vim/pack/tpope/start/repeat"]
 	path = vim/pack/tpope/start/repeat
-	url = https://tpope.io/vim/repeat.git
+	url = https://github.com/tpope/vim-repeat.git
 [submodule "vim/pack/ui/start/vim-airline"]
 	path = vim/pack/ui/start/vim-airline
 	url = https://github.com/vim-airline/vim-airline
@@ -52,9 +52,9 @@
 	url = https://github.com/nanotech/jellybeans.vim.git
 [submodule "vim/pack/ui/start/tempus-themes-vim"]
 	path = vim/pack/colorschemes/start/tempus-themes-vim
-	url = https://gitlab.com/protesilaos/tempus-themes-vim
+	url = https://gitlab.com/protesilaos/tempus-themes-vim.git
 [submodule "vim/pack/dist/start/vim-ruby"]
-	path = vim/pack/filetypes/start/vim-ruby
+	path = vim/pack/ruby/start/vim-ruby
 	url = https://github.com/vim-ruby/vim-ruby.git
 [submodule "vim/pack/dir_views/start/nerdtree"]
 	path = vim/pack/dir_views/start/nerdtree
@@ -116,3 +116,45 @@
 [submodule "vim/pack/colorschemes/opt/gruvbox"]
 	path = vim/pack/colorschemes/opt/gruvbox
 	url = https://github.com/morhetz/gruvbox.git
+[submodule "vim-abolish"]
+	path = vim/pack/tpope/start/abolish
+	url = https://github.com/tpope/vim-abolish.git
+[submodule "vim/pack/fzf-preview.vim"]
+	path = vim/pack/fzf/start/fzf-preview.vim
+	url = https://github.com/yuki-yano/fzf-preview.vim.git
+[submodule "vim/pack/ui/start/vim-indent-guides"]
+	path = vim/pack/ui/start/vim-indent-guides
+	url = https://github.com/nathanaelkane/vim-indent-guides.git
+[submodule "vim/pack/tpope/start/vim-rsi"]
+	path = vim/pack/tpope/start/rsi
+	url = https://github.com/tpope/vim-rsi.git
+[submodule "vim/pack/commands/start/tabular"]
+	path = vim/pack/commands/start/tabular
+	url = https://github.com/godlygeek/tabular.git
+[submodule "vim/pack/ui/start/tagbar"]
+	path = vim/pack/ui/start/tagbar
+	url = https://github.com/majutsushi/tagbar.git
+[submodule "vim/pack/insert/start"]
+	path = vim/pack/insert/start/multiple-cursors
+	url = https://github.com/terryma/vim-multiple-cursors.git
+[submodule "vim/pack/ruby/start/vim-haml"]
+	path = vim/pack/ruby/start/vim-haml
+	url = https://github.com/sheerun/vim-haml.git
+[submodule "vim/pack/ruby/start/vim-rails"]
+	path = vim/pack/ruby/start/vim-rails
+	url = https://github.com/tpope/vim-rails.git
+[submodule "vim/pack/ruby/start/vim-rbenb"]
+	path = vim/pack/ruby/start/vim-rbenv/
+	url = https://github.com/tpope/vim-rbenv.git
+[submodule "vim/pack/ruby/start/vim-rspec"]
+	path = vim/pack/ruby/start/vim-rspec
+	url = https://github.com/thoughtbot/vim-rspec.git
+[submodule "vim/pack/ruby/start/rspec.vim"]
+	path = vim/pack/ruby/start/rspec.vim
+	url = https://github.com/keith/rspec.vim.git
+[submodule "vim/pack/ruby/start/rbs"]
+	path = vim/pack/ruby/start/rbs
+	url = https://github.com/jlcrochet/vim-rbs.git
+[submodule "vim/pack/tpope/start/scriptease"]
+	path = vim/pack/tpope/start/scriptease
+	url = https://github.com/tpope/vim-scriptease.git
