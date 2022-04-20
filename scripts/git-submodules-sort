@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+# 1) add sortable prefix to each line, and extra path line
+# 2) preliminary sort, places path above each submodule
+# 3) replace submodule name with path, removing extra path line
+# 4) resort, this with name and path synchronized
+# 5) drop sorting prefix
+# 6) adjust indentation
+
+function add_sortable_prefix_and_path_line() {
+  awk '
+      BEGIN { I=0 ; J=0 ; K="" } ;
+      /^\[submodule/{ N+=1 ; J=1 ; K=$2 ; gsub(/("vendor\/|["\]])/, "", K) } ;
+      { print K, N, J, $0 } ;
+      /path = /{ print K, N, 0, $3 } ;
+      { J+=1 }
+  ' "$1"
+}
+
+function replace_submodule_name_with_path() {
+  awk '
+      $3~/^0$/{ P=$4; next } ;
+      $3~/^1$/{ $5="\"" P "\"]"; } ;
+      { $1=P; print }
+  '
+}
+
+function drop_sorting_prefix() {
+  awk '{ $1="" ; $2="" ; $3="" ; print }'
+}
+
+function adjust_indentation() {
+  sed 's/^ *//g' \
+    | awk '/^\[/{ print ; next } { print "\t" $0 }'
+}
+
+add_sortable_prefix_and_path_line .gitmodules \
+  | sort \
+  | replace_submodule_name_with_path \
+  | sort \
+  | drop_sorting_prefix \
+  | adjust_indentation \
+  | tee .gitmodules.new
+
+mv -f .gitmodules.new .gitmodules
