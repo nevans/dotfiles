@@ -1,0 +1,61 @@
+#!/bin/bash
+set -euo pipefail
+
+cd "$( dirname "${BASH_SOURCE[0]}" )/.."
+
+show_start=
+show_opt=
+CATEGORY=
+hide_category=n
+
+usage="
+Usage: $0 [-c|--category <category>] [-s|--start] [-o|--opt]
+          [-C|--hide-category]
+"
+
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    -s|--start) show_start=y; show_opt=${show_opt:-n}; shift ;;
+    -o|--opt) show_start=${show_start:-n}; show_opt=y; shift ;;
+    -c|--category) CATEGORY=${2?missing category$'\n\n'$usage}; shift; shift ;;
+    -C|--hide-category) hide_category=y; shift ;;
+
+    -h|--help) echo "$usage"; exit 0 ;;
+    *)
+      echo "Unknown option $1"
+      echo "$usage"
+      exit 1
+      ;;
+  esac
+done
+
+for plugdir in vim/pack/*/*/*; do
+  if [ -d "$plugdir" ]; then
+    optdir=$(dirname "$plugdir")
+    catdir=$(dirname "$optdir")
+    plugin=$(basename "$plugdir")
+    option=$(basename "$optdir")
+    category=$(basename "$catdir")
+    if [[ $option == "opt"   && $show_opt == "n" ]]; then continue; fi
+    if [[ $option == "start" && $show_start == "n" ]]; then continue; fi
+    if [[ -n $CATEGORY && $category != *"$CATEGORY"* ]]; then continue; fi
+    # normalize plugin name and remote URLs
+    name=${plugin#vim-}
+    remoteurl=$(git -C "$plugdir" ls-remote --get-url)
+    remoteurl=${remoteurl/#https?:\/\/|git@/}
+    remoteurl=${remoteurl%.git}
+    remoteurl=${remoteurl/:/\/}
+    branch=$(
+      git -C "$plugdir" for-each-ref \
+        --format="%(upstream:track) %(refname:short)=>%(upstream:strip=3)" \
+        "$(git symbolic-ref -q HEAD)"
+    )
+    printf -v gitinfo "%-60s %s" "$remoteurl" "$branch"
+    if [[ $hide_category == "y" ]]; then
+      printf "%-25s %s\n" "$name" "$gitinfo"
+    else
+      printf "%-25s %-20s %5s %s\n" "$name" "$category" "$option" "$gitinfo"
+    fi
+  fi
+done \
+  | sort | sort -k 2 # removed "vim-", so resorting

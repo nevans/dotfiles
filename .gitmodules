@@ -29,18 +29,36 @@
 [submodule "vim/pack/00-essential/start/unimpaired"]
 	path = vim/pack/00-essential/start/unimpaired
 	url = https://github.com/tpope/vim-unimpaired.git
+[submodule "vim/pack/colorschemes/start/colorschemes"]
+	path = vim/pack/colorschemes/start/colorschemes
+	url = https://github.com/flazz/vim-colorschemes.git
+[submodule "vim/pack/colorschemes/start/colors-solarized"]
+	path = vim/pack/colorschemes/start/colors-solarized
+	url = https://github.com/altercation/vim-colors-solarized.git
 [submodule "vim/pack/colorschemes/start/gruvbox"]
 	path = vim/pack/colorschemes/start/gruvbox
 	url = https://github.com/morhetz/gruvbox.git
 [submodule "vim/pack/colorschemes/start/jellybeans.vim"]
 	path = vim/pack/colorschemes/start/jellybeans.vim
 	url = https://github.com/nanotech/jellybeans.vim.git
+[submodule "vim/pack/colorschemes/start/one"]
+	path = vim/pack/colorschemes/start/one
+	url = https://github.com/rakr/vim-one.git
+[submodule "vim/pack/colorschemes/start/onedark.vim"]
+	path = vim/pack/colorschemes/start/onedark.vim
+	url = https://github.com/joshdick/onedark.vim.git
+[submodule "vim/pack/colorschemes/start/palenight.vim"]
+	path = vim/pack/colorschemes/start/palenight.vim
+	url = https://github.com/drewtempelmeyer/palenight.vim.git
 [submodule "vim/pack/colorschemes/start/papercolor-theme"]
 	path = vim/pack/colorschemes/start/papercolor-theme
 	url = https://github.com/NLKNguyen/papercolor-theme.git
 [submodule "vim/pack/colorschemes/start/tempus-themes-vim"]
 	path = vim/pack/colorschemes/start/tempus-themes-vim
 	url = https://gitlab.com/protesilaos/tempus-themes-vim.git
+[submodule "vim/pack/colorschemes/start/vividchalk"]
+	path = vim/pack/colorschemes/start/vividchalk
+	url = https://github.com/tpope/vim-vividchalk.git
 [submodule "vim/pack/commands/start/abolish"]
 	path = vim/pack/commands/start/abolish
 	url = https://github.com/tpope/vim-abolish.git
@@ -56,6 +74,15 @@
 [submodule "vim/pack/commands/start/vim-test"]
 	path = vim/pack/commands/start/vim-test
 	url = https://github.com/vim-test/vim-test.git
+[submodule "vim/pack/compl_lint_lsp_etc/opt/ale"]
+	path = vim/pack/compl_lint_lsp_etc/opt/ale
+	url = https://github.com/dense-analysis/ale.git
+[submodule "vim/pack/compl_lint_lsp_etc/opt/coc.nvim"]
+	path = vim/pack/compl_lint_lsp_etc/opt/coc.nvim
+	url = https://github.com/neoclide/coc.nvim.git
+[submodule "vim/pack/compl_lint_lsp_etc/opt/supertab"]
+	path = vim/pack/compl_lint_lsp_etc/opt/supertab
+	url = https://github.com/ervandew/supertab.git
 [submodule "vim/pack/filetypes/start/ansible-vim"]
 	path = vim/pack/filetypes/start/ansible-vim
 	url = https://github.com/pearofducks/ansible-vim.git
@@ -65,9 +92,15 @@
 [submodule "vim/pack/filetypes/start/Dockerfile.vim"]
 	path = vim/pack/filetypes/start/Dockerfile.vim
 	url = https://github.com/ekalinin/Dockerfile.vim.git
+[submodule "vim/pack/ft-ruby/opt/blockle"]
+	path = vim/pack/ft-ruby/opt/blockle
+	url = https://github.com/jgdavey/vim-blockle.git
 [submodule "vim/pack/ft-ruby/start/bundler"]
 	path = vim/pack/ft-ruby/start/bundler
 	url = https://github.com/tpope/vim-bundler.git
+[submodule "vim/pack/ft-ruby/start/cucumber"]
+	path = vim/pack/ft-ruby/start/cucumber
+	url = https://github.com/tpope/vim-cucumber.git
 [submodule "vim/pack/ft-ruby/start/rake"]
 	path = vim/pack/ft-ruby/start/rake
 	url = https://github.com/tpope/vim-rake.git
@@ -116,12 +149,6 @@
 [submodule "vim/pack/insert/start/rsi"]
 	path = vim/pack/insert/start/rsi
 	url = https://github.com/tpope/vim-rsi.git
-[submodule "vim/pack/lsp-completion-linters-etc/opt/ale"]
-	path = vim/pack/lsp-completion-linters-etc/opt/ale
-	url = https://github.com/dense-analysis/ale.git
-[submodule "vim/pack/lsp-completion-linters-etc/opt/coc.nvim"]
-	path = vim/pack/lsp-completion-linters-etc/opt/coc.nvim
-	url = https://github.com/neoclide/coc.nvim.git
 [submodule "vim/pack/normal/opt/vim-which-key"]
 	path = vim/pack/normal/opt/vim-which-key
 	url = https://github.com/liuchengxu/vim-which-key.git
@@ -170,6 +197,9 @@
 [submodule "vim/pack/tpope/start/scriptease"]
 	path = vim/pack/tpope/start/scriptease
 	url = https://github.com/tpope/vim-scriptease.git
+[submodule "vim/pack/ui-buffers/opt/bufkill"]
+	path = vim/pack/ui-buffers/opt/bufkill
+	url = https://github.com/qpkorr/vim-bufkill.git
 [submodule "vim/pack/ui-buffers/opt/vem-tabline"]
 	path = vim/pack/ui-buffers/opt/vem-tabline
 	url = https://github.com/pacha/vem-tabline.git
@@ -191,18 +221,24 @@
 [submodule "vim/pack/ui-dirtrees/start/vim-nerdtree-syntax-highlight"]
 	path = vim/pack/ui-dirtrees/start/vim-nerdtree-syntax-highlight
 	url = https://github.com/tiagofumo/vim-nerdtree-syntax-highlight.git
-[submodule "vim/pack/ui-fzf/opt/vim-clap"]
-	path = vim/pack/ui-fzf/opt/vim-clap
+[submodule "vim/pack/ui-finders/opt/ctrlp.vim"]
+	path = vim/pack/ui-finders/opt/ctrlp.vim
+	url = https://github.com/kien/ctrlp.vim.git
+[submodule "vim/pack/ui-finders/opt/vim-clap"]
+	path = vim/pack/ui-finders/opt/vim-clap
 	url = https://github.com/liuchengxu/vim-clap.git
-[submodule "vim/pack/ui-fzf/start/fzf"]
-	path = vim/pack/ui-fzf/start/fzf
+[submodule "vim/pack/ui-finders/start/fzf"]
+	path = vim/pack/ui-finders/start/fzf
 	url = https://github.com/junegunn/fzf.git
-[submodule "vim/pack/ui-fzf/start/fzf-preview.vim"]
-	path = vim/pack/ui-fzf/start/fzf-preview.vim
+[submodule "vim/pack/ui-finders/start/fzf-preview.vim"]
+	path = vim/pack/ui-finders/start/fzf-preview.vim
 	url = https://github.com/yuki-yano/fzf-preview.vim.git
-[submodule "vim/pack/ui-fzf/start/fzf.vim"]
-	path = vim/pack/ui-fzf/start/fzf.vim
+[submodule "vim/pack/ui-finders/start/fzf.vim"]
+	path = vim/pack/ui-finders/start/fzf.vim
 	url = https://github.com/junegunn/fzf.vim.git
+[submodule "vim/pack/ui/start/mundo"]
+	path = vim/pack/ui/start/mundo
+	url = https://github.com/simnalamburt/vim-mundo.git
 [submodule "vim/pack/ui/start/tagbar"]
 	path = vim/pack/ui/start/tagbar
 	url = https://github.com/majutsushi/tagbar.git

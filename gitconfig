@@ -108,8 +108,8 @@
   addall   = add -A .
   a        = add -A
 
-  update-submodules = submodule update --init --recursive
-  upgrade-submodules = submodule update --init --remote
+  update-submodules = submodule update --init --recursive --rebase
+  upgrade-submodules = submodule update --init --recursive --remote
 
   pffpru = pull --ff-only --prune
   ff = merge --ff-only

@@ -1,0 +1,34 @@
+#!/bin/bash
+set -euo pipefail
+
+cd "$( dirname "${BASH_SOURCE[0]}" )/.."
+
+usage=<<USAGE
+A quick-and-dirty script to add git submodules for vim plugins.
+
+$0 category username/repository
+  TODO: support non-github!
+USAGE
+
+packcategory=${1?Need category}
+repo=${2?Need username/repository}
+opt=${3-start}
+
+ghuser=${repo%/*}
+ghrepo=${repo##*/}
+name=${ghrepo#vim-}
+
+PLUGIN_DIR="vim/pack/$packcategory/$opt/$name"
+REPOSITORY="https://github.com/$ghuser/$ghrepo.git"
+
+echo git submodule add "$REPOSITORY" "$PLUGIN_DIR"
+
+sleep 1
+printf .
+sleep 1
+printf .
+sleep 1
+printf .
+
+mkdir -p "vim/pack/$packcategory/start"
+git submodule add "$REPOSITORY" "$PLUGIN_DIR"
