@@ -153,16 +153,30 @@ endtry
 
 set background=dark
 
-let g:tempus_enforce_background_color=1
+" turning off bg in the terminal allows the bg to be transparent
+if has('gui_running')
+  let g:colors_keep_transparent_bg = v:false " gvim can't have transparent bg
+elseif $TERMUX_VERSION =~ '\d'
+  let g:colors_keep_transparent_bg = v:false " termux can't have transparent bg
+else
+  let g:colors_keep_transparent_bg = v:true
+endif
 
-let g:jellybeans_overrides = {
-\  'background': {
-\    'ctermbg': 'none', '256ctermbg': 'none',
-\  },
-\}
+if g:colors_keep_transparent_bg
+  let g:jellybeans_overrides = {}
+  let g:jellybeans_overrides['background'] = {}
+  let g:jellybeans_overrides['background']['guibg']      = 'NONE'
+  let g:jellybeans_overrides['background']['ctermbg']    = 'NONE'
+  let g:jellybeans_overrides['background']['256ctermbg'] = 'NONE'
 
-if has('termguicolors') && &termguicolors
-    let g:jellybeans_overrides['background']['guibg'] = 'none'
+  augroup vimrc_colors
+    autocmd!
+    autocmd ColorScheme * hi Normal  ctermbg=NONE guibg=NONE
+    autocmd ColorScheme * hi NonText ctermbg=NONE guibg=NONE
+  augroup END
+
+else
+  let g:tempus_enforce_background_color = v:true
 endif
 
 " n.b: colorscheme plugins are stored in ~/.vim/pack/colorschemes
@@ -176,21 +190,6 @@ catch /^Vim\%((\a\+)\)\=:E185/
   colorscheme default
   set background=dark
 endtry
-
-augroup vimrc_colors
-  autocmd!
-
-  " if !has('gui_running')
-  "   " I prefer to turn off bg (transparent) most of the time:
-  "   if $TERMUX_VERSION !~ '\d'
-  "     autocmd ColorScheme * hi! Normal  ctermbg=NONE guibg=NONE
-  "     autocmd ColorScheme * hi! NonText ctermbg=NONE guibg=NONE
-  "   else
-  "     " nevermind... nothing to see here
-  "   endif
-  " endif
-
-augroup END
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plugin configs                                                         {{{1
