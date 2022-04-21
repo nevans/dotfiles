@@ -163,8 +163,10 @@ else
 endif
 
 if g:colors_keep_transparent_bg
-  let g:jellybeans_overrides = {}
-  let g:jellybeans_overrides['background'] = {}
+  if !exists('g:jellybeans_overrides')
+    let g:jellybeans_overrides = {}
+    let g:jellybeans_overrides['background'] = {}
+  endif
   let g:jellybeans_overrides['background']['guibg']      = 'NONE'
   let g:jellybeans_overrides['background']['ctermbg']    = 'NONE'
   let g:jellybeans_overrides['background']['256ctermbg'] = 'NONE'
@@ -199,29 +201,39 @@ endtry
 " Plugin: airline                                          {{{2
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" let g:airline_experimental = 1  " enable new vim9 implementation
+let g:airline_experimental = 1  " enable new vim9 implementation
 
+let g:airline#extensions#tabline#show_buffers = 1
+let g:airline#extensions#tabline#buf_label_first = 1
+let g:airline#extensions#tabline#buffers_label = 'bufs'
 let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#show_tab_nr = 1
+let g:airline#extensions#tabline#show_tab_type = 1
+let g:airline#extensions#tabline#switch_buffers_and_tabs = 1
+let g:airline#extensions#tabline#tab_nr_type = 2 " splits and tab number
+
 let g:airline_exclude_preview = 0
 let g:airline_section_c_only_filename = 0
 let g:airline_powerline_fonts = 1
 let g:airline_symbols_ascii = 0
+let g:airline_skip_empty_sections = 1
+let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
 
 " NB: no*, cv, ce, r? and ! do not actually display
 "  I added extra space where either vim or my terminal were ignorant of double
 "  wide characters.
 let g:airline_mode_map = {
       \ '__':    '----',
-      \ 'n':     'N ✅', 'c':   'C :…',
-      \ 'i':     'I 📝', 'ic':  'I 🎱', 'ix':  'I 🔮',
-      \ 'R':     'R 📝', 'Rc':  'R 🎱', 'Rx':  'R 🔮',
+      \ 'n':     'N✅',  'c':   'C:…',
+      \ 'i':     'I📝',  'ic':  'I🎱',  'ix':  'I🔮',
+      \ 'R':     'R📝',  'Rc':  'R🎱',  'Rx':  'R🔮',
+      \ 's':     'S……',  'S':   'S☰☰',  '':  'S▒▒',
+      \ 'v':     'V……',  'V':   'V☰☰',  '':  'V▒▒',
+      \ 't':     'T💻',  'nt':  'N💻',
+      \ 'multi': 'M🎛️',
       \ 'Rv':    'Rv📝', 'Rvc': 'Rv🎱', 'Rvx': 'Rv🔮',
       \ 'niI':   'N<<I', 'niR': 'N<<R', 'niV': 'N<<V',
-      \ 's':     'S ……', 'S':   'S ☰☰', '':  'S ▒▒',
       \ 'vs':    'V…<S', 'Vs':  'V☰<S', 's': 'V▒<S',
-      \ 'v':     'V ……', 'V':   'V ☰☰', '':  'V ▒▒',
-      \ 't':     'T 💻', 'nt':  'N 💻',
-      \ 'multi': 'M 🎛️ ',
       \ }
 
 " my symbols
