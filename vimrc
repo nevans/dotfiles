@@ -89,12 +89,6 @@ if !has('gui_running')
     set mouse+=nvi   " let terminal control mouse (& clipboard) in command mode
   endif
 
-  if $COLORTERM =~ '^\%(truecolor\|24bit\)$' || $TERM =~# '-direct$'
-    if &t_Co < 16777216
-      let &t_Co = 16777216 " terminfo probably returned 256!
-    endif
-  endif
-
   if &term =~ '^\%(screen\|tmux\)'
       let &t_Co = 16777216 " terminfo probably returned 256!
       " Better mouse support, see  :help 'ttymouse'
@@ -119,7 +113,7 @@ if !has('gui_running')
       execute "silent! set <xLeft>=\<Esc>[@;*D"
   endif
 
-  if &t_Co == 16777216
+  if $COLORTERM =~ '^\%(truecolor\|24bit\)$' || $TERM =~# '-direct$'
     " these are only set automatically for xterm-*... :(
     if empty(&t_8f) | let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum" | endif
     if empty(&t_8b) | let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum" | endif
@@ -172,11 +166,12 @@ if has('termguicolors') && &termguicolors
 endif
 
 " n.b: colorscheme plugins are stored in ~/.vim/pack/colorschemes
+" TODO: load local colorscheme override
 try
   " colorscheme torte
   " colorscheme PaperColor
-  " colorscheme tempus_warp
-  colorscheme tempus_night
+  colorscheme tempus_warp
+  " colorscheme tempus_night
 catch /^Vim\%((\a\+)\)\=:E185/
   colorscheme default
   set background=dark

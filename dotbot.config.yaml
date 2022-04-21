@@ -67,4 +67,4 @@
     quiet: true
     stderr: true
     stdout: true
-    command: ./vim/pack/fzf/start/fzf/install --xdg --completion --key-bindings --no-update-rc
+    command: ./vim/pack/ui-finders/start/fzf/install --xdg --completion --key-bindings --no-update-rc
