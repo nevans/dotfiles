@@ -155,6 +155,9 @@
 [submodule "vim/pack/normal/start/characterize"]
 	path = vim/pack/normal/start/characterize
 	url = https://github.com/tpope/vim-characterize.git
+[submodule "vim/pack/normal/start/easymotion"]
+	path = vim/pack/normal/start/easymotion
+	url = https://github.com/easymotion/vim-easymotion.git
 [submodule "vim/pack/normal/start/jdaddy"]
 	path = vim/pack/normal/start/jdaddy
 	url = https://github.com/tpope/vim-jdaddy.git
