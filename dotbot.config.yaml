@@ -57,8 +57,8 @@
       path: ssh/config
 
 - shell:
-  - git submodule sync --recursive
-  - git submodule update --init --recursive
+  - git submodule sync --recursive --quiet
+  - git submodule update --init --recursive --depth 5
 
   - description: Update vim helptags
     quiet: true
