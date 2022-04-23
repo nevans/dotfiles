@@ -23,6 +23,10 @@
     - ~/.config
     - ~/.local
     - ~/.local/bin
+    - ~/.local/share
+    - ~/.local/state
+    - ~/Documents
+    - ~/Downloads
     - ~/bin
     - ~/src
     - ~/tmp

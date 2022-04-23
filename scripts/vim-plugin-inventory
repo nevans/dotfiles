@@ -29,6 +29,7 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
+shopt -s extglob
 for plugdir in vim/pack/*/*/*; do
   if [ -d "$plugdir" ]; then
     optdir=$(dirname "$plugdir")
@@ -42,7 +43,7 @@ for plugdir in vim/pack/*/*/*; do
     # normalize plugin name and remote URLs
     name=${plugin#vim-}
     remoteurl=$(git -C "$plugdir" ls-remote --get-url)
-    remoteurl=${remoteurl/#https?:\/\/|git@/}
+    remoteurl=${remoteurl/#@(http?(s):\/\/|git@)/}
     remoteurl=${remoteurl%.git}
     remoteurl=${remoteurl/:/\/}
     branch=$(
@@ -50,10 +51,10 @@ for plugdir in vim/pack/*/*/*; do
         --format="%(upstream:track) %(refname:short)=>%(upstream:strip=3)" \
         "$(git symbolic-ref -q HEAD)"
     )
-    printf -v gitinfo "%-60s %s" "$remoteurl" "$branch"
     if [[ $hide_category == "y" ]]; then
-      printf "%-25s %s\n" "$name" "$gitinfo"
+      printf "%-25s %s\n" "$name" "$remoteurl"
     else
+      printf -v gitinfo "%-60s %s" "$remoteurl" "$branch"
       printf "%-25s %-20s %5s %s\n" "$name" "$category" "$option" "$gitinfo"
     fi
   fi
