@@ -1,0 +1,92 @@
+" Terminal or window width options                                       {{{1
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+augroup vimrc_resize_options
+  au!
+  au VimEnter,VimResized,BufWinEnter * call s:adjust_options_for_width()
+
+  function s:adjust_options_for_width()
+
+    if 100 <= &columns
+      " wide enough to support all of my preferred features
+      set nowrap                        " don't use line-wrapping by default
+      set numberwidth=5                 " spacious
+      set signcolumn=yes                " always display sign column
+      let g:auto_origami_foldcolumn = 5 " spacious
+
+    elseif 90 <= &columns
+      " narrow, but usable
+      set wrap                          " narrow screens need to wrap
+      set numberwidth=4                 " good enough for most files
+      set signcolumn=number             " merged sign and number columns
+      let g:auto_origami_foldcolumn = 2 " not much!
+
+    elseif 85 <= &columns
+      " too narrow for everything
+      set wrap                          " narrow screens need to wrap
+      set numberwidth=1                 " use only as much space as necessary
+      set signcolumn=number             " merged sign and number columns
+      let g:auto_origami_foldcolumn = 1 " nearly nothing
+
+    else
+      " very narrow screen
+      set wrap                          " narrow screens need to wrap
+      set numberwidth=1                 " use only as much space as necessary
+      set signcolumn=number             " merged sign and number columns
+      let g:auto_origami_foldcolumn = 0 " no foldcolumn
+    endif
+
+  endfunction
+
+augroup END
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" TERM/TERMINFO/COLORTERM, mouse, tmux, etc                              {{{1
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+if !has('gui_running')
+
+  if &mouse =~# 'a'
+    set mouse-=a     " some terminals won't or can't override app mouse control
+    set mouse+=nvi   " let terminal control mouse (& clipboard) in command mode
+  endif
+
+  if &term =~ '^\%(screen\|tmux\)'
+      " Better mouse support, see  :help 'ttymouse'
+      set ttymouse=sgr
+
+      " Enable bracketed paste mode, see  :help xterm-bracketed-paste
+      let &t_BE = "\<Esc>[?2004h"
+      let &t_BD = "\<Esc>[?2004l"
+      let &t_PS = "\<Esc>[200~"
+      let &t_PE = "\<Esc>[201~"
+
+      " Enable focus event tracking, see  :help xterm-focus-event
+      let &t_fe = "\<Esc>[?1004h"
+      let &t_fd = "\<Esc>[?1004l"
+      execute "set <FocusGained>=\<Esc>[I"
+      execute "set <FocusLost>=\<Esc>[O"
+
+      " Enable modified arrow keys, see  :help arrow_modifiers
+      execute "silent! set <xUp>=\<Esc>[@;*A"
+      execute "silent! set <xDown>=\<Esc>[@;*B"
+      execute "silent! set <xRight>=\<Esc>[@;*C"
+      execute "silent! set <xLeft>=\<Esc>[@;*D"
+  endif
+
+  if $COLORTERM =~ '^\%(truecolor\|24bit\)$' || $TERM =~# '-direct$'
+    " 256 colors (not 16M) because t_Co is for the *palette* of *indexed* colors
+    " i.e. it's the difference between setaf/setab and setrgbf/setrgbb.
+    " At least, that's how ncurses and tput interpret it. vim may be different?
+    if empty(&t_Co) | let &t_Co = 256 | endif
+    " these are only set automatically for xterm-*... :(
+    if empty(&t_8f) | let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum" | endif
+    if empty(&t_8b) | let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum" | endif
+    let &termguicolors = v:true
+  endif
+
+endif
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" vim modeline... {{{1
+" vim: wrap fdm=marker
