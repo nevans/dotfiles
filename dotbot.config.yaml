@@ -8,13 +8,13 @@
       stdout: true
 
 - shell:
-  - description: Check for Github Codespaces ~/.bashrc
-    command: |
-      if [ "$CODESPACES" = true ] && [ -f ~/.bashrc ] && [ ! -f ~/codespace.bashrc ];
-      then
-        mv ~/.bashrc ~/codespace.bashrc
-        scripts/dl-terminfo
-      fi
+    - description: Check for Github Codespaces ~/.bashrc
+      command: |
+        if [ "$CODESPACES" = true ] && [ -f ~/.bashrc ] && [ ! -f ~/codespace.bashrc ];
+        then
+          mv ~/.bashrc ~/codespace.bashrc
+          scripts/dl-terminfo
+        fi
 
 - clean: ['~', '~/.config']
 
@@ -49,7 +49,7 @@
     ~/.vimrc:
 
     ~/.terminfo/:
-      if: test -d terminfo # run scripts/dl-terminfo to populate this
+      if: test -d terminfo  # run scripts/dl-terminfo to populate this
       glob: true
       path: terminfo/**
 
@@ -57,18 +57,32 @@
       path: ssh/config
 
 - shell:
-  - git submodule sync --recursive --quiet
-  - git submodule update --init --recursive --depth 5
+    - git submodule sync --recursive --quiet
+    - git submodule update --init --recursive --depth 5
 
-  - description: Update vim helptags
-    quiet: true
-    stdin: true
-    stderr: true
-    stdout: true
-    command: vim -e "+packload | helptags ALL | qall"
+    - description: Update vim helptags
+      quiet: true
+      stdin: true
+      stderr: true
+      stdout: true
+      command: vim -e "+packload | helptags ALL | qall"
 
-  - description: Install fzf
-    quiet: true
-    stderr: true
-    stdout: true
-    command: ./vim/pack/ui-finders/start/fzf/install --xdg --completion --key-bindings --no-update-rc
+    - description: Install fzf
+      quiet: true
+      stderr: true
+      stdout: true
+      command: |
+        ./vim/pack/ui-finders/start/fzf/install \
+          --xdg --completion --key-bindings --no-update-rc
+
+    - description: Update coc.nvim
+      quiet: true
+      stderr: true
+      command: |
+        dir="vim/pack/compl_lint_lsp_etc/opt/coc.nvim"
+        if [ -r "$dir"/package.json ]; then
+          {
+            cd "$dir"
+            yarn install --frozen-lockfile
+          }
+        fi
