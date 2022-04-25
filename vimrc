@@ -28,7 +28,7 @@ source $VIMRUNTIME/defaults.vim
 runtime! plugin/sensible.vim
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Set paths (XDG, etc)                                                   {{{1
+" Set paths to XDG Base Directory Specification                          {{{1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " $MYVIMRC is normally set by vim... except when VIMINIT is used.
@@ -109,12 +109,6 @@ noremap  <localleader>, ,
 " " set this low so map prefixes can run sooner
 " set timeoutlen=500
 
-" vim-which-key plugin: provides dynamically generated menu from mappings
-nnoremap <silent> <leader>      :<c-u>WhichKey       '<Space>'<CR>
-vnoremap <silent> <leader>      :<c-u>WhichKeyVisual '<Space>'<CR>
-nnoremap <silent> <localleader> :<c-u>WhichKey       ','<CR>
-vnoremap <silent> <localleader> :<c-u>WhichKeyVisual ','<CR>
-
 set showtabline=2       " always show tabline
 set cmdheight=2         " avoids some unnecessary <hit-enter> prompts
 set shortmess=atIoO     " abbreviate and truncate messages, avoiding 'hit enter' prompts
@@ -139,7 +133,6 @@ set visualbell          " beeps are annoying; flashes less so.
 set virtualedit=block   " lets me place cursor *anywhere* in visual block mode
 set autoread            " autoread changed files; not triggered if the internal modifications
 
-set nowrap              " don't use line-wrapping by default
 set number              " nice to know what line number I'm on
 
 " show line numbers relative to current line  {{{2
@@ -150,14 +143,6 @@ set number              " nice to know what line number I'm on
 "   autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
 "   autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
 " augroup END " }}}2
-
-" and don't bounce around for the sign column; override the number column
-" but fallback to permanent signcolumn for older versions of vim
-" TODO: manage dynamically in plugin/dynamic_signs.vim
-if has('signs')
-  set signcolumn=yes
-  " silent! set signcolumn=number
-endif
 
 set foldlevelstart=99   " always start unfolded
 
@@ -189,6 +174,49 @@ set viminfo=!,'20,<100,s15,%,h
 set exrc   " allow loading project specific .vimrc, but securely!
 set secure " ":autocmd", shell and write commands are not allowed in ".vimrc" in
            " the current directory and map commands are displayed.
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Terminal or window width options                                       {{{1
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+augroup vimrc_resize_options
+  au!
+  au VimEnter,VimResized,BufWinEnter * call s:adjust_options_for_width()
+
+  function s:adjust_options_for_width()
+
+    if 100 <= &columns
+      " wide enough to support all of my preferred features
+      set nowrap                        " don't use line-wrapping by default
+      set numberwidth=5                 " spacious
+      set signcolumn=yes                " always display sign column
+      let g:auto_origami_foldcolumn = 5 " spacious
+
+    elseif 90 <= &columns
+      " narrow, but usable
+      set wrap                          " narrow screens need to wrap
+      set numberwidth=4                 " good enough for most files
+      set signcolumn=number             " merged sign and number columns
+      let g:auto_origami_foldcolumn = 2 " not much!
+
+    elseif 85 <= &columns
+      " too narrow for everything
+      set wrap                          " narrow screens need to wrap
+      set numberwidth=1                 " use only as much space as necessary
+      set signcolumn=number             " merged sign and number columns
+      let g:auto_origami_foldcolumn = 1 " nearly nothing
+
+    else
+      " very narrow screen
+      set wrap                          " narrow screens need to wrap
+      set numberwidth=1                 " use only as much space as necessary
+      set signcolumn=number             " merged sign and number columns
+      let g:auto_origami_foldcolumn = 0 " no foldcolumn
+    endif
+
+  endfunction
+
+augroup END
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " TERM/TERMINFO/COLORTERM, mouse, tmux, etc                              {{{1
@@ -460,30 +488,6 @@ let g:coc_global_extensions = [
 let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Plugin: fzf and fzf.vim                                  {{{2
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-nmap <c-p> :GitFiles<CR>
-" These mappings are taken from :help fzf-vim
-
-" Mapping selecting mappings
-nmap <leader><tab> <plug>(fzf-maps-n)
-xmap <leader><tab> <plug>(fzf-maps-x)
-omap <leader><tab> <plug>(fzf-maps-o)
-
-" Insert mode completion
-imap <c-x><c-k> <plug>(fzf-complete-word)
-imap <c-x><c-f> <plug>(fzf-complete-path)
-imap <c-x><c-l> <plug>(fzf-complete-line)
-" Path completion with custom source command
-"
-inoremap <expr> <c-x><c-f> fzf#vim#complete#path('fd')
-inoremap <expr> <c-x><c-f> fzf#vim#complete#path('rg --files')
-
-" Word completion with custom spec with popup layout option
-inoremap <expr> <c-x><c-k> fzf#vim#complete#word({'window': { 'width': 0.2, 'height': 0.9, 'xoffset': 1 }})
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plugin: ack.vim                                          {{{2
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:ackprg='ag --nogroup --nocolor --column'
@@ -606,10 +610,14 @@ vnoremap k gk
 " use arrow keys for quick buffers/clist navigation
 " I go back and forth on whether I love this or hate it.
 " It only seems to be an issue when plugins expect working arrow keys.
-nnoremap <left>  :bp<cr>
-nnoremap <right> :bn<cr>
-nnoremap <up>    :cp<cr>
-nnoremap <down>  :cn<cr>
+"
+" Oh, and its a real pain when using a phone keyboard, eg TERMUX.
+if $TERMUX_VERSION !~ '\d'
+  nnoremap <left>  :bp<cr>
+  nnoremap <right> :bn<cr>
+  nnoremap <up>    :cp<cr>
+  nnoremap <down>  :cn<cr>
+endif
 
 " use vim-win for quick window movement: <leader>w then arrow keys or numbers
 " use tmux-navigator for quick window movement: <C-h><C-j><C-k><C-l>
@@ -663,6 +671,40 @@ vnoremap / y/<C-R>"<CR>
 
 " quick dirname in command mode
 cnoremap %% <c-r>=expand('%:h').'/'<cr>
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" mappings: vim-which-key                                                {{{2
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" vim-which-key plugin: provides dynamically generated menu from mappings
+nnoremap <silent> <leader>      :<c-u>WhichKey       '<Space>'<CR>
+vnoremap <silent> <leader>      :<c-u>WhichKeyVisual '<Space>'<CR>
+nnoremap <silent> <localleader> :<c-u>WhichKey       ','<CR>
+vnoremap <silent> <localleader> :<c-u>WhichKeyVisual ','<CR>
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" mappings: fzf and fzf.vim                                              {{{2
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+nmap <c-p> :GitFiles<CR>
+" These mappings are taken from :help fzf-vim
+
+" Mapping selecting mappings
+nmap <leader><tab> <plug>(fzf-maps-n)
+xmap <leader><tab> <plug>(fzf-maps-x)
+omap <leader><tab> <plug>(fzf-maps-o)
+
+" Insert mode completion
+imap <c-x><c-k> <plug>(fzf-complete-word)
+imap <c-x><c-f> <plug>(fzf-complete-path)
+imap <c-x><c-l> <plug>(fzf-complete-line)
+" Path completion with custom source command
+"
+inoremap <expr> <c-x><c-f> fzf#vim#complete#path('fd')
+inoremap <expr> <c-x><c-f> fzf#vim#complete#path('rg --files')
+
+" Word completion with custom spec with popup layout option
+inoremap <expr> <c-x><c-k> fzf#vim#complete#word({'window': { 'width': 0.2, 'height': 0.9, 'xoffset': 1 }})
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " mappings: NERDTree                                           (cmap)    {{{2
