@@ -3,7 +3,11 @@
 
 augroup vimrc_resize_options
   au!
-  au VimEnter,VimResized,BufWinEnter * call s:adjust_options_for_width()
+  " WinScrolled seems like it ought to work for these, but it'll need some
+  " adjustments first.
+
+  " This handles font-size changes, too!
+  au VimResized                          * call s:auto_adjust_window_sizes()
 
   " even with 'equalalways' set, it seems some scenarios are unhandled.
   function s:auto_adjust_window_sizes()
@@ -11,48 +15,73 @@ augroup vimrc_resize_options
     execute "normal! \<c-w>="
   endfunction
 
-  " This handles font-size changes, too!
-  au VimResized                      * call s:auto_adjust_window_sizes()
+  if has("vim9script")
+    au VimEnter,VimResized,WinNew,WinEnter,WinScrolled * call AdjustWindowOptionsForWidth()
 
-  function s:adjust_options_for_width()
-    if !(empty(&buftype) && &buflisted)
-      " special buffers can manage themselves!
-      return
-    endif
+    def AdjustWindowOptionsForWidth(): void
+      if exists("w:adjust_options_for_width_ignored")
+        # marked to be ignored
+        return
+      endif
 
-    if 100 <= &columns
-      " wide enough to support all of my preferred features
-      setlocal nowrap                        " don't use line-wrapping by default
-      setlocal number                        " line numbers
-      setlocal numberwidth=5                 " spacious
-      setlocal signcolumn=yes                " always display sign column
-      let g:auto_origami_foldcolumn = 5 " spacious
+      var cols = winwidth(0)
+      if exists("w:adjust_options_for_width_previous_width")
+        if w:adjust_options_for_width_previous_width == cols
+          # unchanged from last check
+          return
+        endif
+      endif
+      w:adjust_options_for_width_previous_width = cols
 
-    elseif 90 <= &columns
-      " narrow, but usable
-      setlocal wrap                          " narrow screens need to wrap
-      setlocal number                        " line numbers
-      setlocal numberwidth=4                 " good enough for most files
-      setlocal signcolumn=number             " merged sign and number columns
-      let g:auto_origami_foldcolumn = 2 " not much!
+      if !(empty(&buftype) && &buflisted)
+        # special buffers can manage themselves!
+        w:adjust_options_for_width_ignored = true
+        return
+      endif
 
-    elseif 85 <= &columns
-      " too narrow for everything
-      setlocal wrap                          " narrow screens need to wrap
-      setlocal number                        " line numbers
-      setlocal numberwidth=1                 " use only as much space as necessary
-      setlocal signcolumn=number             " merged sign and number columns
-      let g:auto_origami_foldcolumn = 1 " nearly nothing
+      if 100 <= cols
+        # wide enough to support all of my preferred features
+        setlocal nowrap               # don't use line-wrapping by default
+        setlocal number               # line numbers
+        setlocal numberwidth=5        # spacious
+        if &l:signcolumn != "yes"     # setting signcolumn always flashes screen
+          setlocal signcolumn=yes     # always display sign column
+        endif
+        g:auto_origami_foldcolumn = 5 # spacious
 
-    else
-      " very narrow screen
-      setlocal wrap                          " narrow screens need to wrap
-      setlocal nonumber                      " too narrow. so sad (use the statusbar)
-      setlocal signcolumn=auto               " merged sign and number columns
-      let g:auto_origami_foldcolumn = 0 " no foldcolumn at all (can still fold)
-    endif
+      elseif 90 <= cols
+        # narrow, but usable
+        setlocal wrap                 # narrow screens need to wrap
+        setlocal number               # line numbers
+        setlocal numberwidth=4        # good enough for most files
+        if &l:signcolumn != "number"  # setting signcolumn always flashes screen
+          setlocal signcolumn=number  # merged sign and number columns
+        endif
+        g:auto_origami_foldcolumn = 2 # not much!
 
-  endfunction
+      elseif 85 <= cols
+        # too narrow for everything
+        setlocal wrap                 # narrow screens need to wrap
+        setlocal number               # line numbers
+        setlocal numberwidth=1        # use only as much space as necessary
+        if &l:signcolumn != "number"  # setting signcolumn always flashes screen
+          setlocal signcolumn=number  # merged sign and number columns
+        endif
+        g:auto_origami_foldcolumn = 1 # nearly nothing
+
+      else
+        # very narrow screen
+        setlocal wrap                 # narrow screens need to wrap
+        setlocal nonumber             # too narrow. so sad (use the statusbar)
+        if &l:signcolumn != "hide"    # setting signcolumn always flashes screen
+          setlocal signcolumn=auto    # auto-hide when not in use
+        endif
+        g:auto_origami_foldcolumn = 0 # no foldcolumn at all (can still fold)
+      endif
+
+    enddef
+    defcompile
+  endif
 
 augroup END
 
