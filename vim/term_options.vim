@@ -5,35 +5,51 @@ augroup vimrc_resize_options
   au!
   au VimEnter,VimResized,BufWinEnter * call s:adjust_options_for_width()
 
+  " even with 'equalalways' set, it seems some scenarios are unhandled.
+  function s:auto_adjust_window_sizes()
+    " TODO: make special windows fixed or min/max width/height
+    execute "normal! \<c-w>="
+  endfunction
+
+  " This handles font-size changes, too!
+  au VimResized                      * call s:auto_adjust_window_sizes()
+
   function s:adjust_options_for_width()
+    if !(empty(&buftype) && &buflisted)
+      " special buffers can manage themselves!
+      return
+    endif
 
     if 100 <= &columns
       " wide enough to support all of my preferred features
-      set nowrap                        " don't use line-wrapping by default
-      set numberwidth=5                 " spacious
-      set signcolumn=yes                " always display sign column
+      setlocal nowrap                        " don't use line-wrapping by default
+      setlocal number                        " line numbers
+      setlocal numberwidth=5                 " spacious
+      setlocal signcolumn=yes                " always display sign column
       let g:auto_origami_foldcolumn = 5 " spacious
 
     elseif 90 <= &columns
       " narrow, but usable
-      set wrap                          " narrow screens need to wrap
-      set numberwidth=4                 " good enough for most files
-      set signcolumn=number             " merged sign and number columns
+      setlocal wrap                          " narrow screens need to wrap
+      setlocal number                        " line numbers
+      setlocal numberwidth=4                 " good enough for most files
+      setlocal signcolumn=number             " merged sign and number columns
       let g:auto_origami_foldcolumn = 2 " not much!
 
     elseif 85 <= &columns
       " too narrow for everything
-      set wrap                          " narrow screens need to wrap
-      set numberwidth=1                 " use only as much space as necessary
-      set signcolumn=number             " merged sign and number columns
+      setlocal wrap                          " narrow screens need to wrap
+      setlocal number                        " line numbers
+      setlocal numberwidth=1                 " use only as much space as necessary
+      setlocal signcolumn=number             " merged sign and number columns
       let g:auto_origami_foldcolumn = 1 " nearly nothing
 
     else
       " very narrow screen
-      set wrap                          " narrow screens need to wrap
-      set numberwidth=1                 " use only as much space as necessary
-      set signcolumn=number             " merged sign and number columns
-      let g:auto_origami_foldcolumn = 0 " no foldcolumn
+      setlocal wrap                          " narrow screens need to wrap
+      setlocal nonumber                      " too narrow. so sad (use the statusbar)
+      setlocal signcolumn=auto               " merged sign and number columns
+      let g:auto_origami_foldcolumn = 0 " no foldcolumn at all (can still fold)
     endif
 
   endfunction
