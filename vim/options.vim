@@ -54,18 +54,8 @@ set magic               " use vim-style regex excaping
 set visualbell          " beeps are annoying; flashes less so.
 
 set virtualedit=block   " lets me place cursor *anywhere* in visual block mode
+set display=lastline    " When lines are cropped at the screen bottom, show as much as possible
 set autoread            " autoread changed files; not triggered if the internal modifications
-
-set number              " nice to know what line number I'm on
-
-" show line numbers relative to current line  {{{2
-" BUT, only in current buffer, and not in insert mode.
-" set relativenumber      " trying out relative numbers (shows current number)
-" augroup numbertoggle
-"   autocmd!
-"   autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
-"   autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
-" augroup END " }}}2
 
 set foldlevelstart=99   " always start unfolded
 
@@ -120,6 +110,8 @@ set undodir    =$XDG_STATE_HOME/vim/undo//,~/.vim/undo//
 set viminfofile=$XDG_STATE_HOME/vim/viminfo
 
 try
+  call mkdir($XDG_CONFIG_HOME..'/vim', 'p', 0700)
+
   call mkdir($XDG_DATA_HOME..'/vim/backup', 'p', 0700)
   call mkdir($XDG_DATA_HOME.."/vim/spell",  'p', 0700)
   call mkdir($XDG_DATA_HOME..'/vim/view',   'p', 0700)
