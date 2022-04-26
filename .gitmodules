@@ -239,6 +239,9 @@
 [submodule "vim/pack/ui-finders/start/fzf.vim"]
 	path = vim/pack/ui-finders/start/fzf.vim
 	url = https://github.com/junegunn/fzf.vim.git
+[submodule "vim/pack/ui/start/emoji-icon-theme"]
+	path = vim/pack/ui/start/emoji-icon-theme
+	url = https://github.com/adelarsq/vim-emoji-icon-theme.git
 [submodule "vim/pack/ui/start/mundo"]
 	path = vim/pack/ui/start/mundo
 	url = https://github.com/simnalamburt/vim-mundo.git
@@ -251,9 +254,6 @@
 [submodule "vim/pack/ui/start/vim-devicons"]
 	path = vim/pack/ui/start/vim-devicons
 	url = https://github.com/ryanoasis/vim-devicons.git
-[submodule "vim/pack/ui/start/vim-devicons-emoji"]
-	path = vim/pack/ui/start/vim-devicons-emoji
-	url = https://github.com/adelarsq/vim-devicons-emoji.git
 [submodule "vim/pack/ui/start/vim-indent-guides"]
 	path = vim/pack/ui/start/vim-indent-guides
 	url = https://github.com/nathanaelkane/vim-indent-guides.git
