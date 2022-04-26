@@ -75,7 +75,4 @@ catch /^Vim\%((\a\+)\)\=:E185/
   set background=dark
 endtry
 
-" warn me when I've gone over the textwidth
-let &colorcolumn="+1,+21,+41,+61,+81"
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

@@ -61,6 +61,7 @@ set foldlevelstart=99   " always start unfolded
 
 set list                " show tabs and trailing whitespace explicitly
 set listchars=trail:_,tab:>-,precedes:<,extends:>
+set colorcolumn=+1,+21,+41,+81,+161,+321,+641     " textwidth guard-rails
 
 set splitbelow          " For some reason, the default split options
 set splitright          " (left and above) usually feel backwards to me.
