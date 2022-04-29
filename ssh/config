@@ -1,6 +1,31 @@
 #######################################################################
 # The first match for any setting is used; later matches are ignored.
 # So most settings at the top can only be overridden by CLI flags.
+Host *
+  #####################################################################
+  # SendEnv
+  # Can be removed later with "SendEnv -VAR", so defaults should be up top.
+  # Needs AcceptEnv on server.
+  #
+  SendEnv LANG LC_* # already default for Ubuntu & Debian
+  SendEnv LANGUAGE
+  SendEnv COLORTERM # gets weird if TERM isn't in server's terminfo db.
+
+  # SendEnv TERMINFO  # a path or (ncurses 6.1+) a base64 encoded entry.
+  # Can use TERMINFO=$(infocmp -0qQ2) to populate the variable.
+  # Or copy the terminfo file into ~/.terminfo (then you don't need this var).
+
+#######################################################################
+# Includes
+# Match, Host, and other configs should only be in private repo (or no repo).
+#
+# Files are sorted lexographically.
+Include config.d/*.conf
+
+#######################################################################
+# Defaults
+# This will be be overridden by included configs.
+#
 
 Host *
   #####################################################################
@@ -11,32 +36,9 @@ Host *
   ControlPath ~/.ssh/control/%C
   ControlPersist no
 
-  #####################################################################
-  # SendEnv
-  # Needs AcceptEnv on server.  Can be removed later with "SendEnv -VAR".
-  #
-  SendEnv LANG LC_* # already default for Ubuntu & Debian
-  SendEnv LANGUAGE
-  SendEnv COLORTERM # gets weird if TERM isn't in server's terminfo db.
-  SendEnv TERMINFO  # a path or (ncurses 6.1+) a base64 encoded entry.
-  # Can use TERMINFO=$(infocmp -0qQ2) to populate the variable.
-
-#######################################################################
-# Includes
-# This is public, so Match and Host (etc) configs come from another repo.
-#
-# Files are sorted lexographically.
-Include config.d/*.conf
-
-#######################################################################
-# Defaults
-# At the bottom, so they can be overridden by included configs.
-#
-
-# these are already the system default for Ubuntu & Debian,
-# but this config might be installed on a different OS.
-Host *
-    HashKnownHosts yes
-    GSSAPIAuthentication yes
+  # these are already the system default for Ubuntu & Debian,
+  # but this config might be installed on a different OS.
+  HashKnownHosts yes
+  GSSAPIAuthentication yes
 
 # vim: ft=sshconfig

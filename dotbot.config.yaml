@@ -1,3 +1,4 @@
+---
 - defaults:
     link:
       relink: true
@@ -16,25 +17,33 @@
           scripts/dl-terminfo
         fi
 
-- clean: ['~', '~/.config']
-
 - create:
-    - ~/.cache
-    - ~/.config
-    - ~/.local
-    - ~/.local/bin
-    - ~/.local/share
-    - ~/.local/state
-    - ~/Documents
-    - ~/Downloads
-    - ~/bin
-    - ~/src
-    - ~/tmp
+  - ~/.cache
+  - ~/.config
+  - ~/.local
+  - ~/.local/bin
+  - ~/.local/share
+  - ~/.local/state
+  - ~/Documents
+  - ~/Downloads
+  - ~/bin
+  - ~/src
+  - ~/tmp
+
 - create:
     ~/.ssh:
       mode: 0700
     ~/.ssh/config.d:
       mode: 0700
+
+- clean:
+  - "~"
+  - "~/.config"
+  - "~/.local"
+  - "~/.local/bin"
+  - "~/.local/share"
+  - "~/.local/state"
+  - "~/.ssh"
 
 - link:
     ~/.bash_profile:
