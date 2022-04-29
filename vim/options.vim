@@ -37,7 +37,10 @@ set cmdheight=2         " avoids some unnecessary <hit-enter> prompts
 set shortmess=atIoO     " abbreviate and truncate messages, avoiding 'hit enter' prompts
 set shortmess+=c        " coc.nvim says: Don't pass messages to |ins-completion-menu|
 
-set wildmode=list:longest,full
+set wildmode=longest:full,full
+try
+  set wildoptions=pum,tagfile
+endtry
 
 set completeopt=menu,menuone,popup
 

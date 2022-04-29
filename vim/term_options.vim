@@ -3,12 +3,10 @@
 
 augroup vimrc_resize_options
   au!
-  " WinScrolled seems like it ought to work for these, but it'll need some
-  " adjustments first.
 
   " This handles font-size changes, too!
+  " WinScrolled seems like it should be good here, but it needs some tweaks.
   au VimResized                          * call s:auto_adjust_window_sizes()
-
   " even with 'equalalways' set, it seems some scenarios are unhandled.
   function s:auto_adjust_window_sizes()
     " TODO: make special windows fixed or min/max width/height

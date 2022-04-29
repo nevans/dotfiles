@@ -1,0 +1,105 @@
+#!/usr/bin/env bash
+# This is much simpler with a Dockerfile... but I don't want vim inside a
+# container!
+set -euo pipefail
+
+VIM_CLONE_REPO_URL="${VIM_CLONE_REPO_URL:-https://github.com/vim/vim.git}"
+
+if [[ -d ~/src/vim ]]; then
+  if ! whiptail --yesno "Vim src dir already exists.  Update?" 10 50; then
+    exit 1
+  fi
+
+  cd ~/src/vim
+
+  if whiptail --yesno 'Run "make distclean"?' 10 50; then
+    make distclean
+  fi
+  if git status --porcelain | \
+      grep -qvE '^\?\? (bin|share|src/testdir/failed)/$'; then
+    echo "Git working copy is dirty.  Clean it before continuing."
+    git status
+    exit 1
+  fi
+
+  rm -rf bin/ share/ src/testdir/failed
+  git switch master >/dev/null
+  git pull --ff-only --prune
+
+else
+
+  mkdir ~/src -p
+  cd ~/src
+
+  git clone "$VIM_CLONE_REPO_URL" --depth 500
+
+  cd ~/src/vim
+fi
+
+if whiptail --yesno "Install build-dep vim?" 10 50; then
+  sudo apt build-dep vim
+fi
+
+echo "$(tput setaf 2)Removing $HOME from \$PATH...$(tput sgr0)"
+PATH=$(ruby -e '
+  puts ENV["PATH"].split(":").grep_v(/^#{Regexp.quote ENV["HOME"]}/).join ":"
+')
+echo "$(tput setaf 2)New \$PATH=$PATH$(tput sgr0)"
+sleep 5
+
+n=$(nproc); if (( 4 < n )); then n=4; fi
+export MAKEOPTS="${MAKEOPTS:-} -j$n"
+
+# These options are loosely based on Debian's rules:
+#   https://salsa.debian.org/vim-team/vim/-/blob/debian/sid/debian/rules
+
+OPTFLAGS=()
+OPTFLAGS+=( --enable-fail-if-missing )
+OPTFLAGS+=( --enable-cscope )
+OPTFLAGS+=( --enable-gpm )
+OPTFLAGS+=( --enable-selinux --disable-smack )
+OPTFLAGS+=( --with-features=huge )
+OPTFLAGS+=( --enable-acl )
+OPTFLAGS+=( --enable-terminal )
+OPTFLAGS+=( --enable-libsodium )
+
+GUIFLAGS=()
+GUIFLAGS+=( --with-x )
+GUIFLAGS+=( --enable-xim )
+GUIFLAGS+=( --enable-canberra )
+
+GTK3FLAGS=()
+GTK3FLAGS+=( --enable-gui=gtk3 )
+GTK3FLAGS+=( --enable-gtk3-check )
+GTK3FLAGS+=( --disable-gnome-check )
+GTK3FLAGS+=( --disable-motif-check )
+GTK3FLAGS+=( --disable-motif-check )
+GTK3FLAGS+=( --disable-fontset )
+
+ALLINTERPFLAGS=()
+ALLINTERPFLAGS+=( --enable-luainterp )
+ALLINTERPFLAGS+=( --disable-mzschemeinterp )
+ALLINTERPFLAGS+=( --enable-perlinterp )
+ALLINTERPFLAGS+=( --enable-python3interp )
+ALLINTERPFLAGS+=( --with-python3-config-dir="$(python3-config --configdir)" )
+ALLINTERPFLAGS+=( --disable-pythoninterp )
+ALLINTERPFLAGS+=( --enable-tclinterp )
+ALLINTERPFLAGS+=( --with-tclsh=/usr/bin/tclsh )
+ALLINTERPFLAGS+=( --enable-rubyinterp )
+
+echo "$(tput setaf 2)Configuring vim...$(tput sgr0)"
+sleep 1
+export LC_ALL=C.UTF-8 LANG=C.UTF-8
+./configure \
+  "${OPTFLAGS[@]}" \
+  "${GUIFLAGS[@]}" \
+  "${ALLINTERPFLAGS[@]}" \
+  "${GTK3FLAGS[@]}"
+
+echo "$(tput setaf 2)Building vim...$(tput sgr0)"
+sleep 2
+make
+
+if whiptail --yesno "Install to /usr/local?" 10 50; then
+  sudo make install
+fi
