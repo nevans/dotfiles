@@ -1,6 +1,44 @@
 " Custom mappings
+"
+" n.b. different plugins have various approaches to mappings:
+"
+"   * never creates maps, but might document some recommended maps
+"   * creates maps only if you set a global var or call a function
+"   * disables maps only if you set a global var or call a function
+"   * creates maps only if they don't already exist, using "mapcheck()"
+"   * creates maps only if they don't already exist, using "hasmapto()"
+"   * always creates its own maps, possibly clobbering yours.
+"   * or any combination of the above
+"
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" mappings: UI                                                 (nmap)    {{{1
+
+" maps NVSOICLT => Category or description       notable prefixes     {{{1
+"
+"  See also ":help map-table", "map-listing", "mapping"
+"  ┏━┯━━━━━━━┯━━━━━━━━┯━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┯━━━━━━━━━━━━━━━━━━━━━┓
+"  ┃ │ ?map? │NVSOICLT│ Modes                         │ help                ┃
+"  ┠─┼───────┼────────┼───────────────────────────────┼─────────────────────┨
+"  ┃ │  map  │NVSO    │ normal visual select operator │                     ┃
+"  ┃n│ nmap  │N       │ normal                        │                     ┃
+"  ┃v│ vmap  │ VS     │        visual select          │                     ┃
+"  ┃s│ smap  │  S     │               select          │ select-mode-mapping ┃
+"  ┃x│ xmap  │ V      │        visual                 │                     ┃
+"  ┃o│ omap  │   O    │                      operator │ omap-info           ┃
+"  ┠─┼───────┼────────┼───────────────────────────────┼─────────────────────┨
+"  ┃!│  map! │    IC  │ insert command                │                     ┃
+"  ┃i│ imap  │    I   │ insert                        │                     ┃
+"  ┃c│ cmap  │     C  │        command                │                     ┃
+"  ┃l│ lmap  │    ICL │ insert command lang-arg       │ language-mapping    ┃
+"  ┠─┼───────┼────────┼───────────────────────────────┼─────────────────────┨
+"  ┃t│ tmap  │       T│ terminal                      │ terminal-typing     ┃
+"  ┗━┷━━━━━━━┷━━━━━━━━┷━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┷━━━━━━━━━━━━━━━━━━━━━┛
+"
+" TODO: document some of the more significant mappings from plugins
+" TODO: document some of the more significant built-in mappings; ":help index"
+" TODO: move commands to another file (coc.nvim: :Format, :OrganizeImports, ...)
+" }}}1
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" maps NVSO     => UI                               <F#> <Leader>     {{{1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " because I often accidentally hit F1, and I know how to use :help
@@ -8,10 +46,10 @@ noremap           <F1>   <Esc>
 noremap!          <F1>   <Esc>
 
 " quickly turn off search highlighting
-noremap <leader><cr> :nohl<cr>
+nnoremap <leader><cr> :nohl<cr>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" mappings: colors and syntax highlighting...                  (nmap)    {{{1
+" maps N        => colors, highlighting...                   $ g?     {{{1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " copied from https://stackoverflow.com/questions/9464844/how-to-get-group-name-of-highlighting-under-cursor-in-vim
@@ -26,16 +64,16 @@ endfunction
 
 " this will help remove syntax highlighting errors that result from not having
 " enough context cached... but it might be slow
-noremap <leader>$$   :syntax sync fromstart<cr>
-noremap <leader>$256 :set t_Co=256<cr>
-noremap <leader>$16  :set t_Co=16<cr>
+nnoremap <leader>$$   :syntax sync fromstart<cr>
+nnoremap <leader>$256 :set t_Co=256<cr>
+nnoremap <leader>$16  :set t_Co=16<cr>
 "autocmd BufEnter * :syntax sync fromstart
 
 " occasionally I might want to toggle syntax highlighting...
 " mneumonic:$yntax Yes
-noremap <leader>$y :syntax on<cr>
+nnoremap <leader>$y :syntax on<cr>
 " mneumonic:$yntax No
-noremap <leader>$n :syntax off<cr>
+nnoremap <leader>$n :syntax off<cr>
 
 " replaces g?{motion} => rot13
 nnoremap g? :call SynStack()<CR>
@@ -47,7 +85,7 @@ nnoremap <leader>hlid :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name"
 \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" mappings: navigation inside buffers                          (nmap)    {{{1
+" maps NVSOIC   => navigation inside buffers           ^A h j k l     {{{1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Emacs style mappings
@@ -61,7 +99,7 @@ vnoremap j gj
 vnoremap k gk
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" mappings: navigation between files and buffers               (nmap)    {{{1
+" maps N        => arrow keys                            <Arrows>     {{{1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -81,7 +119,7 @@ endif
 " use tmux-navigator for quick window movement: <C-h><C-j><C-k><C-l>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" mappings: window and tab navigation                          (nmap)    {{{1
+" maps N        => window and tab navigation          gb <Leader>     {{{1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " quickly open command line with...
@@ -112,7 +150,7 @@ nnoremap <leader>ej :tj<space>
 nnoremap <leader>eb :buffers<cr>:buffer<space>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" mappings: visual mode                                        (vmap)    {{{1
+" maps  VS      => visual mode                                    etc {{{1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Enable TAB indent and SHIFT-TAB unindent
@@ -124,44 +162,47 @@ vnoremap <silent> <S-TAB> <gv
 vnoremap / y/<C-R>"<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" mappings: command mode                                       (cmap)    {{{1
+" maps      C   => command mode                                   etc {{{1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " quick dirname in command mode
 cnoremap %% <c-r>=expand('%:h').'/'<cr>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" mappings: mouse                                          {map,imap)    {{{1
+" maps NVSOIC   => mouse                                  <Mouse>     {{{1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-  " Scroll only one line for mouse wheel events to get smooth scrolling on touch screens
+" Scroll only one line for mouse wheel events to get smooth scrolling on touch screens
+if $TERMUX_VERSION =~ '\d'
   map  <ScrollWheelUp>   <C-Y>
   imap <ScrollWheelUp>   <C-X><C-Y>
   map  <ScrollWheelDown> <C-E>
   imap <ScrollWheelDown> <C-X><C-E>
+endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" mappings: vim-which-key                                                {{{1
+" maps NVSO     => vim-which-key           <Leader> <LocalLeader>     {{{1
+" TODO: plugin is optional; only apply these when the plugin has been loaded
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " vim-which-key plugin: provides dynamically generated menu from mappings
-" TODO: plugin is optional; only apply these when the plugin has been loaded
 " nnoremap <silent> <leader>      :<c-u>WhichKey       '<Space>'<CR>
 " vnoremap <silent> <leader>      :<c-u>WhichKeyVisual '<Space>'<CR>
 " nnoremap <silent> <localleader> :<c-u>WhichKey       ','<CR>
 " vnoremap <silent> <localleader> :<c-u>WhichKeyVisual ','<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" mappings: fzf and fzf.vim                                              {{{1
+" maps NV OI    => fzf and fzf.vim                 ^x ^p <Leader> etc {{{1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 nmap <c-p> :GitFiles<CR>
 " These mappings are taken from :help fzf-vim
 
-" Mapping selecting mappings
+" Mapping selecting mappings.  See "fzf-vim-mappings"
 nmap <leader><tab> <plug>(fzf-maps-n)
 xmap <leader><tab> <plug>(fzf-maps-x)
 omap <leader><tab> <plug>(fzf-maps-o)
+" imap <leader><tab> <plug>(fzf-maps-i)
 
 " Insert mode completion
 imap <c-x><c-k> <plug>(fzf-complete-word)
@@ -176,7 +217,7 @@ inoremap <expr> <c-x><c-f> fzf#vim#complete#path('rg --files')
 inoremap <expr> <c-x><c-k> fzf#vim#complete#word({'window': { 'width': 0.2, 'height': 0.9, 'xoffset': 1 }})
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" mappings: NERDTree                                           (cmap)    {{{1
+" maps N        => NERDTree                              <Leader> etc {{{1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " open/close file browser
@@ -185,5 +226,9 @@ nmap <leader>d :NERDTreeToggle<CR>
 nmap <leader>D :NERDTree %<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" maps NVSOI    => coc.nvim                  ][ g <Ctrl> <Leader> etc {{{1
+" TODO: plugin is optional; only apply these when the plugin has been loaded
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 " vim modeline... {{{1
 " vim: wrap fdm=marker
