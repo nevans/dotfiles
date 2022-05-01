@@ -2,19 +2,24 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 augroup vimrc_resize_options
-  au!
+  autocmd!
 
-  " This handles font-size changes, too!
-  " WinScrolled seems like it should be good here, but it needs some tweaks.
-  au VimResized                          * call s:auto_adjust_window_sizes()
-  " even with 'equalalways' set, it seems some scenarios are unhandled.
   function s:auto_adjust_window_sizes()
     " TODO: make special windows fixed or min/max width/height
     execute "normal! \<c-w>="
   endfunction
 
+  " This handles font-size changes, too!
+  " WinScrolled seems like it should be good here, but it needs some tweaks.
+  autocmd VimResized * call s:auto_adjust_window_sizes()
+  " even with 'equalalways' set, it seems some scenarios are unhandled.
+
   if has("vim9script")
-    au VimEnter,VimResized,WinNew,WinEnter,WinScrolled * call AdjustWindowOptionsForWidth()
+    autocmd VimEnter,VimResized * call AdjustWindowOptionsForWidth()
+    autocmd WinNew,WinEnter     * call AdjustWindowOptionsForWidth()
+    if exists("##WinScrolled") " introduced sometime after v8.2.4650
+      autocmd WinScrolled       * call AdjustWindowOptionsForWidth()
+    endif
 
     def AdjustWindowOptionsForWidth(): void
       if exists("w:adjust_options_for_width_ignored")
