@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+# run this script from dotfiles dir
+cd "$( dirname "${BASH_SOURCE[0]}" )/.." || exit 1
+
+if [ "$CODESPACES" = true ]; then
+  BACKUP_DIR=~/backup-codespaces-cfg
+  mkdir -p "$BACKUP_DIR"
+  if [ -f ~/.bashrc  ]; then mv ~/.bashrc  "$BACKUP_DIR"/bashrc;  fi
+  if [ -f ~/.profile ]; then mv ~/.profile "$BACKUP_DIR"/profile; fi
+fi

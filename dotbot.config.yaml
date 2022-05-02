@@ -10,12 +10,7 @@
 
 - shell:
     - description: Check for Github Codespaces ~/.bashrc
-      command: |
-        if [ "$CODESPACES" = true ] && [ -f ~/.bashrc ] && [ ! -f ~/codespace.bashrc ];
-        then
-          mv ~/.bashrc ~/codespace.bashrc
-          scripts/dl-terminfo
-        fi
+      command: bin/gh-codespace-init
 
 - create:
   - ~/.cache
