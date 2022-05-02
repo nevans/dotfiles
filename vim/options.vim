@@ -80,52 +80,72 @@ set textwidth=80
 " I was still unsure about it when vim 7.3 was released! (early 2010s)  ;)
 set hidden              " hide (instead of unload) buffers when they are abandoned
 
-" !: Save and restore global variables that start with an uppercase letter, and don't contain a lowercase letter.
-" ': Maximum number of previously edited files for which the marks are remembered.
-" <: Maximum number of lines saved for each register.
-" s: Maximum size of an item in Kbyte.  If zero then registers are
-" %: saves and restores the buffer list
-" h: Disable the effect of 'hlsearch' when loading the viminfo file.
-set viminfo=!,'20,<100,s15,%,h
-
-set exrc   " allow loading project specific .vimrc, but securely!
-set secure " ":autocmd", shell and write commands are not allowed in ".vimrc" in
-           " the current directory and map commands are displayed.
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Paths: swapfiles, persistent undofile, view files, backup files, etc.  {{{1
+" viminfo, and other saved state                                         {{{1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Paths: follow XDG Base Directory Specification         {{{2
+"  * https://wiki.debian.org/XDGBaseDirectorySpecification
+"  * https://wiki.archlinux.org/title/XDG_Base_Directory
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" plugin config files (analogous to /etc)
+let g:coc_config_home = $XDG_CONFIG_HOME..'/vim'
+
+" data files (analogous to /usr/share)
+let g:netrw_home = $XDG_DATA_HOME..'/vim'
+call mkdir($XDG_DATA_HOME.."/vim/spell",  'p', 0700)
+
+" State files (e.g. analogous to /var/lib)
 "
-" From :help 'directory'
+" From :help 'directory' (also applies to 'backupdir' and 'undodir')
 "       For Unix and Win32, if a directory ends in two path separators "//",
 "       the swap file name will be built from the complete path to the file
 "       with all path separators replaced by percent '%' signs (including
 "       the colon following the drive letter on Win32). This will ensure
 "       file name uniqueness in the preserve directory.
-
-set backupdir   =$XDG_DATA_HOME/vim/backup//,~/.vim/backup//
-set viewdir     =$XDG_DATA_HOME/vim/view
-
-let g:netrw_home      = $XDG_DATA_HOME..'/vim'
-let g:coc_config_home = $XDG_CONFIG_HOME..'/vim'
-
-set directory  =$XDG_STATE_HOME/vim/swap//,~/.vim/swap//
-set undodir    =$XDG_STATE_HOME/vim/undo//,~/.vim/undo//
+set directory  =$XDG_STATE_HOME/vim/swap//   | call mkdir(&directory, 'p', 0700)
+set undodir    =$XDG_STATE_HOME/vim/undo//   | call mkdir(&undodir,   'p', 0700)
+set backupdir  =$XDG_STATE_HOME/vim/backup// | call mkdir(&backupdir, 'p', 0700)
+set viewdir    =$XDG_STATE_HOME/vim/view     | call mkdir(&viewdir,   'p', 0700)
 set viminfofile=$XDG_STATE_HOME/vim/viminfo
 
-try
-  call mkdir($XDG_CONFIG_HOME..'/vim', 'p', 0700)
+call mkdir($XDG_CONFIG_HOME..'/vim', 'p', 0700)
 
-  call mkdir($XDG_DATA_HOME..'/vim/backup', 'p', 0700)
-  call mkdir($XDG_DATA_HOME.."/vim/spell",  'p', 0700)
-  call mkdir($XDG_DATA_HOME..'/vim/view',   'p', 0700)
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Options: configure viminfo, history undofile, exrc, etc.  {{{2
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-  call mkdir($XDG_STATE_HOME..'/vim/swap',  'p', 0700)
-  call mkdir($XDG_STATE_HOME..'/vim/undo',  'p', 0700)
+set viminfo=            " cleared here in order to set them one-by-one, below.
+set viminfo+='100       " max files that will remember their marks.
+set viminfo+=<250       " max lines saved per register.
+set viminfo+=s50        " max kbyte saved per register, skipping any larger.
+set viminfo+=h          " disable 'hlsearch' when loading the viminfo file.
+set viminfo+=%          " %: saves and restores the buffer list
+set viminfo+=r/tmp      " Removable media; no marks will be stored.
+set viminfo+=r/run      " ...can be given several times for multiple paths.
+set viminfo+=r/mount
+"
+" set vi+=n~/.viminfo   " Name of viminfo file.  Use 'viminfofile' instead.
+" set viminfo+=f        " limits file marks to be stored ('0 to '9, 'A to 'Z)
+" set viminfo+=c        " convert encoding of viminfo... Just use utf-8. always!
+"
+" set viminfo+=!        " restore ALL_CAPS global variables.
+                        " I used to like this, but it can create confusing debug
+                        " issues—viminfo will overwrite globals set by vimrc!
+"
+" /: max lines of history for search patterns.  defaults to 'history'
+" :: max lines of history for command-line.     defaults to 'history'
+" @: max lines of history for input-line.       defaults to 'history'
+set history=2500        " 10x more than $VIMRUNTIME/defaults.vim
 
-  set undofile
-catch
-endtry
+set undofile            " automatically save and restore undo history
+
+set exrc                " allow loading project specific .vimrc, but securely!
+set secure              " ":autocmd", shell and write commands are not allowed
+                        " in ".vimrc" in the current directory and map commands
+                        " are displayed.
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" }}}1
 " vim: wrap fdm=marker

@@ -9,8 +9,8 @@
       stdout: true
 
 - shell:
-    - description: Check for Github Codespaces ~/.bashrc
-      command: bin/gh-codespace-init
+  - description: Check for Github Codespaces ~/.bashrc
+    command: bin/gh-codespace-init
 
 - create:
   - ~/.cache
