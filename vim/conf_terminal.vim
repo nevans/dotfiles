@@ -21,30 +21,36 @@ augroup vimrc_resize_options
       autocmd WinScrolled       * call AdjustWindowOptionsForWidth()
     endif
 
-    def AdjustWindowOptionsForWidth(): void
+    def! AdjustWindowOptionsForWidth(): void
       if exists("w:adjust_options_for_width_ignored")
+            \ && !empty(w:adjust_options_for_width_ignored)
+            \ || exists("b:adjust_options_for_width_ignored")
+            \ && !empty(b:adjust_options_for_width_ignored)
+            \ || exists("g:adjust_options_for_width_ignored")
+            \ && !empty(g:adjust_options_for_width_ignored)
         # marked to be ignored
         return
       endif
 
-      var cols = winwidth(0)
+      const cols = winwidth(0)
+      const buf = bufnr('')
       if exists("w:adjust_options_for_width_previous_width")
-        if w:adjust_options_for_width_previous_width == cols
-          # unchanged from last check
-          return
-        endif
+            \ && w:adjust_options_for_width_previous_width == cols
+            \ || exists("w:adjust_options_for_width_previous_bufnr")
+            \ && w:adjust_options_for_width_previous_bufnr != buf
+        # unchanged from last check
+        return
       endif
       w:adjust_options_for_width_previous_width = cols
+      w:adjust_options_for_width_previous_bufnr = buf
 
       if !(empty(&buftype) && &buflisted)
         # special buffers can manage themselves!
-        w:adjust_options_for_width_ignored = true
-        return
-      endif
+        setlocal numberwidth=1        # use only as much space as necessary
 
-      if 100 <= cols
+      elseif 100 <= cols
         # wide enough to support all of my preferred features
-        setlocal nowrap               # don't use line-wrapping by default
+        set      wrap<                # use global value for wrap
         setlocal number               # line numbers
         setlocal numberwidth=5        # spacious
         if &l:signcolumn != "yes"     # setting signcolumn always flashes screen

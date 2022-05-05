@@ -49,8 +49,9 @@
     ~/.gitconfig:
     ~/.gitignore:
     ~/.profile:
-    ~/.vim:
-    ~/.vimrc:
+    ~/.local/share/vim:
+    ~/.vimrc: # backwards compatible, so I don't need to rely on VIMINIT
+      path: vim/vimrc
 
     ~/.terminfo/:
       if: test -d terminfo  # run scripts/dl-terminfo to populate this

@@ -1,7 +1,32 @@
-" Plugin configurations                                                 {{{1
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Plugins: paths, config vars, etc.
+"
+" Config vars should generally be set unconditionally, even for unloaded
+" optional plugins.  The primary reason for dynamically setting variables is
+" handling conflicts between different similar plugins. e.g. which plugins
+" handle completion, or LSP, fuzzy lookups, snippets, etc.  Settings may also
+" change based on whether or not executables are available, what version of
+" something is available, or other environmental factors.
+"
+" Use ./init_packadd.vim to select which plugins will be loaded.
+" Use ./conf_maps_cmds.vim for plugin maps, ex commands, autocommands, etc.
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+" Plugin paths (follow XDG Base Directory Specification)                 {{{1
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Plugin: netrw                                            {{{2
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:netrw_home      =  $XDG_DATA_HOME..'/vim'
+let g:netrw_liststyle = 3 " tree style
+
+" Plugin: unicode.vim                                      {{{2
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:Unicode_data_directory  = $XDG_DATA_HOME  ..'/vim'
+let g:Unicode_cache_directory = $XDG_CACHE_HOME ..'/vim'
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" }}}1
+" Plugin configurations                                                  {{{1
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plugin: airline                                          {{{2
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -42,9 +67,7 @@ let g:airline_mode_map = {
 
 " my symbols
 " copied and pasted from :help airline-customization
-if !exists('g:airline_symbols')
-  let g:airline_symbols = {}
-endif
+let g:airline_symbols = get(g:, 'airline_symbols', {})
 
 " shrink to single char, removing superfluous whitespace and ':'
 let g:airline_symbols.linenr    = ''
@@ -69,11 +92,15 @@ let g:airline#extensions#branch#sha1_len = 6
 " Plugin: ale                                              {{{2
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" let g:ale_disable_lsp = 1 " let coc.nvim handle LSP
+" Use ALE for LSP, unless another LSP is configured (coc.nvim, vim-lsp, ?)
+let g:ale_disable_lsp = 'ale' != get(g:vimrc_packs, 'lsp_client', 'ale')
 
 if !exists('g:ale_linters')         | let g:ale_linters = {}         | endif
 if !exists('g:ale_fixers')          | let g:ale_fixers = {}          | endif
 if !exists('g:ale_pattern_options') | let g:ale_pattern_options = {} | endif
+
+let g:ale_fixers["c"]   = ["remove_trailing_lines", "trim_whitespace", "clang-format"]
+let g:ale_fixers["cpp"] = ["remove_trailing_lines", "trim_whitespace", "clang-format"]
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " ALE: ruby config                                     {{{3
@@ -96,9 +123,13 @@ let g:ale_linters["ruby"] = [
 " let g:ale_fixers["ruby"] += ["remove_trailing_lines", "trim_whitespace"]
 " let g:ale_fixers["ruby"] += ["rubocop"]
 
+" }}}3
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plugin: coc.nvim                                         {{{2
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+let g:coc_config_home = $XDG_CONFIG_HOME..'/vim'
 
 let g:coc_global_extensions = [
       \ '@yaegassy/coc-ansible',
@@ -149,13 +180,37 @@ let g:bufExplorerSplitRight=0        " Split left.
 let g:bufExplorerFindActive=0        " Do not go to active window. (toggle: a)
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" End plugin configs ....                                }}}1
+" Plugin: vimwiki                                          {{{2
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" FT plugin configurations (TODO: move to ftplugins)                     {{{1
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:vimwiki_hl_cb_checked = 1
+let g:vimwiki_global_ext = 0
+let wiki = {}
+let wiki.path            = '~/Documents/vimwiki/'
+let wiki.diary_rel_path  = './'
+let wiki.diary_index     = 'DailyJournal'
+let wiki.diary_header    = 'Daily Journal'
+let wiki.diary_header    = 'Daily Journal'
+let wiki.nested_syntaxes = {'ruby': 'ruby', 'python': 'python', 'html': 'html'}
+let g:vimwiki_list     = [wiki]
+let g:vimwiki_dir_link = 'index'
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Plugin: vim-test                                        {{{2
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+let test#vim#term_height = '20'
+
+if has('terminal')
+  let test#strategy = "vimterminal"
+else
+  let test#strategy = "dispatch"
+endif
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" }}}1
+" FT plugin configs (TODO: move to ftplugins)                            {{{1
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " ftplugin: ruby-vim                                       {{{2
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:ruby_indent_assignment_style = 'variable'
@@ -178,8 +233,6 @@ let g:markdown_folding_level = 6
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:vim_json_syntax_conceal = 0
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" End ftplugin configs ....                                }}}1
-
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" }}}1
 " vim modeline... {{{1
 " vim: wrap fdm=marker

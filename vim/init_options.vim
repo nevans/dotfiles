@@ -38,9 +38,9 @@ set shortmess=atIoO     " abbreviate and truncate messages, avoiding 'hit enter'
 set shortmess+=c        " coc.nvim says: Don't pass messages to |ins-completion-menu|
 
 set wildmode=longest:full,full
-try
+if has("patch-8.2.4325")
   set wildoptions=pum,tagfile
-endtry
+endif
 
 set completeopt=menu,menuone,popup
 
@@ -84,39 +84,6 @@ set hidden              " hide (instead of unload) buffers when they are abandon
 " viminfo, and other saved state                                         {{{1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Paths: follow XDG Base Directory Specification         {{{2
-"  * https://wiki.debian.org/XDGBaseDirectorySpecification
-"  * https://wiki.archlinux.org/title/XDG_Base_Directory
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-" plugin config files (analogous to /etc)
-let g:coc_config_home = $XDG_CONFIG_HOME..'/vim'
-
-" data files (analogous to /usr/share)
-let g:netrw_home = $XDG_DATA_HOME..'/vim'
-call mkdir($XDG_DATA_HOME.."/vim/spell",  'p', 0700)
-
-" State files (e.g. analogous to /var/lib)
-"
-" From :help 'directory' (also applies to 'backupdir' and 'undodir')
-"       For Unix and Win32, if a directory ends in two path separators "//",
-"       the swap file name will be built from the complete path to the file
-"       with all path separators replaced by percent '%' signs (including
-"       the colon following the drive letter on Win32). This will ensure
-"       file name uniqueness in the preserve directory.
-set directory  =$XDG_STATE_HOME/vim/swap//   | call mkdir(&directory, 'p', 0700)
-set undodir    =$XDG_STATE_HOME/vim/undo//   | call mkdir(&undodir,   'p', 0700)
-set backupdir  =$XDG_STATE_HOME/vim/backup// | call mkdir(&backupdir, 'p', 0700)
-set viewdir    =$XDG_STATE_HOME/vim/view     | call mkdir(&viewdir,   'p', 0700)
-set viminfofile=$XDG_STATE_HOME/vim/viminfo
-
-call mkdir($XDG_CONFIG_HOME..'/vim', 'p', 0700)
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Options: configure viminfo, history undofile, exrc, etc.  {{{2
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
 set viminfo=            " cleared here in order to set them one-by-one, below.
 set viminfo+='100       " max files that will remember their marks.
 set viminfo+=<250       " max lines saved per register.
@@ -142,10 +109,10 @@ set history=2500        " 10x more than $VIMRUNTIME/defaults.vim
 
 set undofile            " automatically save and restore undo history
 
-set exrc                " allow loading project specific .vimrc, but securely!
-set secure              " ":autocmd", shell and write commands are not allowed
-                        " in ".vimrc" in the current directory and map commands
-                        " are displayed.
+" project-specific state and configuration
+set exrc   " allow loading project specific .vimrc, but securely!
+set secure " ":autocmd", shell and write commands are not allowed in ".vimrc" in
+           " the current directory and map commands are displayed.
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" }}}1
 " vim: wrap fdm=marker

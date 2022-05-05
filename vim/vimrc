@@ -1,0 +1,56 @@
+" Nicholas A. Evans's vimrc
+"
+" I've been using some parts of this config since 1997... there may be better
+" ways to configure vim in 2022. ;)
+"
+" Nota Bene: This vimrc requires at least vim 8.2.
+"
+"    I'll (probably) try to keep it at least *partially* working with the latest
+"    released versions in last two Ubuntu LTS releases (which is probably
+"    running on my servers), the previous non-LTS release (which might be on any
+"    desktops), and the latest termux version (I'm not going to compile by hand
+"    for termux).
+"
+"    Latest versions (as of 2022-05-04)
+"      * Ubuntu 18.04 LTS => v8.0.1453
+"      * Ubuntu 20.04 LTS => v8.1.2269
+"      * Ubuntu 21.10     => v8.2.2434
+"      * Ubuntu 22.04 LTS => v8.2.3995
+"      * termux           => v8.2.4650
+"      * vim master       => v8.2.4867
+"
+"    I can use the bin/install-vim script in this repo to get the absolute
+"    latest version.  But that's not always feasible (e.g. on termux).
+"
+"    Known incompatibilities with 8.2.0000:
+"      Patch 8.2.1794 => falsy coalescing operator (a ?? b)
+"      Patch 8.2.4325 => wildoption+="pum"
+"      Patch 8.2.4713 => WinScrolled event
+"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" $MYVIMRC is normally set by vim... except when VIMINIT is used.
+if empty($MYVIMRC) | let $MYVIMRC = expand('<sfile>:p') | endif
+" xdg.vim must be in the same dir as this file's realpath (not symlink)
+let $MYVIMRCdir = $MYVIMRC->resolve()->fnamemodify(":h")
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" source initialization files from runtimepath (with XDG config and data dirs)
+"
+" Most of my public dotfiles will be in XDG_DATA_HOME/vim (or ~/.vim).
+" All of my private dotfiles will be in XDG_CONFIG_HOME/vim.
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+so $MYVIMRCdir/init_xdg.vim " use XDG spec for rtp, pp, viminfo, dir
+runtime! init_options.vim   " settings for vim options. no plugins required
+runtime! init_packadd.vim   " preparing &rtp before any other config
+runtime! conf_terminal.vim  " termguicolors, &t_*, width-based opts, mouse, etc
+runtime! conf_colors.vim    " colorscheme, highlights, etc
+runtime! conf_plugins.vim   " plugin config vars (no packadd, map, au, com, &c)
+runtime! conf_maps_cmds.vim " all my maps, autocmds, and ex commands
+runtime! conf_abbrev.vim    " may include snippets, digraphs, spelling fixes
+
+" plugins.vim is for selecting and loading plugins, and basic configuration
+" (i.e. setting vars).  No mappings, ex commands, autocmds, etc should be in
+" plugins.vim.
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
