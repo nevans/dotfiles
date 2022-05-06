@@ -4,44 +4,20 @@
 " ways to configure vim in 2022. ;)
 "
 " Nota Bene: This vimrc requires at least vim 8.2.
-"
-"    I'll (probably) try to keep it at least *partially* working with the latest
-"    released versions in last two Ubuntu LTS releases (which is probably
-"    running on my servers), the previous non-LTS release (which might be on any
-"    desktops), and the latest termux version (I'm not going to compile by hand
-"    for termux).
-"
-"    Latest versions (as of 2022-05-04)
-"      * Ubuntu 18.04 LTS => v8.0.1453
-"      * Ubuntu 20.04 LTS => v8.1.2269
-"      * Ubuntu 21.10     => v8.2.2434
-"      * Ubuntu 22.04 LTS => v8.2.3995
-"      * termux           => v8.2.4650
-"      * vim master       => v8.2.4867
-"
-"    I can use the bin/install-vim script in this repo to get the absolute
-"    latest version.  But that's not always feasible (e.g. on termux).
-"
-"    Known incompatibilities with 8.2.0000:
-"      Patch 8.2.1794 => falsy coalescing operator (a ?? b)
-"      Patch 8.2.4325 => wildoption+="pum"
-"      Patch 8.2.4713 => WinScrolled event
-"
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"            (see changelog below)
 
-" $MYVIMRC is normally set by vim... except when VIMINIT is used.
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Ensure XDG_CONFIG_HOME and XDG_DATA_HOME are in runtimepath.           {{{1
+
 if empty($MYVIMRC) | let $MYVIMRC = expand('<sfile>:p') | endif
-" xdg.vim must be in the same dir as this file's realpath (not symlink)
-let $MYVIMRCdir = $MYVIMRC->resolve()->fnamemodify(":h")
+let $MYVIMdir = expand('<sfile>:p') ->resolve()->fnamemodify(":h")
+source $MYVIMdir/init_xdg.vim " use XDG spec for rtp, pp, viminfo, dir
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" source initialization files from runtimepath (with XDG config and data dirs)
+" load init/conf files from runtimepath (using XDG)                      {{{1
 "
 " Most of my public dotfiles will be in XDG_DATA_HOME/vim (or ~/.vim).
 " All of my private dotfiles will be in XDG_CONFIG_HOME/vim.
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-so $MYVIMRCdir/init_xdg.vim " use XDG spec for rtp, pp, viminfo, dir
 runtime! init_options.vim   " settings for vim options. no plugins required
 runtime! init_packadd.vim   " preparing &rtp before any other config
 runtime! conf_terminal.vim  " termguicolors, &t_*, width-based opts, mouse, etc
@@ -50,7 +26,246 @@ runtime! conf_plugins.vim   " plugin config vars (no packadd, map, au, com, &c)
 runtime! conf_maps_cmds.vim " all my maps, autocmds, and ex commands
 runtime! conf_abbrev.vim    " may include snippets, digraphs, spelling fixes
 
-" plugins.vim is for selecting and loading plugins, and basic configuration
-" (i.e. setting vars).  No mappings, ex commands, autocmds, etc should be in
-" plugins.vim.
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Vim changelog since 8.0, copied from https://www.arp242.net/vimlog/    {{{1
+"
+"    I can use the bin/install-vim script in this repo to install the latest
+"    version (from git).  But that's not always feasible (e.g. on termux).
+"
+"    I'll (probably, occasionally) try to keep this from crashing horribly in
+"    anything newer than 8.0... but no promises.  It's probably broken in 8.1.
+"    No effor has been made (yet?) to make this work with neovim.
+"
+"    Notable changes, copied from https://www.arp242.net/vimlog/
+"      * 8.2.4892 (2022-05-06) ========================== git master branch {{{2
+"        * ???
+"        * 8.2.4825 (2022 Apr 25) => Add maplist()
+"        * 8.2.4805 (2022 Apr 22) => Add hl-CurSearch
+"        * 8.2.4804 (2022 Apr 21) => Allow expressions in heredoc
+"        * 8.2.4780 (2022 Apr 18) => Support LSP in channels
+"        * 8.2.4742 (2022 Apr 12) => Add --log
+"        * 8.2.4713 (2022 Apr  8) => WinScrolled event
+"        * 8.2.4712 (2022 Apr  8) => Add :profile stop and dump
+"        * 8.2.4684 (2022 Apr  4) => Open channel on Unix domain socket
+"
+"      * 8.2.4650 (2022-01 to 2022-03) =================> my current termux {{{2
+"        * 8.2.4608 (2022 Mar 22) => Add "fuzzy" to 'wildoptions'
+"        * 8.2.4335 (2022 Feb  9) => DirChangedPre event
+"        * 8.2.4329 (2022 Feb  8) => Add %e and %k in 'errorformat'
+"        * 8.2.4325 (2022 Feb  8) => Add "pum:" to 'wildoptions'
+"        * 8.2.4249 (2022 Jan 29) => Add "timeout" to 'spellsuggest'
+"        * 8.2.4242 (2022 Jan 28) => P in visual mode
+"                                       "Put" (paste) text in visual mode
+"                                       without yanking the deleted text to the
+"                                       unnamed register.
+"        * 8.2.4052 (2022 Jan 10) => win_move_separator(), win_move_statusline()
+"
+"      * 8.2.3995 (2021-02 to 2021-12) ==================> Ubuntu 22.04 LTS {{{2
+"        * 8.2.3906 (2021 Dec 26) => Remove "in development" from Vim9
+"        * 8.2.3900 (2021 Dec 26) => Allow script-local functions in *expr
+"                                    options
+"        * 8.2.3888 (2021 Dec 24) => Add :argdedeupe
+"        * 8.2.3848 (2021 Dec 18) => reduce(), filter(), and map() work on
+"                                    strings
+"        * 8.2.3751 (2021 Dec  6) => Assign lambda to options that take a
+"                                    function
+"        * 8.2.3664 (2021 Nov 24) => Add hl-CursorLineSign, hl-CursorLineFold
+"        * 8.2.3605 (2021 Nov 16) => Add hlget(), hlset()
+"        * 8.2.3591 (2021 Nov 13) => Add WinClosed event
+"        * 8.2.3562 (2021 Oct 24) => Add v:colornames
+"        * 8.2.3524 (2021 Oct 16) => Add 'guiligatures'
+"        * 8.2.3520 (2021 Oct 16) => Add 'thesaurusfunc'
+"        * 8.2.3430 (2021 Sep 12) => ModeChanged event
+"        * 8.2.3424 (2021 Sep 10) => Add multispace to 'listchars'
+"        * 8.2.3226 (2021 Jul 26) => Add digraph_get(), digraph_getlist(),
+"                                    digraph_set(), digraph_setlist()
+"        * 8.2.3198 (2021 Jul 22) => Add list to 'breakindentopt'
+"        * 8.2.3110 (2021 Jul  5) => Add \%.l, \%<.l, and \%>.l patterns
+"        * 8.2.3022 (2021 Jun 20) => Add 'cryptmethod'=xchaha20
+"        * 8.2.2971 (2021 Jun 10) => Add zp, zP, zy
+"                                        zp pastes in block mode without adding
+"                                        trailing whitespace,
+"                                        zy yanks without trailing whitespace.
+"        * 8.2.2854 (2021 May 15) => Add %{ to 'statusline'
+"        * 8.2.2813 (2021 Apr 26) => Add f flag in :vimgrep
+"                                        "Fuzzy" match :vimgrep results.
+"        * 8.2.2675 (2021 Mar 29) => Add 'autoshelldir'
+"        * 8.2.2606 (2021 Mar 14) => Add strcharlen()
+"        * 8.2.2658 (2021 Mar 26) => Loop over a string
+"        * 8.2.2569 (2021 Mar  4) => Expand 'fillchars'
+"                                        New values: "eob" to change change the
+"                                        (~) to indicate non-existing lines,
+"                                        "foldopen", "foldclose", and "foldsep"
+"                                        to change 'foldcolumn' markers.
+"                                        'fillchars' can be set per-window
+"                                        (previously it was always global).
+"                                        Also allow multibyte characters in
+"                                        'fillchars' and 'statusline'.
+"        * 8.2.2490 (2021 Feb 10) => Add followwrap to 'diffopt'
+"        * 8.2.2468 (2021 Feb  6) => Add fullcommand()
+"        * 8.2.2454 (2021 Feb  3) => lead: in 'listchars'
+"
+"      * 8.2.2434 (2019-11 to 2021-01) ===========> Ubuntu 21.10, Debian 11 {{{2
+"        * 8.2.2428 (2021 Jan 30) => Detect focus events in terminal
+"        * 8.2.2366 (2021 Jan 16) => :sleep!
+"        * 8.2.2324 (2021 Jan 10) => Add charcol(), getcharpos(), setcharpos(),
+"                                    getcursorcharpos(), setcursorcharpos()
+"        * 8.2.2233 (2020 Dec 28) => Add charidx()
+"        * 8.2.2128 (2020 Dec 11) => Add VimSuspend and VimResume
+"        * 8.2.1978 (2020 Nov 12) => Add <Cmd>
+"                                    Don't change modes in this key mapping so
+"                                    that insert or visual mode mappings will
+"                                    always work without having to use <C-u> or
+"                                    <C-o>.  For example noremap <C-q>
+"                                    <Cmd>:normal! K<CR>
+"        * 8.2.1933 (2020 Nov  1) => :sort and sort() can do locale-aware sorting
+"        * 8.2.1921 (2020 Oct 29) => matchfuzzy(), matchfuzzypos()
+"        * 8.2.1874 (2020 Oct 21) => Add InsertLeavePre
+"        * 8.2.1794 (2020 Oct  3) => ?? operator
+"        * 8.2.1544 (2020 Aug 30) => Add gettext()
+"        * 8.2.1536 (2020 Aug 28) => Add setcellwidths(), charclass()
+"                                        Allow overriding the display width for
+"                                        characters whose width is ambiguous.
+"        * 8.2.1413 (2020 Aug 10) => Add g<Tab>; support :tabnext #,
+"                                    :tabclose #, etc.
+"                                        g<Tab> goes back to the last accessed
+"                                        tab, and # in :tab* commands refer to
+"                                        the last accessed tab.
+"        * 8.2.1347 (2020 Aug  1) => expand('<SID>')
+"        * 8.2.1255 (2020 Jul 20) => Add 'quickfixtextfunc'
+"        * 8.2.0988 (2020 Jun 16) => Add sorting to readir(), readirex()
+"        * 8.2.0970 (2020 Jun 13) => Add terminalprops()
+"        * 8.2.0953 (2020 Jun 10) => Add 'spelloptions'
+"        * 8.2.0952 (2020 Jun 10) => Add SigUSR1 autocmd
+"        * 8.2.0935 (2020 Jun  8) => Add flatten()
+"        * 8.2.0924 (2020 Jun  7) => Add getreginfo()
+"        * 8.2.0877 (2020 Jun  1) => Add searchcount()
+"        * 8.2.0863 (2020 May 31) => Allow setting underline colour in terminal
+"        * 8.2.0878 (2020 Jun  1) => Add reduce()
+"        * 8.2.0875 (2020 Jun  1) => Add readirex()
+"        * 8.2.0861 (2020 May 31) => Add getmarklist()
+"        * 8.2.0860 (2020 May 31) => Add unsigned to 'nrformats'
+"        * 8.2.0815 (2020 May 24) => Add mapset()
+"        * 8.2.0775 (2020 May 17) => Call Vim functions from Lua
+"        * 8.2.0574 (2020 Apr 13) => IPv6 support in channels
+"        * 8.2.0258 (2020 Feb 14) => Add echoraw()
+"        * 8.2.0095 (2020 Jan  6) => Add optional error code to :cquit
+"        * 8.1.2343 (2019 Nov 26) => rand() and srand()
+"        * 8.1.2341 (2019 Nov 25) => interrupt()
+"        * 8.1.2326 (2019 Nov 21) => strptime()
+"
+"      * 8.1.2269 (2019-02 to 2019-11) ==================> Ubuntu 20.04 LTS {{{2
+"        * 8.1.2255 (2019 Nov  4) => :terminal ++shell
+"        * 8.1.2233 (2019 Oct 29) => v:argv
+"        * 8.1.2231 (2019 Oct 28) => Add gM
+"        * 8.1.2229 (2019 Oct 27) => hl-LineNrAbove, hl-LineNrBelow
+"        * 8.1.2019 (2019 Sep  9) => Add 'cursorlineopt'
+"        * 8.1.1904 (2019 Aug 21) => border and align in 'completepopup'
+"        * 8.1.1882 (2019 Aug 18) => popup in 'completeopt'
+"        * 8.1.1838 (2019 Aug 11) => :spellrare
+"        * 8.1.1996 (2019 Sep  6) => -> operator
+"        * 8.1.1928 (2019 Aug 25) => Popup windows
+"        * 8.1.1769 (2019 Jul 28) => 'completeslash'
+"        * 8.1.1705 (2019 Jul 16) => #{} dict notation
+"        * 8.1.1565 (2019 Jun 17) => Sound functions
+"        * 8.1.1542 (2019 Jun 15) => v:option_command, v:option_oldlocal,
+"                                    v:option_oldglobal
+"        * 8.1.1539 (2019 Jun 15) => :const
+"        * 8.1.1418 (2019 May 29) => win_execute()
+"        * 8.1.1391 (2019 May 25) => 'wincolor'
+"        * 8.1.1372 (2019 May 23) => g:actual_curwin, g:statusline_winid
+"        * 8.1.1354 (2019 May 19) => :let=<<  (Heredoc assignment)
+"        * 8.1.1341 (2019 May 17) => Text properties
+"                                        Assign metadata to text in a buffer, as
+"                                        an alternative to Vim's syntax
+"                                        highlighting.  See textprop. This is
+"                                        still an experimental feature.
+"        * 8.1.1332 (2019 May 14) => listener_add()
+"        * 8.1.1310 (2019 May  9) => Default values for function arguments
+"        * 8.1.1307 (2019 May  9) => :xrestore
+"        * 8.1.1305 (2019 May  9) => environ(), getenv(), and setenv()
+"        * 8.1.1291 (2019 May  7) => chdir()
+"        * 8.1.1275 (2019 May  5) => :cbefore, :cafter
+"        * 8.1.1270 (2019 May  4) => Show match position when searching
+"        * 8.1.1256 (2019 May  3) => :cabove, :cbelow, :labove, :lbelow
+"        * 8.1.1224 (2019 Apr 28) => Control font weight on Windows'
+"        * 8.1.1218 (2019 Apr 27) => Tab-local directory
+"        * 8.1.1188 (2019 Apr 20) => v: prefix is required
+"                                        Previously e.g. count would also work.
+"                                        The v: prefix is mandatory when
+"                                        :scriptversion is 3 or higher.
+"        * 8.1.1140 (2019 Apr  8) => Add more arguments to winnr()
+"        * 8.1.1138 (2019 Apr  8) => CompleteChanged event
+"        * 8.1.1122 (2019 Apr  6) => str2list() and list2str()
+"        * 8.1.1120 (2019 Apr  5) => readdir()
+"        * 8.1.1116 (2019 Apr  4) => :scriptversion
+"        * 8.1.1114 (2019 Apr  4) => .. operator
+"        * 8.1.1113 (2019 Apr  4) => ++once argument for :autocmd
+"        * 8.1.1084 (2019 Mar 30) => Add window ID argument to matchdelete(),
+"                                    clearmatches(), getmatches(), setmatches()
+"        * 8.1.1068 (2019 Mar 29) => complete_info()
+"        * 8.1.1056 (2019 Mar 26) => rubyeval()
+"        * 8.1.0972 (2019 Feb 22) => CTRL-W_gt, CTRL-W_gT
+"                                        Switch tabs, like gt and gT. Mainly
+"                                        useful to switch from terminal window.
+"        * 8.1.0902 (2019 Feb 12) => *=, /=, %=
+"        * 8.1.0897 (2019 Feb 11) => a: variables are immutable
+"
+"      * 8.1.0875 (2018-02 to 2019-01) =========================> Debian 10 {{{2
+"        * 8.1.0862 (2019 Jan 31) => [:ident:], [:keyword:], [:fname:]
+"        * 8.1.0759 (2019 Jan 16) => Allow for a third character for "tab:" in
+"                                    'listchars'
+"        * 8.1.0757 (2019 Jan 15) => Blob type
+"        * 8.1.0728 (2019 Jan 11) => p" flag in 'formatoptions'
+"                                        Don't break lines at single spaces that
+"                                        follow periods.
+"        * 8.1.0706 (2019 Jan  8) => :redrawtabline
+"        * 8.1.0658 (2018 Dec 29) => sign_place(), sign_unplace(), etc
+"        * 8.1.0573 (2018 Dec  8) => Allow functions and commands to redefine
+"                                    themselves
+"        * 8.0.0495 (2018 Oct 25) => :filter support for more commands
+"        * 8.1.0487 (2018 Oct 19) => :tlmenu
+"        * 8.1.0393 (2018 Sep 15) => Include the xdiff library
+"                                    Include diff library instead of relying on
+"                                    external tools to improve diff quality.
+"                                    Many new 'diffopt' settings (e.g.
+"                                    set diffopt+=internal,algorithm:patience
+"                                    would be a good setting for many).
+"        * 8.1.0369 (2018 Sep 11) => \   Comments in line continuations;
+"                                        see line-continuation-comment:
+"        * 8.1.0311 (2018 Aug 21) => cfilter-plugin
+"        * 8.1.0105 (2018 Jun 23) => 'vartabstop', 'varsofttabstop'
+"        * 8.1.0414 (2018 Sep 21) => OptionSet autocmd
+"        * 8.1.0035 (2018 Jun  6) => prompt buffer
+"        * 8.0.1832 (2018 May 13) => Allow :unlet $ENV
+"        * 8.0.1787 (2018 May  1) => CTRL-R CTRL-L
+"                                        Insert line from buffer in commandline
+"        * 8.0.1742 (2018 Apr 21) => job_info() without argument lists all jobs
+"        * 8.0.1708 (2018 Apr 14) => mkdir('p') won't fail fail if the directory
+"                                    already exists
+"        * 8.0.1641 (2018 Mar 25) => Add the terminal API.
+"        * 8.0.1630 (2018 Mar 22) => trim()
+"        * 8.0.1616 (2018 Mar 18) => Add "!" to 'guioptions'
+"                                        Use a Vim terminal window for :! shell
+"                                        commands.
+"        * 8.0.1570 (2018 Mar  5) => Menus in terminal
+"        * 8.0.1531 (2018 Feb 22) => 24 bit colors in Windows console
+"        * 8.0.1491 (2018 Feb 10) => 'pumwidth'
+"        * 8.0.1459 (2018 Feb  3) => DirChanged event
+"
+"      * 8.0.1453 (2016-10 to 2018-01) ==================> Ubuntu 18.04 LTS {{{2
+"        * 8.0.1445 (Jan 31) => CmdlineChanged event
+"        * 8.0.1394 (Dec 16) => TextYankPost event
+"        * 8.0.1364 (Dec  2) => win_screenpos().
+"        * 8.0.1206 (Oct 19) => CmdlineEnter, CmdlineLeave
+"        * 8.0.1108 (Sep 14) => :terminal
+"        * 8.0.0716 (Jul 15) => --clean, 'viminfofile'
+"        * 8.0.0431 (Mar  8) => E flag in 'cinoptions'
+"        * 8.0.0251 (Jan 28) => 'pyxversion', :pythonx
+"      * 8.0.0000 (2016-08}========================= vim's 25th anniversary {{{2
+"        * versions below 8.0 *really* shouldn't be installed anywhere!!!
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" vim modeline... {{{1
+" vim: wrap fdm=marker

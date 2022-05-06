@@ -33,11 +33,11 @@ augroup vimrc_resize_options
       endif
 
       const cols = winwidth(0)
-      const buf = bufnr('')
+      const buf  = bufnr('')
       if exists("w:adjust_options_for_width_previous_width")
             \ && w:adjust_options_for_width_previous_width == cols
-            \ || exists("w:adjust_options_for_width_previous_bufnr")
-            \ && w:adjust_options_for_width_previous_bufnr != buf
+            \ && exists("w:adjust_options_for_width_previous_bufnr")
+            \ && w:adjust_options_for_width_previous_bufnr == buf
         # unchanged from last check
         return
       endif
