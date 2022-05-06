@@ -1,6 +1,7 @@
 ---
 - defaults:
     link:
+      relative: true
       relink: true
       create: true
     shell:
@@ -11,6 +12,9 @@
 - shell:
   - description: Check for Github Codespaces ~/.bashrc
     command: bin/gh-codespace-init
+
+  - description: move history files to {XDG_STATE_HOME
+    command: bin/mv_state_files
 
 - create:
   - ~/.cache
@@ -48,8 +52,9 @@
     ~/.dotfiles: ''
     ~/.gitconfig:
     ~/.gitignore:
-    ~/.profile:
     ~/.local/share/vim:
+    ~/.profile:
+
     ~/.vimrc: # backwards compatible, so I don't need to rely on VIMINIT
       path: vim/vimrc
 

@@ -382,6 +382,27 @@ if g:vimrc_enable_coq_maps
   nnoremap <silent><nowait> <leader>p  :<C-u>CocListResume<CR>
 
 endif
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" }}}1
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" vim modeline... {{{1
+" Custom commands (without mappings)
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+" :StripTrailingWhitespace                                               {{{1
+"
+" for twn decades, I've just manually typed :%s\s\+$// like a barbarian.
+" I saw this in someone else's dntfiles and realized, yes I *would* like to save
+" my original position and searck, thankyouverymuch.
+function! s:stripTrailingWhitespace(line1 = 1, line2 = '$') range
+  let origpos = getpos(".")
+  let origreg = getreg('/')
+  execute (a:line1 + 1) .. "," .. a:line2 .. 's/\s\+$//e'
+  eval origpos->setpos('.')
+  eval origreg->setreg('/')
+endfunction
+
+command -range=% StripTrailingWhitespace call s:stripTrailingWhitespace(<line1>, <line2>)
+
+
+" vim modeline... """"""""""""""""""""""""""""""""""""""""{{{1
 " vim: wrap fdm=marker

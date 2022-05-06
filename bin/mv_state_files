@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+set -euo pipefail
+cd "$(dirname "${BASH_SOURCE[0]}")"
+
+result=0
+export XDG_STATE_HOME=${XDG_STATE_HOME:-$HOME/.local/state}
+mkdir -p "$XDG_STATE_HOME"
+
+files=(
+  bash_history
+  irb_history
+  lesshst
+  yarnrc
+)
+
+for f in "${files[@]}"; do
+  home="$HOME/.$f"
+  xdg="$XDG_STATE_HOME/$f"
+  if [[ -f "$home" && ! -L "$home" ]]; then
+    if [[ -f "$xdg" ]]; then
+      1>&2 echo "Can't move $home. $xdg already exists."
+      result=1
+    fi
+    mv -i "$home" "$xdg"
+  fi
+  touch "$xdg"
+  if [[ ! -f "$home" ]] || [[ -L "$home" ]]; then
+    ln -srf "$(realpath "$xdg")" "$home"
+  fi
+done
