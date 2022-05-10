@@ -6,6 +6,7 @@
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
 if ! shopt -oq posix; then
+  export BASH_COMPLETION_USER_FILE="$XDG_CONFIG_HOME"/bash_completion
   if [ -f /usr/share/bash-completion/bash_completion ]; then
     . /usr/share/bash-completion/bash_completion
 

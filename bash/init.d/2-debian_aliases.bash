@@ -7,6 +7,7 @@ if hash vivid 2>/dev/null; then
     LS_COLORS="$(vivid generate one-dark)"
     export LS_COLORS
 elif hash dircolors 2>/dev/null; then
+    # TODO: eval $(dircolors "$XDG_CONFIG_HOME"/dircolors)
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
 fi
 ncolors=$(tput colors)

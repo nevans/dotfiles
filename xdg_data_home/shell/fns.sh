@@ -112,3 +112,6 @@ path_prepend () {
   eval "$ref=\$dirs"
   # echo "$ref=$dirs prepended $dir"
 }
+
+cond_path_append ()  { if [ -d "$1" ]; then path_prepend "$1"; fi; }
+cond_path_prepend () { if [ -d "$1" ]; then path_append  "$1"; fi; }

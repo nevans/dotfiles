@@ -1,0 +1,13 @@
+--type-add=ruby=.rake
+--type-set=haml=.haml
+--type-set=cucumber=.feature
+--type-set=conf=.conf
+--type-set=mustache=.mustache
+--type-set=sass=.sass
+--type-set=scss=.scss
+--type-set=ejs=.ejs
+--ignore-dir=log
+--ignore-dir=tmp
+--ignore-dir=doc
+--ignore-dir=coverage
+--known-types

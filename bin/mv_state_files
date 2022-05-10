@@ -8,8 +8,6 @@ mkdir -p "$XDG_STATE_HOME"
 
 files=(
   bash_history
-  irb_history
-  lesshst
   yarnrc
 )
 

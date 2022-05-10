@@ -1,4 +1,4 @@
- [ -z "$TERMUX_VERSION" ] && return
+[ -z "$TERMUX_VERSION" ] && return
 
 # change these to something more useful.
 # n.b. this has no affect on e.g. ssh's default user

@@ -45,21 +45,41 @@
   - "~/.ssh"
 
 - link:
-    ~/.bash_profile:
-    ~/.bashrc:
-    ~/.config/bash:
-    ~/.config/shell:
     ~/.dotfiles: ''
+
+    # When XDG is supported, place configuration files in ~/.config
+    # Local overrides Defaults might be in ~/.config/app-local.conf files, or in
+    # ~/.config/app.d/ dirs.)
+    ~/.config/bash:
+    ~/.config/npm:
+
+    # install packages, plugins etc in ~/.local/share
+    # default configs may also be put here, with local overrides in ~/.config.
+    ~/.local/share/vim:
+    ~/.local/share/:
+      glob: true
+      path: xdg_data_home/**
+
+    # TODO: move to XDG
     ~/.gitconfig:
     ~/.gitignore:
-    ~/.local/share/vim:
+
+    # Otherwise, if an environment variable can set the path, set in shell init.
+    # Only link in $HOME if neither XDG nor envvar config are supported.
+    ~/.bash_logout:
+      path: bash/bash_logout
+    ~/.bash_profile:
+      path: bash/bash_profile
+    ~/.bashrc:
+      path: bash/bashrc
     ~/.profile:
 
-    ~/.vimrc: # backwards compatible, so I don't need to rely on VIMINIT
+    # backwards compatible bootstrap, so I don't need to use $VIMINIT
+    ~/.vimrc:
       path: vim/vimrc
 
     ~/.terminfo/:
-      if: test -d terminfo  # run scripts/dl-terminfo to populate this
+      if: test -d terminfo  # run bin/dl-terminfo to populate this
       glob: true
       path: terminfo/**
 

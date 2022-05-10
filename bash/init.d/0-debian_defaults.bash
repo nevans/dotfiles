@@ -14,6 +14,8 @@ shopt -s histappend
 HISTSIZE=5000
 HISTFILESIZE=10000
 
+export HISTFILE="$XDG_STATE_HOME"/bash_history
+
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize

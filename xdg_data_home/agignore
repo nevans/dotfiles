@@ -1,0 +1,4 @@
+*.sock
+*.log
+*.pdf
+tags

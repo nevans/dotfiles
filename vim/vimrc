@@ -64,7 +64,7 @@ runtime! conf_abbrev.vim    " may include snippets, digraphs, spelling fixes
 "        * 8.2.3906 (2021 Dec 26) => Remove "in development" from Vim9
 "        * 8.2.3900 (2021 Dec 26) => Allow script-local functions in *expr
 "                                    options
-"        * 8.2.3888 (2021 Dec 24) => Add :argdedeupe
+"        * 8.2.3888 (2021 Dec 24) => Add :argdedupe
 "        * 8.2.3848 (2021 Dec 18) => reduce(), filter(), and map() work on
 "                                    strings
 "        * 8.2.3751 (2021 Dec  6) => Assign lambda to options that take a
@@ -216,7 +216,7 @@ runtime! conf_abbrev.vim    " may include snippets, digraphs, spelling fixes
 "        * 8.1.0759 (2019 Jan 16) => Allow for a third character for "tab:" in
 "                                    'listchars'
 "        * 8.1.0757 (2019 Jan 15) => Blob type
-"        * 8.1.0728 (2019 Jan 11) => p" flag in 'formatoptions'
+"        * 8.1.0728 (2019 Jan 11) => "p" flag in 'formatoptions'
 "                                        Don't break lines at single spaces that
 "                                        follow periods.
 "        * 8.1.0706 (2019 Jan  8) => :redrawtabline

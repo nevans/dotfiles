@@ -1,5 +1,5 @@
 ################################################################################
-# default debian/ubuntu prompt config... TODO: replace this with my prompt cfg.
+# default debian/ubuntu prompt config... kept for reference
 ################################################################################
 
 # set variable identifying the chroot you work in (used in the prompt below)
