@@ -1,0 +1,126 @@
+[color]
+  ui = auto
+
+#[color "branch"]
+#  current = yellow reverse
+#  local = yellow
+#  remote = green
+
+[diff]
+  colorMoved = blocks
+
+[color "diff"]
+  # meta = yellow
+  # frag = magenta
+  old = red
+  new = green
+  whitespace = red reverse
+
+#[color "status"]
+#  added = yellow
+#  changed = green
+#  untracked = cyan
+
+[core]
+  whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
+  excludesfile = ./ignore
+  commitGraph = true
+
+[branch]
+  autosetupmerge = true
+
+[push]
+  default = tracking
+
+[pull]
+  ff = only
+
+[merge]
+  conflictstyle = diff3
+  tool = vimdiff
+
+[alias]
+  st = status
+  ci = commit
+  br = branch
+  co = checkout
+  df = diff
+  sw = switch
+
+  cached   = diff --cached
+  branches = branch -av
+
+  ###############################################################
+  # TODO: convert much of this to "pretty.<name> format strings
+  #
+  # log variations (patch variations are only on lg):
+  #   "sm": (since master)   master...
+  #   "a":  (all)            --all --topo-order
+  #   "m":  (mainline)       --first-parent
+  #   "p":  (patch)          --patch
+  #   "mp": (mainline patch) --first-parent --patch -m
+
+  # "lg" = "natural log" (or "l"og "g"raph)
+  lg    = log --graph --decorate
+  lgsm  = log --graph --decorate master...
+  lga   = log --graph --decorate --all --topo-order
+  lgm   = log --graph --decorate --first-parent
+  lgp   = log --graph --decorate --patch
+  lgpsm = log --graph --decorate --patch master...
+  lgsmp = lgpsm
+  lgmp  = log --graph --decorate --first-parent --patch -m
+
+  # "l"og "o"ne "l"ine: --pretty=oneline
+  lol   = log --graph --decorate --pretty=oneline --abbrev-commit
+  lolsm = log --graph --decorate --pretty=oneline --abbrev-commit master...
+  lola  = log --graph --decorate --pretty=oneline --abbrev-commit --all --topo-order
+  lolm  = log --graph --decorate --pretty=oneline --abbrev-commit --first-parent
+
+  # my preferred short format: a little more informative than "oneline"
+  # Needs 120 columns or more
+  #
+  l     = log --graph --decorate --date=short --format=tformat:'%w(120,0,10)%C(auto)%>|(20)%h %Cblue%cd %Cgreen%aN%<|(59)%x20%Creset%<(60,trunc)%s%C(auto)%+d'
+  lsm   = log --graph --decorate --date=short --format=tformat:'%w(120,0,10)%C(auto)%>|(20)%h %Cblue%cd %Cgreen%aN%<|(50)%x20%Creset%<(60,trunc)%s%C(auto)%+d' master...
+  la    = log --graph --decorate --date=short --format=tformat:'%w(120,0,10)%C(auto)%>|(20)%h %Cblue%cd %Cgreen%aN%<|(59)%x20%Creset%<(60,trunc)%s%C(auto)%+d' --all --topo-order
+  lm    = log --graph --decorate --date=short --format=tformat:'%w(120,0,10)%C(auto)%>|(10)%h %Cblue%cd %Cgreen%aN%<|(49)%x20%Creset%<(70,trunc)%s%C(auto)%+d' --first-parent
+
+  # longer short log; uses four lines and fits into 120 columns
+  ll    = log --graph --decorate --date=short --format=tformat:'%w(120,0,10)%>|(52)%C(auto)%H %C(auto)%D%n%w(120,0,0)%<|(11)%x20%C(cyan)[%ai] %Cblue(%ar)%>|(118)%Cgreen%aN%n%<|(12)%x20%<(68,trunc)%s %Cgreen%>(38,mtrunc)%aE%n'
+  llsm  = log --graph --decorate --date=short --format=tformat:'%w(120,0,10)%>|(52)%C(auto)%H %C(auto)%D%n%w(120,0,0)%<|(11)%x20%C(cyan)[%ai] %Cblue(%ar)%>|(118)%Cgreen%aN%n%<|(12)%x20%<(68,trunc)%s %Cgreen%>(38,mtrunc)%aE%n' master...
+  lla   = log --graph --decorate --date=short --format=tformat:'%w(120,0,10)%>|(52)%C(auto)%H %C(auto)%D%n%w(120,0,0)%<|(11)%x20%C(cyan)[%ai] %Cblue(%ar)%>|(118)%Cgreen%aN%n%<|(12)%x20%<(68,trunc)%s %Cgreen%>(38,mtrunc)%aE%n' --all --topo-order
+  llm   = log --graph --decorate --date=short --format=tformat:'%w(120,0,10)%>|(52)%C(auto)%H %C(auto)%D%n%w(120,0,0)%<|( 1)%x20%C(cyan)[%ai] %Cblue(%ar)%>|(118)%Cgreen%aN%n%<|( 2)%x20%<(68,trunc)%s %Cgreen%>(38,mtrunc)%aE%n' --first-parent
+
+  # uses two lines and needs 120 columns or more
+  l2    = log --graph --decorate --date=short --format=tformat:'%w(120,0,0)%>|(10)%x20%Cblue%cs %C(auto)%h%C(auto)%d%n%Cgreen%>|(9)%x20%aN%<|(34)%x20%Creset%<(85,trunc)%s%C(auto)'
+
+  # skinny log; uses four lines and fits into 80 columns
+  ls    = log --graph --decorate --date=short --format=tformat:'%>|(12)%C(auto)%x20%h %C(auto)%D%n%<|(11)%x20%C(cyan)[%ai] %Cblue(%ar)%>|(78)%Cgreen%aN%n%<|(11)%x20%<(66,trunc)%s%n'
+  lssm  = log --graph --decorate --date=short --format=tformat:'%>|(12)%C(auto)%x20%h %C(auto)%D%n%<|(11)%x20%C(cyan)[%ai] %Cblue(%ar)%>|(78)%Cgreen%aN%n%<|(11)%x20%<(66,trunc)%s%n' master...
+  lsa   = log --graph --decorate --date=short --format=tformat:'%>|(12)%C(auto)%x20%h %C(auto)%D%n%<|(11)%x20%C(cyan)[%ai] %Cblue(%ar)%>|(78)%Cgreen%aN%n%<|(11)%x20%<(66,trunc)%s%n' --all --topo-order
+  lsm   = log --graph --decorate --date=short --format=tformat:'%>|( 2)%C(auto)%x20%h %C(auto)%D%n%<|( 1)%x20%C(cyan)[%ai] %Cblue(%ar)%>|(78)%Cgreen%aN%n%<|( 1)%x20%<(76,trunc)%s%n' --first-parent
+
+  # end log variations...
+  #####################################################
+
+  mrg      = merge --no-ff --no-commit
+  mrgc     = merge --no-ff --commit
+  uncommit = reset --soft HEAD^
+  addall   = add -A .
+  a        = add -A
+
+  update-submodules = submodule update --init --recursive --rebase
+  upgrade-submodules = submodule update --init --recursive --remote
+
+  pffpru = pull --ff-only --prune
+  ff = merge --ff-only
+
+[commit]
+  verbose = true
+
+[gc]
+  writeCommitGraph = true
+
+[init]
+  defaultBranch = main
+
+# vim:ft=gitconfig

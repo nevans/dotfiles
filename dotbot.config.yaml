@@ -55,14 +55,13 @@
 
     # install packages, plugins etc in ~/.local/share
     # default configs may also be put here, with local overrides in ~/.config.
-    ~/.local/share/vim:
     ~/.local/share/:
       glob: true
-      path: xdg_data_home/**
+      path: xdg_data_home/*
 
-    # TODO: move to XDG
+    # for backwards compatibility
+    # TODO: move completely to XDG
     ~/.gitconfig:
-    ~/.gitignore:
 
     # Otherwise, if an environment variable can set the path, set in shell init.
     # Only link in $HOME if neither XDG nor envvar config are supported.
@@ -76,7 +75,7 @@
 
     # backwards compatible bootstrap, so I don't need to use $VIMINIT
     ~/.vimrc:
-      path: vim/vimrc
+      path: xdg_data_home/vim/vimrc
 
     ~/.terminfo/:
       if: test -d terminfo  # run bin/dl-terminfo to populate this
@@ -102,7 +101,7 @@
       stderr: true
       stdout: true
       command: |
-        ./vim/pack/ui-finders/start/fzf/install \
+        ./xdg_data_home/vim/pack/ui-finders/start/fzf/install \
           --xdg --completion --key-bindings --no-update-rc
 
     - description: Update coc.nvim
