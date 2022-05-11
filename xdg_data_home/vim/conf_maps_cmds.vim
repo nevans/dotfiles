@@ -295,8 +295,9 @@ nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
 " Use K to show documentation in preview window.
-" TODO: this clobbers some other plugins documentation. :(
 nnoremap <silent> K :call <SID>show_documentation()<CR>
+" to use keywordprg, which is ussually set by ftplugins
+nnoremap <silent> gK K
 
 function! s:show_documentation()
   if CocAction('hasProvider', 'hover')

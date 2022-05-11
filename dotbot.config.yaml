@@ -52,6 +52,7 @@
     # ~/.config/app.d/ dirs.)
     ~/.config/bash:
     ~/.config/npm:
+    ~/.config/ripgrep:
 
     # install packages, plugins etc in ~/.local/share
     # default configs may also be put here, with local overrides in ~/.config.
