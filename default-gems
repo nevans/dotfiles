@@ -1,0 +1,11 @@
+bundler
+rubocop
+meowcop
+rspec
+pry
+yard
+gem-ctags
+rexe
+
+rails
+resque-pool

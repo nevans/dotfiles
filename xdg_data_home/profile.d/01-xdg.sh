@@ -2,7 +2,7 @@
 #   * tmux v3.2 (v3.1 can use hardcoded ~/.config/tmux)
 
 # for ruby config, see ./ruby.sh
-# for go config, see ./ruby.sh
+# for go config, see ./go.sh
 # for nodejs config, see ./node.sh
 
 # Copied and adapted from https://wiki.archlinux.org/title/XDG_Base_Directory

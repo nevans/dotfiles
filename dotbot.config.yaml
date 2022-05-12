@@ -50,33 +50,27 @@
     # When XDG is supported, place configuration files in ~/.config
     # Local overrides Defaults might be in ~/.config/app-local.conf files, or in
     # ~/.config/app.d/ dirs.)
-    ~/.config/bash:
-    ~/.config/npm:
-    ~/.config/ripgrep:
+    ~/.config:
+      glob: true
+      path: xdg_config_home/*
 
     # install packages, plugins etc in ~/.local/share
     # default configs may also be put here, with local overrides in ~/.config.
     ~/.local/share/:
       glob: true
       path: xdg_data_home/*
+    ~/.local/share/rbenv/default-gems:
 
-    # for backwards compatibility
-    # TODO: move completely to XDG
+    # TODO: move to XDG_CONFIG_HOME
     ~/.gitconfig:
 
     # Otherwise, if an environment variable can set the path, set in shell init.
     # Only link in $HOME if neither XDG nor envvar config are supported.
+    ~/.agignore:
     ~/.bash_logout:
-      path: bash/bash_logout
     ~/.bash_profile:
-      path: bash/bash_profile
     ~/.bashrc:
-      path: bash/bashrc
     ~/.profile:
-
-    # backwards compatible bootstrap, so I don't need to use $VIMINIT
-    ~/.vimrc:
-      path: xdg_data_home/vim/vimrc
 
     ~/.terminfo/:
       if: test -d terminfo  # run bin/dl-terminfo to populate this
@@ -86,28 +80,26 @@
     ~/.ssh/config:
       path: ssh/config
 
+    # backwards compatible bootstrap, so I don't need to use $VIMINIT
+    ~/.vimrc:
+      path: xdg_data_home/vim/vimrc
+
 - shell:
     - git submodule sync --recursive --quiet
     - git submodule update --init --recursive --depth 5
 
     - description: Update vim helptags
       quiet: true
-      stdin: true
-      stderr: true
-      stdout: true
       command: vim -e "+packload | helptags ALL | qall"
 
     - description: Install fzf
       quiet: true
-      stderr: true
-      stdout: true
       command: |
         ./xdg_data_home/vim/pack/ui-finders/start/fzf/install \
           --xdg --completion --key-bindings --no-update-rc
 
     - description: Update coc.nvim
       quiet: true
-      stderr: true
       command: |
         dir="vim/pack/compl_lint_lsp_etc/opt/coc.nvim"
         if [ -r "$dir"/package.json ]; then
