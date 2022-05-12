@@ -4,9 +4,9 @@
 # see /usr/share/doc/bash/examples/startup-files for examples.
 # the files are located in the bash-doc package.
 
-# the default umask is set in /etc/profile; for setting the umask
-# for ssh logins, install and configure the libpam-umask package.
-#umask 022
+# the default umask is probably set by /etc/profile or /etc/login.defs.
+# Either way, the historical default umask 022 is far too permissive.
+umask 077
 
 export TZ="America/New_York"
 export EDITOR="vim"

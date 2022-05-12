@@ -7,5 +7,3 @@
   [ -e "$XDG_DATA_HOME"   ] || mkdir -p "$XDG_DATA_HOME"
   [ -e "$XDG_STATE_HOME"  ] || mkdir -p "$XDG_STATE_HOME"
 ) > /dev/null 2>&1
-
-

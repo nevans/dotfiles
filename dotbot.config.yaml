@@ -41,7 +41,8 @@
   - "~/.local"
   - "~/.local/bin"
   - "~/.local/share"
-  - "~/.local/state"
+  - "~/.local/share/vim"
+  - "~/.local/share/rbenv"
   - "~/.ssh"
 
 - link:

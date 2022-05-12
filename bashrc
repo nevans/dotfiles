@@ -6,9 +6,8 @@
 [[ -n "$bashrc_loaded" ]] && return 0
 bashrc_loaded=1
 
-# the fns used in this script
+# the fns and paths used in this script
 . "${XDG_DATA_HOME:-$HOME/.local/share}/shell/fns.sh"
-# the paths used in this script
 . "${XDG_DATA_HOME:-$HOME/.local/share}/shell/xdg.sh"
 
 # mostly for satting various path-related environment vars

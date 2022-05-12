@@ -9,11 +9,8 @@
 # Because polluting our environment is better than polluting $HOME 😏,
 # Many many env vars instructing other apps to honor XDG base dir spec:
 
-if [ -z "$MANPATH" ]; then
-  export MANPATH="$XDG_DATA_HOME/man:"
-else
-  path_prepend MANPATH "$XDG_DATA_HOME/man"
-fi
+path_prepend MANPATH "$XDG_DATA_HOME/man"
+path_append MANPATH ""  # ensure the defaults are honored
 
 export ACKRC="$XDG_CONFIG_HOME/ack/ackrc"
 export DOCKER_CONFIG="$XDG_CONFIG_HOME"/docker

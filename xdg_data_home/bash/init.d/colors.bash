@@ -17,5 +17,3 @@ if [ -n "$ncolors" ] && [ "$ncolors" -ge 8 ]; then
     alias fgrep='fgrep --color=auto'
     alias egrep='egrep --color=auto'
 fi
-
-

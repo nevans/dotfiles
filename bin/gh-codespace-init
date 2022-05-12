@@ -8,4 +8,13 @@ if [ "$CODESPACES" = true ]; then
   mkdir -p "$BACKUP_DIR"
   if [ -f ~/.bashrc  ]; then mv ~/.bashrc  "$BACKUP_DIR"/bashrc;  fi
   if [ -f ~/.profile ]; then mv ~/.profile "$BACKUP_DIR"/profile; fi
+
+  if [ -d "$XDG_CONFIG_HOME"/docker ]; then
+    echo 1>&2 "Docker config dir won't be managed by GitHub Codespace."
+    echo 1>&2 "To switch to GH managed docker config:"
+    echo 1>&2 "  mv ~/.config/docker $BACKUP_DIR"
+    echo 1>&2 "  ~/.dotfiles/install"
+  else
+    ln -nfs ~/.docker ~/.config/docker
+  fi
 fi
