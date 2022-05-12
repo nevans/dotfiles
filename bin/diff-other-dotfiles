@@ -1,0 +1,110 @@
+#!/bin/bash
+# temporary (I hope) until I've transitioned to use both repos at the same time.
+set -euo pipefail
+
+BASEDIR="$(realpath "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)")"
+cd "$BASEDIR"
+
+this_name=$(basename "$BASEDIR")
+
+other_dir="${1:?Need to give other repo path as an argument}"
+if ! [ -d "$other_dir" ]; then
+  if [[ "$other_dir" =~ ^(private|public)$ ]]; then
+    other_dir="../dotfiles-$other_dir"
+  else
+    echo 2>&1 "Path isn't a directory: $other_dir"
+  fi
+fi
+other_dir=${other_dir%/}
+other_name=$(basename "$other_dir")
+
+ondiff=""
+case "${2:-"--stat"}" in
+  "--stat")     ondiff="diffstat" ;;
+  "--delta")    ondiff="delta"    ;;
+  "--diff")     ondiff="diff"     ;;
+  "--no-stat")  ondiff=           ;;
+  *)
+    echo 1>&2 "Usage: $0 other_dir [--no-stat|--stat|--delta|--diff]"
+    exit 1
+    ;;
+esac
+
+# adapted from https://stackoverflow.com/a/54661050/5289571
+function substitute {
+    if [[ "$#" == "2" ]] || [[ "$#" == "3" ]]; then
+      # Input from stdin
+      HAYSTACK="$(/bin/cat -)"
+      NEEDLE="$1"
+      NEEDLESUB="$2"
+      REGEX_FLAGS="${3:-}"
+    else
+      echo "Usage:   echo <HAYSTACK> | substitute <NEEDLE> <NEEDLESUB> [FLAGS]"
+      echo "Example:   echo 'hello w' | substitute 'w' 'world'"
+      echo "Example:   echo 'hello w' | substitute 'O' 'xxxxx' 'gi'"
+    fi
+
+    # shellcheck disable=SC2001
+    CLEAN_SED_STRING="$(echo "$NEEDLE" | sed 's:[]\[^$.*/&]:\\&:g')"
+    # shellcheck disable=SC2001
+    CLEAN_SED_SUBSTRING="$(echo "$NEEDLESUB" | sed 's:[]\[^$.*/&]:\\&:g')"
+    # shellcheck disable=SC2001
+    echo "$HAYSTACK" \
+      | sed "s/$CLEAN_SED_STRING/$CLEAN_SED_SUBSTRING/$REGEX_FLAGS" \
+      || true
+}
+
+printf "Diff %16s => %-16s\n" "$this_name" "$other_name"
+printf "     %16s => %-s\n"   "." "$(realpath "$other_dir" --relative-to=.)"
+echo "======================================================================"
+
+function filesdiff {
+  diff \
+    -qr \
+    -x .netrwhist \
+    -x '.*' \
+    -x '*.md' \
+    -x '*.txt' \
+    "$BASEDIR" "$other_dir" \
+    | grep -vF "ssh/config.d: " \
+    | substitute "$BASEDIR:"  "$this_name:" \
+    | substitute "$BASEDIR/"  "$this_name: " \
+    | substitute "$other_dir:"  "$other_name:" \
+    | substitute "$other_dir/"  "$other_name: " \
+    | sed -E 's@^(Only in .+ .+): (.+)$@\1/\2@' \
+    | sed -E 's/^Files .+: (.+) and .+ differ$/Different: \1/g' \
+    | LC_ALL=C sort \
+    || true
+  :
+}
+
+function collect_diffs_and_output_the_rest {
+  local diffs=()
+  while read -r line; do
+    if [[ $line =~ ^Different: ]]; then
+      diffs+=("${line#Different: }")
+    else
+      printf "%s\n" "$line"
+    fi
+  done < <(filesdiff)
+  DIFFS="$(
+  for f in "${diffs[@]}"; do
+    diff -u --color=always "$f" "$other_dir/$f" || true
+  done)"
+}
+
+case "$ondiff" in
+  diffstat)
+    collect_diffs_and_output_the_rest
+    echo "$DIFFS" | diffstat -EC
+    ;;
+  delta)
+    collect_diffs_and_output_the_rest
+    echo "$DIFFS" | delta
+    ;;
+  diff)
+    collect_diffs_and_output_the_rest
+    echo "$DIFFS"
+    ;;
+  *) filesdiff ;;
+esac

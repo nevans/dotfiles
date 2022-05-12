@@ -6,8 +6,8 @@
       create: true
     shell:
       stdin: true
-      stderr: true
       stdout: true
+      stderr: true
 
 - shell:
   - description: Check for Github Codespaces ~/.bashrc

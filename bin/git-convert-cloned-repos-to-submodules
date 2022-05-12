@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+for root_dir in ${1:-.}; do
+  echo "Looking for git repos in $root_dir"
+  pushd "$root_dir" > /dev/null
+  echo "  Absorbing all existing submodule .git dirs."
+  git submodule absorbgitdirs
+
+  readarray -d '' gitdirs < <(find . -mindepth 2 -type d -name .git -print0; printf "%s" "$?")
+  if [[ -z "${gitdirs:-}" || ${#gitdirs} == 0 || ${gitdirs[-1]} != 0 ]]; then
+    echo "Exiting after error finding .git dirs" 1>&2
+    exit "${gitdirs[-1]}"
+  fi
+  unset 'gitdirs[-1]'
+
+  for gitdir in "${gitdirs[@]}"; do
+    repowc=$(dirname "$gitdir")
+    printf "  Converting %q\n" "$repowc"
+    pushd "$repowc" > /dev/null
+
+    upstream_name=$(git rev-parse --abbrev-ref "@{u}")
+    remote_name=${upstream_name%%/*}
+    remote_branch=${upstream_name#*/}
+    remote_url=$(git remote get-url "$remote_name")
+    local_branch=$(git branch --show-current)
+
+    printf "    %q -> %q %q\n" "$local_branch" "$remote_url" "$remote_branch"
+
+    popd > /dev/null
+
+    git submodule add "$remote_url" "$repowc" --branch "$remote_branch"
+    # TODO: do we need/want to call git submodule set-branch as well?
+  done
+
+  echo "  Absorbing all converted submodule .git dirs."
+  git submodule absorbgitdirs
+  popd > /dev/null
+done
+

@@ -23,7 +23,7 @@
 
 [core]
   whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
-  excludesfile = ./ignore
+  excludesfile = ~/.local/share/git/ignore
   commitGraph = true
 
 [branch]
