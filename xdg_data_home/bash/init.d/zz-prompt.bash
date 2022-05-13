@@ -15,7 +15,7 @@ xterm-color)
     ;;
 esac
 
-RESET_ATTRS="$(tput sgr0)"
+declare -g RESET_ATTRS="$(tput sgr0)"
 
 # Comment in the above and uncomment this below for a color prompt
 #PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
@@ -200,7 +200,7 @@ function __prompt_theme_colors() {
   echo -e "${__PROMPT_THEME_CACHE[$1]}"
 }
 
-declare -A __PROMPT_THEME_CACHE=()
+declare -gA __PROMPT_THEME_CACHE=()
 
 function __prompt_update_theme_cache() {
   local theme
@@ -308,7 +308,9 @@ function __prompt_end_part() {
   esac
 }
 
-declare -gA __PROMPT_SEP_CACHE=()
+declare -gA __PROMPT_SEP_CACHE
+__PROMPT_SEP_CACHE=( [work_around_old_bash_global_declaration_bugs]='yes'
+                     [with_multiple_key_value_pairs]="sure, why not" )
 
 # saves to __PROMPT_SEP_CACHE[${dir}${first}-${last}-${fg}-${bg}]
 #   cache[begin > foo]; cache[foo > bar]; cache[bar > end]
@@ -320,7 +322,7 @@ function __prompt_ensure_separator() {
   local theme="$3"
   local key="${dir}${first}-${last_bg}-${theme}"
 
-  if [ ${__PROMPT_SEP_CACHE[$key]+isset} ]; then
+  if [ -v "__PROMPT_SEP_CACHE[$key]" ]; then
     return
   fi
 
@@ -374,6 +376,7 @@ function __prompt_append_segment() {
   local first=""; if [[ "${#prompt}" = 0 ]]; then first="0"; fi
   __prompt_ensure_separator "$dir" "$first" "$theme"
   local key="${dir}${first}-${PROMPT_LAST_SEGMENT_BG}-${theme}"
+  # [[ ${__PROMPT_SEP_CACHE@a} = A ]] || declare -gA __PROMPT_SEP_CACHE=()
   prompt+="${__PROMPT_SEP_CACHE[$key]}"
 
   prompt+=" $text \[${RESET_ATTRS}\]"

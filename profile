@@ -4,30 +4,19 @@
 # see /usr/share/doc/bash/examples/startup-files for examples.
 # the files are located in the bash-doc package.
 
-# the default umask is probably set by /etc/profile or /etc/login.defs.
-# Either way, the historical default umask 022 is far too permissive.
-umask 077
-
-export TZ="America/New_York"
-export EDITOR="vim"
-
-# if running bash
-if [ -n "$BASH_VERSION" ]; then
-    # include .bashrc if it exists
-    if [ -f "$HOME/.bashrc" ]; then
-        # shellcheck source=/dev/null
-        . "$HOME/.bashrc"
-    fi
+# if running bash, include .bashrc if it exists
+if [ -n "$BASH_VERSION" ] && [ -f "${HOME:-~}/.bashrc" ]; then
+    # shellcheck source=bashrc
+    . "${HOME:-~}/.bashrc"
+else
+    # running some other POSIX compatible shell?
+    # shellcheck source=xdg_data_home/shell/profile-init.sh
+    . "${XDG_DATA_HOME:-${HOME:-~}/.local/share}/shell/profile-init.sh"
 fi
 
-# set PATH so it includes user's private bin if it exists
-if [ -d "$HOME/bin" ] ; then
-    PATH="$HOME/bin:$PATH"
-fi
-
-# set PATH so it includes user's private bin if it exists
-if [ -d "$HOME/.local/bin" ] ; then
-    PATH="$HOME/.local/bin:$PATH"
-fi
+#  add ~/.local/bin and ~/bin to $PATH
+for p in "$HOME/bin" "$HOME/.local/bin"; do
+    if [ -d "$p" ]; then case :$PATH: in *:$p:*);; *) PATH="$p:$PATH";; esac; fi
+done
 
 # vim:ft=sh

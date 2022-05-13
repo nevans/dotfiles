@@ -1,9 +1,10 @@
 source_config_files () {
-  for script in "$@"; do
-    [ -f "$script" ] || continue
+  for script in "$@"; do cond_source_script "$script"; done
+}
+
+cond_source_script () {
     # shellcheck source=/dev/null
-    . "$script"
-  done
+    if [ -f "${1:-}" ]; then . "$1"; fi
 }
 
 # This is *so* complicated compared to modern shells!
@@ -47,7 +48,7 @@ posixly_varlike () {
 
 path_remove () {
   ref="${1:?missing path var ref}"
-  if [ -z ${2+set} ]; then : "${2?missing removed dir}"; fi
+  if [ -z ${2+set} ]; then : "${2?missing path var ref or removed dir}"; fi
 
   dir=$2
   eval "orig=\$$ref"
@@ -60,7 +61,7 @@ path_remove () {
         orig=${orig#$dir:}
         ;;
       *:$dir:*)
-        : removing :"$dir": -- ${orig%%:$dir:*}
+        : removing :"$dir": -- "${orig%%:$dir:*}"
         updated="${updated}${orig%%:$dir:*}:"
         orig=${orig#*:$dir:}
         ;;
@@ -88,7 +89,7 @@ path_remove () {
 path_append ()  {
   path_remove "${@}"
   ref="${1:?missing path var ref}"
-  if [ -z ${2+set} ]; then : "${2?missing appended dir}"; fi
+  if [ -z ${2+set} ]; then : "${2?missing path var ref or appended dir}"; fi
   eval "local dirs=\"\${${ref}:-}\""
   if [ -z "$dirs" ]; then
     dirs="$dir"
@@ -102,7 +103,7 @@ path_append ()  {
 path_prepend () {
   path_remove "${@}"
   ref="${1:?missing path var ref}"
-  if [ -z ${2+set} ]; then : "${2?missing prepended dir}"; fi
+  if [ -z ${2+set} ]; then : "${2?missing path var ref or prepended dir}"; fi
   eval "local dirs=\"\${${ref}:-}\""
   if [ -z "$dirs" ]; then
     dirs="$dir"
@@ -115,3 +116,31 @@ path_prepend () {
 
 cond_path_append ()  { if [ -d "$1" ]; then path_prepend "$1"; fi; }
 cond_path_prepend () { if [ -d "$1" ]; then path_append  "$1"; fi; }
+
+_xdg_runtime_dir_fallback_assign () {
+  if [ -n "${XDG_RUNTIME_DIR:-}" ]; then return 0; fi
+  # shellcheck disable=SC2039
+  uid=${UID:-$(id -un)} # $UID is readonly in bash, but undefined in POSIX
+  # try the usual systemd path...
+  XDG_RUNTIME_DIR="/run/user/$uid"
+  if [ ! -d "${XDG_RUNTIME_DIR}" ]; then
+    # try dir in $TMPDIR or /tmp
+    XDG_RUNTIME_DIR="${TMPDIR:-/tmp}/$uid-runtime"
+    if [ ! -d "${XDG_RUNTIME_DIR}" ]; then
+      # doesn't exist yet
+      mkdir -m 0700 "$XDG_RUNTIME_DIR"
+    fi
+  fi
+  unset uid
+  # `ls` is the only POSIX-compatible perms+owner check.
+  # This is already a fallback, so I'm not going to optimize for bash or zsh.
+  # shellcheck disable=SC2012
+  perms="$(ls -ldn "$XDG_RUNTIME_DIR" | awk '{print $1, $3}')"
+  if [ "drwx------ $(id -u)" != "$perms" ]; then
+    # invalid permissions
+    # TODO: warning msg on stderr?
+    XDG_RUNTIME_DIR=$(mktemp -d "${TMPDIR:-/tmp}/$(id -un)-runtime-XXXXXX")
+  fi
+  unset perms
+  export XDG_RUNTIME_DIR
+}

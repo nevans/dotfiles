@@ -21,9 +21,5 @@ export PASSWORD_STORE_DIR="$XDG_DATA_HOME"/pass
 export RIPGREP_CONFIG_PATH=$XDG_CONFIG_HOME/ripgrep/config
 export SCREENRC="$XDG_CONFIG_HOME"/screen/screenrc
 
-export ELM_HOME="$XDG_CONFIG_HOME"/elm
-export CARGO_HOME="$XDG_DATA_HOME"/cargo
-export RUSTUP_HOME="$XDG_DATA_HOME"/rustup
-
 # TODO: vim—but I'd rather not use $VIMINIT.
 # TODO: GPG... it's complicated. (see Arch wiki)

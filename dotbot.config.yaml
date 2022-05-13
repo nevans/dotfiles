@@ -10,10 +10,10 @@
       stderr: true
 
 - shell:
-  - description: Check for Github Codespaces ~/.bashrc
+  - description: Prepare Github Codespaces, so the rest can complete
     command: bin/gh-codespace-init
 
-  - description: move history files to {XDG_STATE_HOME
+  - description: move history files (etc) to XDG_STATE_HOME
     command: bin/mv_state_files
 
 - create:

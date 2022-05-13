@@ -1,5 +1,5 @@
 ################################################################################
-# default debian/ubuntu completion. TODO: move into my other cfg files
+# default debian/ubuntu completion. Added PREFIX for termux
 ################################################################################
 
 # enable programmable completion features (you don't need to enable

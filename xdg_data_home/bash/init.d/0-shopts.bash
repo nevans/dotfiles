@@ -1,6 +1,5 @@
 ################################################################################
-# default debian/ubuntu bash config...
-# I've uncommented/deleted/adjusted a few lines, but it's mostly just defaults.
+# I've uncommented/deleted/adjusted a few lines, but a lot is debian defaults.
 ################################################################################
 
 # don't put duplicate lines or lines starting with space in the history.
@@ -46,6 +45,4 @@ shopt -s autocd
 shopt -s dirspell
 
 # make less more friendly for non-text input files, see lesspipe(1)
-if [ -x /usr/bin/lesspipe ]; then
-  eval "$(SHELL=/bin/sh lesspipe)"
-fi
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
