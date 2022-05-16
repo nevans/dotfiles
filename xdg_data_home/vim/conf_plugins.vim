@@ -96,6 +96,7 @@ let g:airline#extensions#branch#sha1_len = 6
 let g:ale_disable_lsp = 'ale' != get(g:vimrc_packs, 'lsp_client', 'ale')
 
 if !exists('g:ale_linters')         | let g:ale_linters = {}         | endif
+if !exists('g:ale_linters_ignore')  | let g:ale_linters_ignore = {}  | endif
 if !exists('g:ale_fixers')          | let g:ale_fixers = {}          | endif
 if !exists('g:ale_pattern_options') | let g:ale_pattern_options = {} | endif
 
@@ -106,10 +107,15 @@ let g:ale_fixers["cpp"] = ["remove_trailing_lines", "trim_whitespace", "clang-fo
 " ALE: ruby config                                     {{{3
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+" by contraining ALE to use bundler, we won't run linters/fixers that aren't
+" configured for the project.
 let g:ale_ruby_brakeman_executable   = 'bundle'
 let g:ale_ruby_reek_executable       = 'bundle'
 let g:ale_ruby_rubocop_executable    = 'bundle'
 let g:ale_ruby_standardrb_executable = 'bundle'
+
+" That said, never run prettier.  It hates me; I hate it.
+let g:ale_linters_ignore["ruby"] = ["prettier"]
 
 let g:ale_linters["ruby"] = [
       \ 'ruby',
@@ -117,11 +123,21 @@ let g:ale_linters["ruby"] = [
       \ 'solargraph',
       \ 'reek',
       \]
+
 " let g:ale_linters["ruby"] = ['sorbet']
 " let g:ale_linters["ruby"] += ['rails_best_practices']
 
 " let g:ale_fixers["ruby"] += ["remove_trailing_lines", "trim_whitespace"]
 " let g:ale_fixers["ruby"] += ["rubocop"]
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" ALE: javascript config                                     {{{3
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+let g:ale_linters_ignore["javascript"] = [
+      \ 'standard',
+      \ 'prettier',
+      \]
 
 " }}}3
 
