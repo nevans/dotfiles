@@ -3,32 +3,83 @@ set -euo pipefail
 
 cd "$( dirname "${BASH_SOURCE[0]}" )/.."
 
-usage=<<USAGE
+declare -a repos
+vimdir=xdg_data_home/vim
+category=new-$(date -u +%Y-%m-%d)
+opt=opt
+name=
+
+usage="
 A quick-and-dirty script to add git submodules for vim plugins.
 
-$0 category username/repository
-  TODO: support non-github!
-USAGE
+Usage:
+    $0 user@host:path      [OPTIONS]
+    $0 https://host/path   [OPTIONS]
+    $0 username/repository [OPTIONS]
 
-packcategory=${1?Need category}
-repo=${2?Need username/repository}
-opt=${3-start}
+Options:
+    -v, --vimdir NAME   Directory (in 'packpath') with pack subdirectory.
+                        Defaults to $vimdir
+    -c, --category NAME Package directory in vim/pack.
+                        Defaults to $category.
+    --s,-start|-o.--opt Load plugin during startup or manually with packadd.
+                        Defaults to --$opt.
+    -n, --name NAME     Name to use for plugin dir. Used by packadd.
+                        Default is last segment of repository URL,
+                        without .git suffix or vim- prefix.
 
-ghuser=${repo%/*}
-ghrepo=${repo##*/}
-name=${ghrepo#vim-}
+    -h. --help          Show this help.
 
-PLUGIN_DIR="vim/pack/$packcategory/$opt/$name"
-REPOSITORY="https://github.com/$ghuser/$ghrepo.git"
+  If the repository contains a \"/\" but doesn't include \"[a-z]:/\" or \"@\",
+  it will be converted to a github URL.
+"
 
-echo git submodule add "$REPOSITORY" "$PLUGIN_DIR"
+while [[ $# -gt 0 ]]; do
+  arg="$1"; shift
+  case $arg in
+    -v|--vimdir)   vimdir="${1?Missing vim packpath dir name}";   shift ;;
+    -c|--category) category="${1?missing category/package name}"; shift ;;
+    -s|--start)    opt=start ;;
+    -o|--opt)      opt=opt   ;;
+    -n|--name)     name=${1?missing name}; shift ;;
 
-sleep 1
-printf .
-sleep 1
-printf .
-sleep 1
-printf .
+    -h|--help) echo "$usage"; exit 0 ;;
+    -*)
+      echo 1>&2  "Unknown option $1"
+      echo 1>&2  "$usage"
+      exit 1
+      ;;
+    *[a-z]:/*) repos+=( "$arg" ) ;;
+    *@*)       repos+=( "$arg" ) ;;
+    */*)       repos+=( "https://github.com/$arg.git" ) ;;
+    *)         repos+=( "$arg" ) ;;
+  esac
+done
 
-mkdir -p "vim/pack/$packcategory/start"
-git submodule add "$REPOSITORY" "$PLUGIN_DIR"
+if [[ "${repos+${#repos}}" -eq 0 ]]; then
+  echo 1>&2  "No repository given."
+  echo 1>&2  "$usage"
+  exit 1
+elif [[ 2 -le "${#repos}" ]] && [[ -n "$name" ]]; then
+  echo 1>&2  "Cannot use --name with multiple repos"
+  echo 1>&2  "$usage"
+  exit 1
+fi
+
+for repo in "${repos[@]}"; do
+  if [[ -z "$name" ]]; then
+    pname=${repo##*/}
+    pname=${pname#vim-}
+    pname=${pname%.git}
+  else
+    pname=$name
+  fi
+  plugin_dir="$vimdir/pack/$category/$opt/$pname"
+  printf "Adding %s\n       => %s\n" "$plugin_dir" "$repo"
+
+  sleep 1; printf .
+  sleep 1; printf .
+  sleep 1; printf .
+  mkdir -p "$(dirname "$plugin_dir")"
+  git submodule add "$repo" "$plugin_dir"
+done

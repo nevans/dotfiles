@@ -4,21 +4,26 @@ set -euo pipefail
 cd "$( dirname "${BASH_SOURCE[0]}" )/.."
 
 show_start=
+show_branch=""
 show_opt=
-CATEGORY=
-hide_category=n
+PACKAGE=
+hide_package=n
 
 usage="
-Usage: $0 [-c|--category <category>] [-s|--start] [-o|--opt]
-          [-C|--hide-category]
+Usage: $0 [-s|--start] [-o|--opt]
+          [-b|--branch] [-B|--no-branch]
+          [-p|--package <package>] [-P|--no-package]
+       $0 -h|--help
 "
 
 while [[ $# -gt 0 ]]; do
   case $1 in
-    -s|--start) show_start=y; show_opt=${show_opt:-n}; shift ;;
-    -o|--opt) show_start=${show_start:-n}; show_opt=y; shift ;;
-    -c|--category) CATEGORY=${2?missing category$'\n\n'$usage}; shift; shift ;;
-    -C|--hide-category) hide_category=y; shift ;;
+    -s|--start) show_start=y; show_opt=${show_opt:-n};       shift ;;
+    -o|--opt)   show_opt=y;   show_start=${show_start:-n};   shift ;;
+    -c|--package) PACKAGE=${2?missing package$'\n\n'$usage}; shift; shift ;;
+    -P|--no-package) hide_package=y; shift ;;
+    -b|--branch)     show_branch=y;  shift ;;
+    -B|--no-branch)  show_branch=;   shift ;;
 
     -h|--help) echo "$usage"; exit 0 ;;
     *)
@@ -30,33 +35,39 @@ while [[ $# -gt 0 ]]; do
 done
 
 shopt -s extglob
-for plugdir in vim/pack/*/*/*; do
+shopt -s globstar
+for plugdir in **/vim/pack/*/*/*; do
   if [ -d "$plugdir" ]; then
     optdir=$(dirname "$plugdir")
-    catdir=$(dirname "$optdir")
+    pkgdir=$(dirname "$optdir")
     plugin=$(basename "$plugdir")
     option=$(basename "$optdir")
-    category=$(basename "$catdir")
-    if [[ $option == "opt"   && $show_opt == "n" ]]; then continue; fi
-    if [[ $option == "start" && $show_start == "n" ]]; then continue; fi
-    if [[ -n $CATEGORY && $category != *"$CATEGORY"* ]]; then continue; fi
+    package=$(basename "$pkgdir")
+    if [[ $option == "opt"   && $show_opt   == "n"  ]]; then continue; fi
+    if [[ $option == "start" && $show_start == "n"  ]]; then continue; fi
+    if [[ -n $PACKAGE && $package != *"$PACKAGE"* ]]; then continue; fi
     # normalize plugin name and remote URLs
     name=${plugin#vim-}
     remoteurl=$(git -C "$plugdir" ls-remote --get-url)
     remoteurl=${remoteurl/#@(http?(s):\/\/|git@)/}
     remoteurl=${remoteurl%.git}
     remoteurl=${remoteurl/:/\/}
-    branch=$(
-      git -C "$plugdir" for-each-ref \
-        --format="%(upstream:track) %(refname:short)=>%(upstream:strip=3)" \
-        "$(git symbolic-ref -q HEAD)"
-    )
-    if [[ $hide_category == "y" ]]; then
+    remoteurl=${remoteurl#github.com/}
+    if [[ $hide_package == "y" ]]; then
       printf "%-25s %s\n" "$name" "$remoteurl"
     else
-      printf -v gitinfo "%-60s %s" "$remoteurl" "$branch"
-      printf "%-25s %-20s %5s %s\n" "$name" "$category" "$option" "$gitinfo"
+      printf -v gitinfo "%-60s" "$remoteurl"
+      if [[ $show_branch == "y" ]]; then
+        branch=$(
+          git -C "$plugdir" for-each-ref \
+            --format="%(upstream:track) %(refname:short)=>%(upstream:strip=3)" \
+            "$(git symbolic-ref -q HEAD)"
+        )
+        printf -v gitinfo " %s" "$branch"
+      fi
+      gitinfo="${gitinfo%%+([[:space:]])}"
+      printf "%-25s %-20s %5s %s\n" "$name" "$package" "$option" "$gitinfo"
     fi
   fi
 done \
-  | sort | sort -k 2 # removed "vim-", so resorting
+  | LC_ALL=en_US.UTF-8 sort -bsf

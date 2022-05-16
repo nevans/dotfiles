@@ -86,12 +86,84 @@
 [submodule "xdg_data_home/vim/pack/filetypes/start/Dockerfile.vim"]
 	path = xdg_data_home/vim/pack/filetypes/start/Dockerfile.vim
 	url = https://github.com/ekalinin/Dockerfile.vim.git
+[submodule "xdg_data_home/vim/pack/filetypes/start/abnf"]
+	path = xdg_data_home/vim/pack/filetypes/start/abnf
+	url = https://gitlab.com/ssoil/abnf.git
 [submodule "xdg_data_home/vim/pack/filetypes/start/ansible-vim"]
 	path = xdg_data_home/vim/pack/filetypes/start/ansible-vim
 	url = https://github.com/pearofducks/ansible-vim.git
 [submodule "xdg_data_home/vim/pack/filetypes/start/caddyfile"]
 	path = xdg_data_home/vim/pack/filetypes/start/caddyfile
 	url = https://github.com/isobit/vim-caddyfile.git
+[submodule "xdg_data_home/vim/pack/filetypes/start/cjsx"]
+	path = xdg_data_home/vim/pack/filetypes/start/cjsx
+	url = https://github.com/mtscout6/vim-cjsx.git
+[submodule "xdg_data_home/vim/pack/filetypes/start/coffee-script"]
+	path = xdg_data_home/vim/pack/filetypes/start/coffee-script
+	url = https://github.com/kchmck/vim-coffee-script.git
+[submodule "xdg_data_home/vim/pack/filetypes/start/crystal"]
+	path = xdg_data_home/vim/pack/filetypes/start/crystal
+	url = https://github.com/rhysd/vim-crystal.git
+[submodule "xdg_data_home/vim/pack/filetypes/start/csv.vim"]
+	path = xdg_data_home/vim/pack/filetypes/start/csv.vim
+	url = https://github.com/chrisbra/csv.vim.git
+[submodule "xdg_data_home/vim/pack/filetypes/start/dart-vim-plugin"]
+	path = xdg_data_home/vim/pack/filetypes/start/dart-vim-plugin
+	url = https://github.com/dart-lang/dart-vim-plugin.git
+[submodule "xdg_data_home/vim/pack/filetypes/start/ejs-syntax"]
+	path = xdg_data_home/vim/pack/filetypes/start/ejs-syntax
+	url = https://github.com/nikvdp/ejs-syntax.git
+[submodule "xdg_data_home/vim/pack/filetypes/start/elixir"]
+	path = xdg_data_home/vim/pack/filetypes/start/elixir
+	url = https://github.com/elixir-lang/vim-elixir.git
+[submodule "xdg_data_home/vim/pack/filetypes/start/elm-syntax"]
+	path = xdg_data_home/vim/pack/filetypes/start/elm-syntax
+	url = https://github.com/andys8/vim-elm-syntax.git
+[submodule "xdg_data_home/vim/pack/filetypes/start/erlang-runtime"]
+	path = xdg_data_home/vim/pack/filetypes/start/erlang-runtime
+	url = https://github.com/vim-erlang/vim-erlang-runtime.git
+[submodule "xdg_data_home/vim/pack/filetypes/start/go"]
+	path = xdg_data_home/vim/pack/filetypes/start/go
+	url = https://github.com/fatih/vim-go.git
+[submodule "xdg_data_home/vim/pack/filetypes/start/graphql"]
+	path = xdg_data_home/vim/pack/filetypes/start/graphql
+	url = https://github.com/jparise/vim-graphql.git
+[submodule "xdg_data_home/vim/pack/filetypes/start/helm"]
+	path = xdg_data_home/vim/pack/filetypes/start/helm
+	url = https://github.com/towolf/vim-helm.git
+[submodule "xdg_data_home/vim/pack/filetypes/start/html5.vim"]
+	path = xdg_data_home/vim/pack/filetypes/start/html5.vim
+	url = https://github.com/othree/html5.vim.git
+[submodule "xdg_data_home/vim/pack/filetypes/start/kinesis"]
+	path = xdg_data_home/vim/pack/filetypes/start/kinesis
+	url = https://github.com/joecridge/vim-kinesis.git
+[submodule "xdg_data_home/vim/pack/filetypes/start/kitty"]
+	path = xdg_data_home/vim/pack/filetypes/start/kitty
+	url = https://github.com/fladson/vim-kitty.git
+[submodule "xdg_data_home/vim/pack/filetypes/start/kotlin-vim"]
+	path = xdg_data_home/vim/pack/filetypes/start/kotlin-vim
+	url = https://github.com/udalov/kotlin-vim.git
+[submodule "xdg_data_home/vim/pack/filetypes/start/lua"]
+	path = xdg_data_home/vim/pack/filetypes/start/lua
+	url = https://github.com/tbastos/vim-lua.git
+[submodule "xdg_data_home/vim/pack/filetypes/start/markdown"]
+	path = xdg_data_home/vim/pack/filetypes/start/markdown
+	url = https://github.com/plasticboy/vim-markdown.git
+[submodule "xdg_data_home/vim/pack/filetypes/start/nginx.vim"]
+	path = xdg_data_home/vim/pack/filetypes/start/nginx.vim
+	url = https://github.com/chr4/nginx.vim.git
+[submodule "xdg_data_home/vim/pack/filetypes/start/ragel.vim"]
+	path = xdg_data_home/vim/pack/filetypes/start/ragel.vim
+	url = https://github.com/jneen/ragel.vim.git
+[submodule "xdg_data_home/vim/pack/filetypes/start/scss-syntax.vim"]
+	path = xdg_data_home/vim/pack/filetypes/start/scss-syntax.vim
+	url = https://github.com/cakebaker/scss-syntax.vim.git
+[submodule "xdg_data_home/vim/pack/filetypes/start/systemd-syntax"]
+	path = xdg_data_home/vim/pack/filetypes/start/systemd-syntax
+	url = https://github.com/wgwoods/vim-systemd-syntax.git
+[submodule "xdg_data_home/vim/pack/filetypes/start/yaml"]
+	path = xdg_data_home/vim/pack/filetypes/start/yaml
+	url = https://github.com/stephpy/vim-yaml.git
 [submodule "xdg_data_home/vim/pack/ft-ruby/opt/blockle"]
 	path = xdg_data_home/vim/pack/ft-ruby/opt/blockle
 	url = https://github.com/jgdavey/vim-blockle.git

@@ -4,6 +4,10 @@ umask 077
 
 # I like vim.
 export EDITOR=vim
+export VISUAL=vim
 
 # Until everyone everywhere uses UTC, I'll need to use the local TZ.
 export TZ="America/New_York"
+
+# my locale
+export LANG=en_US.UTF-8
