@@ -90,6 +90,7 @@ function collect_diffs_and_output_the_rest {
   DIFFS="$(
   for f in "${diffs[@]}"; do
     diff -u --color=always "$f" "$other_dir/$f" || true
+    echo # delta gets confused without this newline...
   done)"
 }
 
