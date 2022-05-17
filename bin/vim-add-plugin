@@ -60,7 +60,7 @@ if [[ "${repos+${#repos}}" -eq 0 ]]; then
   echo 1>&2  "No repository given."
   echo 1>&2  "$usage"
   exit 1
-elif [[ 2 -le "${#repos}" ]] && [[ -n "$name" ]]; then
+elif [[ 2 -le "${#repos[@]}" ]] && [[ -n "$name" ]]; then
   echo 1>&2  "Cannot use --name with multiple repos"
   echo 1>&2  "$usage"
   exit 1

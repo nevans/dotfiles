@@ -29,12 +29,18 @@
 [submodule "xdg_data_home/vim/pack/00-essential/start/unimpaired"]
 	path = xdg_data_home/vim/pack/00-essential/start/unimpaired
 	url = https://github.com/tpope/vim-unimpaired.git
+[submodule "xdg_data_home/vim/pack/colorschemes/start/aurora"]
+	path = xdg_data_home/vim/pack/colorschemes/start/aurora
+	url = https://github.com/ray-x/aurora.git
 [submodule "xdg_data_home/vim/pack/colorschemes/start/colors-solarized"]
 	path = xdg_data_home/vim/pack/colorschemes/start/colors-solarized
 	url = https://github.com/altercation/vim-colors-solarized.git
 [submodule "xdg_data_home/vim/pack/colorschemes/start/colorschemes"]
 	path = xdg_data_home/vim/pack/colorschemes/start/colorschemes
 	url = https://github.com/flazz/vim-colorschemes.git
+[submodule "xdg_data_home/vim/pack/colorschemes/start/dracula"]
+	path = xdg_data_home/vim/pack/colorschemes/start/dracula
+	url = https://github.com/dracula/vim.git
 [submodule "xdg_data_home/vim/pack/colorschemes/start/gruvbox"]
 	path = xdg_data_home/vim/pack/colorschemes/start/gruvbox
 	url = https://github.com/morhetz/gruvbox.git
@@ -47,12 +53,18 @@
 [submodule "xdg_data_home/vim/pack/colorschemes/start/onedark.vim"]
 	path = xdg_data_home/vim/pack/colorschemes/start/onedark.vim
 	url = https://github.com/joshdick/onedark.vim.git
+[submodule "xdg_data_home/vim/pack/colorschemes/start/onehalf"]
+	path = xdg_data_home/vim/pack/colorschemes/start/onehalf
+	url = https://github.com/sonph/onehalf.git
 [submodule "xdg_data_home/vim/pack/colorschemes/start/palenight.vim"]
 	path = xdg_data_home/vim/pack/colorschemes/start/palenight.vim
 	url = https://github.com/drewtempelmeyer/palenight.vim.git
 [submodule "xdg_data_home/vim/pack/colorschemes/start/papercolor-theme"]
 	path = xdg_data_home/vim/pack/colorschemes/start/papercolor-theme
 	url = https://github.com/NLKNguyen/papercolor-theme.git
+[submodule "xdg_data_home/vim/pack/colorschemes/start/spaceduck"]
+	path = xdg_data_home/vim/pack/colorschemes/start/spaceduck
+	url = https://github.com/pineapplegiant/spaceduck.git
 [submodule "xdg_data_home/vim/pack/colorschemes/start/tempus-themes-vim"]
 	path = xdg_data_home/vim/pack/colorschemes/start/tempus-themes-vim
 	url = https://gitlab.com/protesilaos/tempus-themes-vim.git
@@ -80,6 +92,12 @@
 [submodule "xdg_data_home/vim/pack/compl_lint_lsp_etc/opt/coc.nvim"]
 	path = xdg_data_home/vim/pack/compl_lint_lsp_etc/opt/coc.nvim
 	url = https://github.com/neoclide/coc.nvim.git
+[submodule "xdg_data_home/vim/pack/compl_lint_lsp_etc/opt/lsp"]
+	path = xdg_data_home/vim/pack/compl_lint_lsp_etc/opt/lsp
+	url = https://github.com/prabirshrestha/vim-lsp.git
+[submodule "xdg_data_home/vim/pack/compl_lint_lsp_etc/opt/lsp-settings"]
+	path = xdg_data_home/vim/pack/compl_lint_lsp_etc/opt/lsp-settings
+	url = https://github.com/mattn/vim-lsp-settings.git
 [submodule "xdg_data_home/vim/pack/compl_lint_lsp_etc/opt/supertab"]
 	path = xdg_data_home/vim/pack/compl_lint_lsp_etc/opt/supertab
 	url = https://github.com/ervandew/supertab.git
@@ -101,6 +119,9 @@
 [submodule "xdg_data_home/vim/pack/filetypes/start/coffee-script"]
 	path = xdg_data_home/vim/pack/filetypes/start/coffee-script
 	url = https://github.com/kchmck/vim-coffee-script.git
+[submodule "xdg_data_home/vim/pack/filetypes/start/cpp"]
+	path = xdg_data_home/vim/pack/filetypes/start/cpp
+	url = https://github.com/vim-jp/vim-cpp.git
 [submodule "xdg_data_home/vim/pack/filetypes/start/crystal"]
 	path = xdg_data_home/vim/pack/filetypes/start/crystal
 	url = https://github.com/rhysd/vim-crystal.git
@@ -134,6 +155,9 @@
 [submodule "xdg_data_home/vim/pack/filetypes/start/html5.vim"]
 	path = xdg_data_home/vim/pack/filetypes/start/html5.vim
 	url = https://github.com/othree/html5.vim.git
+[submodule "xdg_data_home/vim/pack/filetypes/start/json"]
+	path = xdg_data_home/vim/pack/filetypes/start/json
+	url = https://github.com/elzr/vim-json.git
 [submodule "xdg_data_home/vim/pack/filetypes/start/kinesis"]
 	path = xdg_data_home/vim/pack/filetypes/start/kinesis
 	url = https://github.com/joecridge/vim-kinesis.git
@@ -143,6 +167,9 @@
 [submodule "xdg_data_home/vim/pack/filetypes/start/kotlin-vim"]
 	path = xdg_data_home/vim/pack/filetypes/start/kotlin-vim
 	url = https://github.com/udalov/kotlin-vim.git
+[submodule "xdg_data_home/vim/pack/filetypes/start/llvm"]
+	path = xdg_data_home/vim/pack/filetypes/start/llvm
+	url = https://github.com/rhysd/vim-llvm.git
 [submodule "xdg_data_home/vim/pack/filetypes/start/lua"]
 	path = xdg_data_home/vim/pack/filetypes/start/lua
 	url = https://github.com/tbastos/vim-lua.git
@@ -158,12 +185,39 @@
 [submodule "xdg_data_home/vim/pack/filetypes/start/scss-syntax.vim"]
 	path = xdg_data_home/vim/pack/filetypes/start/scss-syntax.vim
 	url = https://github.com/cakebaker/scss-syntax.vim.git
+[submodule "xdg_data_home/vim/pack/filetypes/start/sh"]
+	path = xdg_data_home/vim/pack/filetypes/start/sh
+	url = https://github.com/arzg/vim-sh.git
+[submodule "xdg_data_home/vim/pack/filetypes/start/swift.vim"]
+	path = xdg_data_home/vim/pack/filetypes/start/swift.vim
+	url = https://github.com/keith/swift.vim.git
 [submodule "xdg_data_home/vim/pack/filetypes/start/systemd-syntax"]
 	path = xdg_data_home/vim/pack/filetypes/start/systemd-syntax
 	url = https://github.com/wgwoods/vim-systemd-syntax.git
 [submodule "xdg_data_home/vim/pack/filetypes/start/yaml"]
 	path = xdg_data_home/vim/pack/filetypes/start/yaml
 	url = https://github.com/stephpy/vim-yaml.git
+[submodule "xdg_data_home/vim/pack/ft-javascript/start/javascript"]
+	path = xdg_data_home/vim/pack/ft-javascript/start/javascript
+	url = https://github.com/pangloss/vim-javascript.git
+[submodule "xdg_data_home/vim/pack/ft-javascript/start/js"]
+	path = xdg_data_home/vim/pack/ft-javascript/start/js
+	url = https://github.com/yuezk/vim-js.git
+[submodule "xdg_data_home/vim/pack/ft-javascript/start/jst"]
+	path = xdg_data_home/vim/pack/ft-javascript/start/jst
+	url = https://github.com/briancollins/vim-jst.git
+[submodule "xdg_data_home/vim/pack/ft-javascript/start/jsx-pretty"]
+	path = xdg_data_home/vim/pack/ft-javascript/start/jsx-pretty
+	url = https://github.com/MaxMEllon/vim-jsx-pretty.git
+[submodule "xdg_data_home/vim/pack/ft-javascript/start/jsx-typescript"]
+	path = xdg_data_home/vim/pack/ft-javascript/start/jsx-typescript
+	url = https://github.com/peitalin/vim-jsx-typescript.git
+[submodule "xdg_data_home/vim/pack/ft-javascript/start/typescript-vim"]
+	path = xdg_data_home/vim/pack/ft-javascript/start/typescript-vim
+	url = https://github.com/leafgarland/typescript-vim.git
+[submodule "xdg_data_home/vim/pack/ft-javascript/start/yats.vim"]
+	path = xdg_data_home/vim/pack/ft-javascript/start/yats.vim
+	url = https://github.com/HerringtonDarkholme/yats.vim.git
 [submodule "xdg_data_home/vim/pack/ft-ruby/opt/blockle"]
 	path = xdg_data_home/vim/pack/ft-ruby/opt/blockle
 	url = https://github.com/jgdavey/vim-blockle.git
@@ -203,6 +257,9 @@
 [submodule "xdg_data_home/vim/pack/git/start/gv.vim"]
 	path = xdg_data_home/vim/pack/git/start/gv.vim
 	url = https://github.com/junegunn/gv.vim.git
+[submodule "xdg_data_home/vim/pack/git/start/rhubarb"]
+	path = xdg_data_home/vim/pack/git/start/rhubarb
+	url = https://github.com/tpope/vim-rhubarb.git
 [submodule "xdg_data_home/vim/pack/git/start/rootignore"]
 	path = xdg_data_home/vim/pack/git/start/rootignore
 	url = https://github.com/octref/rootignore.git
@@ -212,12 +269,12 @@
 [submodule "xdg_data_home/vim/pack/insert/opt/delimitMate"]
 	path = xdg_data_home/vim/pack/insert/opt/delimitMate
 	url = https://github.com/Raimondi/delimitMate.git
+[submodule "xdg_data_home/vim/pack/insert/start/emmet-vim"]
+	path = xdg_data_home/vim/pack/insert/start/emmet-vim
+	url = https://github.com/mattn/emmet-vim.git
 [submodule "xdg_data_home/vim/pack/insert/start/endwise"]
 	path = xdg_data_home/vim/pack/insert/start/endwise
 	url = https://github.com/tpope/vim-endwise.git
-[submodule "xdg_data_home/vim/pack/insert/start/multiple-cursors"]
-	path = xdg_data_home/vim/pack/insert/start/multiple-cursors
-	url = https://github.com/terryma/vim-multiple-cursors.git
 [submodule "xdg_data_home/vim/pack/insert/start/rsi"]
 	path = xdg_data_home/vim/pack/insert/start/rsi
 	url = https://github.com/tpope/vim-rsi.git
@@ -233,15 +290,18 @@
 [submodule "xdg_data_home/vim/pack/normal/start/jdaddy"]
 	path = xdg_data_home/vim/pack/normal/start/jdaddy
 	url = https://github.com/tpope/vim-jdaddy.git
+[submodule "xdg_data_home/vim/pack/normal/start/move"]
+	path = xdg_data_home/vim/pack/normal/start/move
+	url = https://github.com/matze/vim-move.git
 [submodule "xdg_data_home/vim/pack/normal/start/ragtag"]
 	path = xdg_data_home/vim/pack/normal/start/ragtag
 	url = https://github.com/tpope/vim-ragtag
-[submodule "xdg_data_home/vim/pack/notes/opt/vimoutliner"]
-	path = xdg_data_home/vim/pack/notes/opt/vimoutliner
-	url = https://github.com/vimoutliner/vimoutliner.git
-[submodule "xdg_data_home/vim/pack/notes/opt/vimwiki"]
-	path = xdg_data_home/vim/pack/notes/opt/vimwiki
-	url = https://github.com/vimwiki/vimwiki.git
+[submodule "xdg_data_home/vim/pack/normal/start/splitjoin.vim"]
+	path = xdg_data_home/vim/pack/normal/start/splitjoin.vim
+	url = https://github.com/andrewradev/splitjoin.vim.git
+[submodule "xdg_data_home/vim/pack/normal/start/visual-multi"]
+	path = xdg_data_home/vim/pack/normal/start/visual-multi
+	url = https://github.com/mg979/vim-visual-multi.git
 [submodule "xdg_data_home/vim/pack/terminal/start/floaterm"]
 	path = xdg_data_home/vim/pack/terminal/start/floaterm
 	url = https://github.com/voldikss/vim-floaterm.git
@@ -311,6 +371,15 @@
 [submodule "xdg_data_home/vim/pack/ui-finders/start/fzf.vim"]
 	path = xdg_data_home/vim/pack/ui-finders/start/fzf.vim
 	url = https://github.com/junegunn/fzf.vim.git
+[submodule "xdg_data_home/vim/pack/ui-notes/opt/VOoM"]
+	path = xdg_data_home/vim/pack/ui-notes/opt/VOoM
+	url = https://github.com/vim-voom/VOoM.git
+[submodule "xdg_data_home/vim/pack/ui-notes/opt/vimoutliner"]
+	path = xdg_data_home/vim/pack/ui-notes/opt/vimoutliner
+	url = https://github.com/vimoutliner/vimoutliner.git
+[submodule "xdg_data_home/vim/pack/ui-notes/opt/vimwiki"]
+	path = xdg_data_home/vim/pack/ui-notes/opt/vimwiki
+	url = https://github.com/vimwiki/vimwiki.git
 [submodule "xdg_data_home/vim/pack/ui-statuslines/opt/flagship"]
 	path = xdg_data_home/vim/pack/ui-statuslines/opt/flagship
 	url = https://github.com/tpope/vim-flagship.git
@@ -323,6 +392,9 @@
 [submodule "xdg_data_home/vim/pack/ui-statuslines/start/vim-airline-themes"]
 	path = xdg_data_home/vim/pack/ui-statuslines/start/vim-airline-themes
 	url = https://github.com/vim-airline/vim-airline-themes.git
+[submodule "xdg_data_home/vim/pack/ui/opt/vimspector"]
+	path = xdg_data_home/vim/pack/ui/opt/vimspector
+	url = https://github.com/puremourning/vimspector.git
 [submodule "xdg_data_home/vim/pack/ui/start/emoji-icon-theme"]
 	path = xdg_data_home/vim/pack/ui/start/emoji-icon-theme
 	url = https://github.com/adelarsq/vim-emoji-icon-theme.git
@@ -332,6 +404,9 @@
 [submodule "xdg_data_home/vim/pack/ui/start/tagbar"]
 	path = xdg_data_home/vim/pack/ui/start/tagbar
 	url = https://github.com/majutsushi/tagbar.git
+[submodule "xdg_data_home/vim/pack/ui/start/undotree"]
+	path = xdg_data_home/vim/pack/ui/start/undotree
+	url = https://github.com/mbbill/undotree.git
 [submodule "xdg_data_home/vim/pack/ui/start/vim-auto-origami"]
 	path = xdg_data_home/vim/pack/ui/start/vim-auto-origami
 	url = https://github.com/benknoble/vim-auto-origami.git
