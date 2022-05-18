@@ -138,6 +138,10 @@ let g:ale_linters_ignore["javascript"] = [
       \ 'standard',
       \ 'prettier',
       \]
+let g:ale_linters_ignore["typescript"] = g:ale_linters_ignore['javascript']
+
+let g:ale_linters_ignore["javascriptreact"] = g:ale_linters_ignore['javascript']
+let g:ale_linters_ignore["typescriptreact"] = g:ale_linters_ignore['typescript']
 
 " }}}3
 
