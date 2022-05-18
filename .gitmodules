@@ -197,6 +197,9 @@
 [submodule "xdg_data_home/vim/pack/filetypes/start/yaml"]
 	path = xdg_data_home/vim/pack/filetypes/start/yaml
 	url = https://github.com/stephpy/vim-yaml.git
+[submodule "xdg_data_home/vim/pack/ft-javascript/opt/yats.vim"]
+	path = xdg_data_home/vim/pack/ft-javascript/opt/yats.vim
+	url = https://github.com/HerringtonDarkholme/yats.vim.git
 [submodule "xdg_data_home/vim/pack/ft-javascript/start/javascript"]
 	path = xdg_data_home/vim/pack/ft-javascript/start/javascript
 	url = https://github.com/pangloss/vim-javascript.git
@@ -215,9 +218,6 @@
 [submodule "xdg_data_home/vim/pack/ft-javascript/start/typescript-vim"]
 	path = xdg_data_home/vim/pack/ft-javascript/start/typescript-vim
 	url = https://github.com/leafgarland/typescript-vim.git
-[submodule "xdg_data_home/vim/pack/ft-javascript/start/yats.vim"]
-	path = xdg_data_home/vim/pack/ft-javascript/start/yats.vim
-	url = https://github.com/HerringtonDarkholme/yats.vim.git
 [submodule "xdg_data_home/vim/pack/ft-ruby/opt/blockle"]
 	path = xdg_data_home/vim/pack/ft-ruby/opt/blockle
 	url = https://github.com/jgdavey/vim-blockle.git
