@@ -92,6 +92,9 @@ let g:airline#extensions#branch#sha1_len = 6
 " Plugin: ale                                              {{{2
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+" n.b. filetype-specific settings have mostly been moved to the appropriate
+" ftplugin directory.
+
 " Use ALE for LSP, unless another LSP is configured (coc.nvim, vim-lsp, ?)
 let g:ale_disable_lsp = 'ale' != get(g:vimrc_packs, 'lsp_client', 'ale')
 

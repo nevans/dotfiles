@@ -1,3 +1,7 @@
+# n.b: moving rbenv or rustup or cargo, etc from $HOME to $XDG_DATA_HOME may
+# require reinstallation of some things,  Just moving the dirs won't completely
+# work
+
 ############################################################################
 # Android SDK                                                              #{{{1
 cond_path_append "$HOME/src/vendor/android-sdk-linux/tools"
@@ -14,7 +18,7 @@ export ELM_HOME="$XDG_CONFIG_HOME"/elm
 # but it might do more in other circumstances or in the future?
 export RUSTUP_HOME="$XDG_DATA_HOME"/rustup
 export CARGO_HOME="$XDG_DATA_HOME"/cargo
-cond_source_script "${CARGO_HOME:-$HOME/.local/share/cargo}/env"
+cond_source_script "$CARGO_HOME/env"
 
 ############################################################################
 # golang                                                                   #{{{1

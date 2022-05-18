@@ -5,107 +5,197 @@ set -euo pipefail
 BASEDIR="$(realpath "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)")"
 cd "$BASEDIR"
 
-this_name=$(basename "$BASEDIR")
-
-other_dir="${1:?Need to give other repo path as an argument}"
-if ! [ -d "$other_dir" ]; then
-  if [[ "$other_dir" =~ ^(private|public)$ ]]; then
-    other_dir="../dotfiles-$other_dir"
-  else
-    echo 2>&1 "Path isn't a directory: $other_dir"
-  fi
-fi
-other_dir=${other_dir%/}
-other_name=$(basename "$other_dir")
-
-ondiff=""
-case "${2:-"--stat"}" in
-  "--stat")     ondiff="diffstat" ;;
-  "--delta")    ondiff="delta"    ;;
-  "--diff")     ondiff="diff"     ;;
-  "--no-stat")  ondiff=           ;;
-  *)
-    echo 1>&2 "Usage: $0 other_dir [--no-stat|--stat|--delta|--diff]"
-    exit 1
-    ;;
-esac
-
-# adapted from https://stackoverflow.com/a/54661050/5289571
-function substitute {
-    if [[ "$#" == "2" ]] || [[ "$#" == "3" ]]; then
-      # Input from stdin
-      HAYSTACK="$(/bin/cat -)"
-      NEEDLE="$1"
-      NEEDLESUB="$2"
-      REGEX_FLAGS="${3:-}"
-    else
-      echo "Usage:   echo <HAYSTACK> | substitute <NEEDLE> <NEEDLESUB> [FLAGS]"
-      echo "Example:   echo 'hello w' | substitute 'w' 'world'"
-      echo "Example:   echo 'hello w' | substitute 'O' 'xxxxx' 'gi'"
-    fi
-
-    # shellcheck disable=SC2001
-    CLEAN_SED_STRING="$(echo "$NEEDLE" | sed 's:[]\[^$.*/&]:\\&:g')"
-    # shellcheck disable=SC2001
-    CLEAN_SED_SUBSTRING="$(echo "$NEEDLESUB" | sed 's:[]\[^$.*/&]:\\&:g')"
-    # shellcheck disable=SC2001
-    echo "$HAYSTACK" \
-      | sed "s/$CLEAN_SED_STRING/$CLEAN_SED_SUBSTRING/$REGEX_FLAGS" \
-      || true
+function usage {
+  echo "Usage: $0 other_dir [DIFF FILE OUTPUT OPTION]"
+  echo
+  echo "Options for outputting shared files which are different:"
+  echo "  -x, --xargs     print list of files, separated by \$DELIMITER"
+  echo "  -1, --oneline   one line per file, shown like files in only one dir"
+  echo "  -p, --pairs     print both filepaths, one pair per line"
+  echo "  -r, --revpairs  print both filepaths, one pair per line, reverse order"
+  echo "  -s, --stat      print diffstat for different files (default)"
+  echo "  -d, --diff      print a unified diff"
+  echo "  -D, --delta     print a unified diff, using 'delta'"
 }
 
-printf "Diff %16s => %-16s\n" "$this_name" "$other_name"
-printf "     %16s => %-s\n"   "." "$(realpath "$other_dir" --relative-to=.)"
-echo "======================================================================"
+function abort {
+  echo 1>&2 "${1:-Unrecoverable errors. Aborting...}"
+  echo 1>&2
+  usage 1>&2
+  exit 1
+}
+
+function main {
+  if [[ "${1:-}" =~ ^(-h|--help|)$ ]]; then usage; exit 0; fi
+  local local_dir="$BASEDIR"
+  local other_dir
+  local on_diffs
+  other_dir=$(optparse_repo_dir "$1")
+  on_diffs=$(optparse_on_diffs "${2:-}")
+
+  echo "======================================================================"
+  printf "Diff ../%s => %s\n"  "$(realpath "$local_dir" --relative-to=..)" "$other_dir"
+  echo "======================================================================"
+
+  if [[ "$on_diffs" =~ ^(diff|diffstat|delta)$ ]]; then
+    local DIFFS=""
+    collect_diffs_and_output_the_rest DIFFS "$local_dir" "$other_dir"
+    if [[ -n "$DIFFS" ]]; then
+      case "$on_diffs" in
+        diffstat)
+          echo "$DIFFS" | diffstat -EC
+          ;;
+        delta)
+          echo "$DIFFS" | delta
+          ;;
+        diff)
+          echo "$DIFFS"
+          ;;
+      esac
+    fi
+  elif [[ "$on_diffs" = xargs ]]; then
+    local -a DIFF_FILES
+    collect_diff_files_and_output_the_rest DIFF_FILES "$local_dir" "$other_dir"
+    printf "Different files: "
+    OLDIFS=$IFS
+    IFS="${DELIMITER:-$' \t\n'}"
+    echo "${DIFF_FILES[*]}"
+    IFS=$OLDIFS
+  elif [[ "$on_diffs" = pairs ]]; then
+    local -a DIFF_FILES
+    collect_diff_files_and_output_the_rest DIFF_FILES "$local_dir" "$other_dir"
+    fake_diff_all DIFF_FILES "$local_dir" "$other_dir"
+  elif [[ "$on_diffs" = revpairs ]]; then
+    local -a DIFF_FILES
+    collect_diff_files_and_output_the_rest DIFF_FILES "$local_dir" "$other_dir"
+    fake_diff_all DIFF_FILES "$other_dir" "$local_dir"
+  else
+    filesdiff "$local_dir" "$other_dir"
+  fi
+}
+
+function optparse_repo_dir {
+  local other_dir=$1
+
+  if [[ "$other_dir" =~ ^(private|public)$ ]]; then
+    other_dir="../dotfiles-$other_dir"
+  fi
+  if ! [[ -d "$other_dir" ]]; then
+    abort "Path isn't a directory: $other_dir"
+  fi
+  other_dir=$(realpath "${other_dir%/}" --relative-to=.)
+  if [[ "$other_dir" == "." ]]; then
+    abort "Comparing to current dir?"
+  fi
+  echo "$other_dir"
+}
+
+function optparse_on_diffs {
+  case "${1:-"--stat"}" in
+    -s|--stat)     printf "diffstat" ;;
+    -x|--xargs)    printf "xargs"    ;;
+    -1|--oneline)  printf ""         ;;
+    -p|--pairs)    printf "pairs"    ;;
+    -r|--revpairs) printf "revpairs" ;;
+    -D|--delta)    printf "delta"    ;;
+    -d|--diff)     printf "diff"     ;;
+    -h|--help)     usage; exit 0     ;;
+    *) abort "Unknown option" ;;
+  esac
+}
+
+function collect_diff_files_and_output_the_rest {
+  local -n collect_diff_files___acc=$1
+  local local_dir=$2
+  local other_dir=$3
+  while read -r line; do
+    if [[ $line =~ ^Different: ]]; then
+      collect_diff_files___acc+=("${line#Different: }")
+    else
+      printf "%s\n" "$line"
+    fi
+  done < <(filesdiff "$local_dir" "$other_dir")
+}
+
+function collect_diffs_and_output_the_rest {
+  local -n collect_diffs___acc=$1
+  local -a DIFF_FILES
+  collect_diff_files_and_output_the_rest DIFF_FILES "$2" "$3"
+  # shellcheck disable=SC2034   # doesn't understand nameref?
+  collect_diffs___acc="$(diff_all DIFF_FILES "$2" "$3")"
+}
+
+function fake_diff_all {
+  local -n diff_files=$1
+  local local_dir=$2
+  local other_dir=$3
+  local local_path
+  local other_path
+  for f in "${diff_files[@]}"; do
+    local_path="$(realpath --relative-to=. "$local_dir/$f")"
+    other_path="$(realpath --relative-to=. "$other_dir/$f")"
+    printf "diff %-45s %s\n" "$local_path" "$other_path"
+  done
+}
+
+function diff_all {
+  local -n diff_files=$1
+  local local_dir=$2
+  local other_dir=$3
+  for f in "${diff_files[@]}"; do
+    diff -u --color=always "$local_dir/$f" "$other_dir/$f" || true
+    echo # delta gets confused without this newline...
+  done
+}
 
 function filesdiff {
+  local local_dir=$1
+  local other_dir=$2
+  local local_name=${3:-$(basename "$local_dir")}
+  local other_name=${4:-$(basename "$other_dir")}
+  export LC_ALL=C
+
   diff \
     -qr \
     -x .netrwhist \
     -x '.*' \
     -x '*.md' \
     -x '*.txt' \
-    "$BASEDIR" "$other_dir" \
+    "$local_dir" "$other_dir" \
     | grep -vF "ssh/config.d: " \
-    | substitute "$BASEDIR:"  "$this_name:" \
-    | substitute "$BASEDIR/"  "$this_name: " \
+    | substitute "$local_dir:"  "$local_name:" \
+    | substitute "$local_dir/"  "$local_name: " \
     | substitute "$other_dir:"  "$other_name:" \
     | substitute "$other_dir/"  "$other_name: " \
     | sed -E 's@^(Only in .+ .+): (.+)$@\1/\2@' \
     | sed -E 's/^Files .+: (.+) and .+ differ$/Different: \1/g' \
-    | LC_ALL=C sort \
+    | sort \
     || true
   :
 }
 
-function collect_diffs_and_output_the_rest {
-  local diffs=()
-  while read -r line; do
-    if [[ $line =~ ^Different: ]]; then
-      diffs+=("${line#Different: }")
-    else
-      printf "%s\n" "$line"
-    fi
-  done < <(filesdiff)
-  DIFFS="$(
-  for f in "${diffs[@]}"; do
-    diff -u --color=always "$f" "$other_dir/$f" || true
-    echo # delta gets confused without this newline...
-  done)"
+# adapted from https://stackoverflow.com/a/54661050/5289571
+function substitute {
+  if [[ "$#" == "2" ]] || [[ "$#" == "3" ]]; then
+    # Input from stdin
+    HAYSTACK="$(/bin/cat -)"
+    NEEDLE="$1"
+    NEEDLESUB="$2"
+    REGEX_FLAGS="${3:-}"
+  else
+    echo 1>&2 "Usage: echo <HAYSTACK> | substitute <NEEDLE> <NEEDLESUB> [FLAGS]"
+    echo 1>&2 "Example:   echo 'hello w' | substitute 'w' 'world'"
+    echo 1>&2 "Example:   echo 'hello w' | substitute 'O' 'xxxxx' 'gi'"
+  fi
+
+  # shellcheck disable=SC2001
+  CLEAN_SED_STRING="$(echo "$NEEDLE" | sed 's:[]\[^$.*/&]:\\&:g')"
+  # shellcheck disable=SC2001
+  CLEAN_SED_SUBSTRING="$(echo "$NEEDLESUB" | sed 's:[]\[^$.*/&]:\\&:g')"
+  # shellcheck disable=SC2001
+  echo "$HAYSTACK" \
+    | sed "s/$CLEAN_SED_STRING/$CLEAN_SED_SUBSTRING/$REGEX_FLAGS" || true
+
 }
 
-case "$ondiff" in
-  diffstat)
-    collect_diffs_and_output_the_rest
-    echo "$DIFFS" | diffstat -EC
-    ;;
-  delta)
-    collect_diffs_and_output_the_rest
-    echo "$DIFFS" | delta
-    ;;
-  diff)
-    collect_diffs_and_output_the_rest
-    echo "$DIFFS"
-    ;;
-  *) filesdiff ;;
-esac
+main "$@"
