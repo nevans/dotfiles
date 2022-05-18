@@ -44,3 +44,7 @@ alias ......='cd ../../../../..'    # 5 up
 # ruby
 alias b='bundler'
 alias bx='bundler exec'
+
+# exa (rusty ls replacement)
+
+alias exa='exa -l --git --icons'
