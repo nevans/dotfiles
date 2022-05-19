@@ -1,0 +1,11 @@
+#!/bin/bash
+set -eux
+
+BASEDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+REPOURL=https://github.com/rbenv/rbenv-installer
+BRANCH=main
+BASEURL=$REPOURL/raw/$BRANCH/bin
+curl -fsSL "${BASEURL}/rbenv-doctor"    > "${BASEDIR}/rbenv-doctor"
+curl -fsSL "${BASEURL}/rbenv-installer" > "${BASEDIR}/rbenv-installer"
+chmod a+x "${BASEDIR}/rbenv-doctor" "${BASEDIR}/rbenv-installer"
