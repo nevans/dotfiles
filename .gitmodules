@@ -32,12 +32,12 @@
 [submodule "xdg_data_home/vim/pack/colorschemes/start/aurora"]
 	path = xdg_data_home/vim/pack/colorschemes/start/aurora
 	url = https://github.com/ray-x/aurora.git
-[submodule "xdg_data_home/vim/pack/colorschemes/start/colors-solarized"]
-	path = xdg_data_home/vim/pack/colorschemes/start/colors-solarized
-	url = https://github.com/altercation/vim-colors-solarized.git
 [submodule "xdg_data_home/vim/pack/colorschemes/start/colorschemes"]
 	path = xdg_data_home/vim/pack/colorschemes/start/colorschemes
 	url = https://github.com/flazz/vim-colorschemes.git
+[submodule "xdg_data_home/vim/pack/colorschemes/start/colors-solarized"]
+	path = xdg_data_home/vim/pack/colorschemes/start/colors-solarized
+	url = https://github.com/altercation/vim-colors-solarized.git
 [submodule "xdg_data_home/vim/pack/colorschemes/start/dracula"]
 	path = xdg_data_home/vim/pack/colorschemes/start/dracula
 	url = https://github.com/dracula/vim.git
@@ -101,9 +101,6 @@
 [submodule "xdg_data_home/vim/pack/compl_lint_lsp_etc/opt/supertab"]
 	path = xdg_data_home/vim/pack/compl_lint_lsp_etc/opt/supertab
 	url = https://github.com/ervandew/supertab.git
-[submodule "xdg_data_home/vim/pack/filetypes/start/Dockerfile.vim"]
-	path = xdg_data_home/vim/pack/filetypes/start/Dockerfile.vim
-	url = https://github.com/ekalinin/Dockerfile.vim.git
 [submodule "xdg_data_home/vim/pack/filetypes/start/abnf"]
 	path = xdg_data_home/vim/pack/filetypes/start/abnf
 	url = https://gitlab.com/ssoil/abnf.git
@@ -131,6 +128,9 @@
 [submodule "xdg_data_home/vim/pack/filetypes/start/dart-vim-plugin"]
 	path = xdg_data_home/vim/pack/filetypes/start/dart-vim-plugin
 	url = https://github.com/dart-lang/dart-vim-plugin.git
+[submodule "xdg_data_home/vim/pack/filetypes/start/Dockerfile.vim"]
+	path = xdg_data_home/vim/pack/filetypes/start/Dockerfile.vim
+	url = https://github.com/ekalinin/Dockerfile.vim.git
 [submodule "xdg_data_home/vim/pack/filetypes/start/ejs-syntax"]
 	path = xdg_data_home/vim/pack/filetypes/start/ejs-syntax
 	url = https://github.com/nikvdp/ejs-syntax.git
@@ -251,6 +251,9 @@
 [submodule "xdg_data_home/vim/pack/ft-ruby/start/vim-ruby"]
 	path = xdg_data_home/vim/pack/ft-ruby/start/vim-ruby
 	url = https://github.com/vim-ruby/vim-ruby.git
+[submodule "xdg_data_home/vim/pack/ft-ruby/start/yardoc"]
+	path = xdg_data_home/vim/pack/ft-ruby/start/yardoc
+	url = https://github.com/noprompt/vim-yardoc.git
 [submodule "xdg_data_home/vim/pack/git/start/fugitive"]
 	path = xdg_data_home/vim/pack/git/start/fugitive
 	url = https://github.com/tpope/vim-fugitive.git
@@ -371,27 +374,15 @@
 [submodule "xdg_data_home/vim/pack/ui-finders/start/fzf.vim"]
 	path = xdg_data_home/vim/pack/ui-finders/start/fzf.vim
 	url = https://github.com/junegunn/fzf.vim.git
-[submodule "xdg_data_home/vim/pack/ui-notes/opt/VOoM"]
-	path = xdg_data_home/vim/pack/ui-notes/opt/VOoM
-	url = https://github.com/vim-voom/VOoM.git
 [submodule "xdg_data_home/vim/pack/ui-notes/opt/vimoutliner"]
 	path = xdg_data_home/vim/pack/ui-notes/opt/vimoutliner
 	url = https://github.com/vimoutliner/vimoutliner.git
 [submodule "xdg_data_home/vim/pack/ui-notes/opt/vimwiki"]
 	path = xdg_data_home/vim/pack/ui-notes/opt/vimwiki
 	url = https://github.com/vimwiki/vimwiki.git
-[submodule "xdg_data_home/vim/pack/ui-statuslines/opt/flagship"]
-	path = xdg_data_home/vim/pack/ui-statuslines/opt/flagship
-	url = https://github.com/tpope/vim-flagship.git
-[submodule "xdg_data_home/vim/pack/ui-statuslines/opt/vim-line-no-indicator"]
-	path = xdg_data_home/vim/pack/ui-statuslines/opt/vim-line-no-indicator
-	url = https://github.com/drzel/vim-line-no-indicator.git
-[submodule "xdg_data_home/vim/pack/ui-statuslines/start/vim-airline"]
-	path = xdg_data_home/vim/pack/ui-statuslines/start/vim-airline
-	url = https://github.com/vim-airline/vim-airline
-[submodule "xdg_data_home/vim/pack/ui-statuslines/start/vim-airline-themes"]
-	path = xdg_data_home/vim/pack/ui-statuslines/start/vim-airline-themes
-	url = https://github.com/vim-airline/vim-airline-themes.git
+[submodule "xdg_data_home/vim/pack/ui-notes/opt/VOoM"]
+	path = xdg_data_home/vim/pack/ui-notes/opt/VOoM
+	url = https://github.com/vim-voom/VOoM.git
 [submodule "xdg_data_home/vim/pack/ui/opt/vimspector"]
 	path = xdg_data_home/vim/pack/ui/opt/vimspector
 	url = https://github.com/puremourning/vimspector.git
@@ -419,3 +410,15 @@
 [submodule "xdg_data_home/vim/pack/ui/start/vim-win"]
 	path = xdg_data_home/vim/pack/ui/start/vim-win
 	url = https://github.com/dstein64/vim-win.git
+[submodule "xdg_data_home/vim/pack/ui-statuslines/opt/flagship"]
+	path = xdg_data_home/vim/pack/ui-statuslines/opt/flagship
+	url = https://github.com/tpope/vim-flagship.git
+[submodule "xdg_data_home/vim/pack/ui-statuslines/opt/vim-line-no-indicator"]
+	path = xdg_data_home/vim/pack/ui-statuslines/opt/vim-line-no-indicator
+	url = https://github.com/drzel/vim-line-no-indicator.git
+[submodule "xdg_data_home/vim/pack/ui-statuslines/start/vim-airline"]
+	path = xdg_data_home/vim/pack/ui-statuslines/start/vim-airline
+	url = https://github.com/vim-airline/vim-airline
+[submodule "xdg_data_home/vim/pack/ui-statuslines/start/vim-airline-themes"]
+	path = xdg_data_home/vim/pack/ui-statuslines/start/vim-airline-themes
+	url = https://github.com/vim-airline/vim-airline-themes.git
