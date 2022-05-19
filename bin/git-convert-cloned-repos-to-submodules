@@ -29,7 +29,7 @@ for root_dir in ${1:-.}; do
 
     popd > /dev/null
 
-    git submodule add "$remote_url" "$repowc" --branch "$remote_branch"
+    git submodule add -b "$remote_branch" -- "$remote_url" "$repowc"
     # TODO: do we need/want to call git submodule set-branch as well?
   done
 
