@@ -63,7 +63,7 @@ function sshagent_init {
     # If at this point we still haven't located an agent, it's time to
     # start a new one
     if [ $AGENTFOUND = 0 ] ; then
-        eval "$(ssh-agent)"
+        eval "$(ssh-agent -t 36000)" # default id lifetime: 10 hours
     fi
 
     # Clean up

@@ -18,6 +18,7 @@
 
 - create:
   - ~/.cache
+  - ~/.cache/npm
   - ~/.config
   - ~/.local
   - ~/.local/bin
