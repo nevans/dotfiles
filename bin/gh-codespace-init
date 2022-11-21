@@ -17,4 +17,7 @@ if [ "$CODESPACES" = true ]; then
   else
     ln -nfs ~/.docker ~/.config/docker
   fi
+
+  # the default image doesn't compile the en_US.UTF-8 locale!
+  sudo localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
 fi
