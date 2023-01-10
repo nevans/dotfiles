@@ -3,6 +3,10 @@
 # container!
 set -euo pipefail
 
+if ! command -v whiptail &> /dev/null; then echo "install whiptail"; exit 1; fi
+if ! command -v make     &> /dev/null; then echo "install make";     exit 1; fi
+if ! command -v git      &> /dev/null; then echo "install git";      exit 1; fi
+
 VIM_CLONE_REPO_URL="${VIM_CLONE_REPO_URL:-https://github.com/vim/vim.git}"
 
 if [[ -d ~/src/vim ]]; then
@@ -38,6 +42,7 @@ fi
 
 if whiptail --yesno "Install build-dep vim?" 10 50; then
   sudo apt build-dep vim
+  sudo apt install python3
 fi
 
 echo "$(tput setaf 2)Removing $HOME from \$PATH...$(tput sgr0)"
