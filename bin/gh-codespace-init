@@ -4,20 +4,24 @@
 cd "$( dirname "${BASH_SOURCE[0]}" )/.." || exit 1
 
 if [ "$CODESPACES" = true ]; then
-  BACKUP_DIR=~/backup-codespaces-cfg
-  mkdir -p "$BACKUP_DIR"
-  if [ -f ~/.bashrc  ]; then mv ~/.bashrc  "$BACKUP_DIR"/bashrc;  fi
-  if [ -f ~/.profile ]; then mv ~/.profile "$BACKUP_DIR"/profile; fi
+  backups=~/backup-codespaces-cfg
+  mkdir -p "$backups"
+  if [ -f ~/.bashrc  ];      then mv ~/.bashrc      "$backups"/bashrc;  fi
+  if [ -f ~/.bash_logout  ]; then mv ~/.bash_logout "$backups"/bash_logout; fi
+  if [ -f ~/.profile ];      then mv ~/.profile     "$backups"/profile; fi
 
   if [ -d "$XDG_CONFIG_HOME"/docker ]; then
     echo 1>&2 "Docker config dir won't be managed by GitHub Codespace."
     echo 1>&2 "To switch to GH managed docker config:"
-    echo 1>&2 "  mv ~/.config/docker $BACKUP_DIR"
+    echo 1>&2 "  mv ~/.config/docker $backups"
     echo 1>&2 "  ~/.dotfiles/install"
   else
     ln -nfs ~/.docker ~/.config/docker
   fi
 
   # the default image doesn't compile the en_US.UTF-8 locale!
-  sudo localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
+  sudo localedef --force \
+    -i en_US -f UTF-8 \
+    -A /usr/share/locale/locale.alias \
+    en_US.UTF-8
 fi
