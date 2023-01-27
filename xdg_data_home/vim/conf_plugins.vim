@@ -103,8 +103,12 @@ if !exists('g:ale_linters_ignore')  | let g:ale_linters_ignore = {}  | endif
 if !exists('g:ale_fixers')          | let g:ale_fixers = {}          | endif
 if !exists('g:ale_pattern_options') | let g:ale_pattern_options = {} | endif
 
-let g:ale_fixers["c"]   = ["remove_trailing_lines", "trim_whitespace", "clang-format"]
-let g:ale_fixers["cpp"] = ["remove_trailing_lines", "trim_whitespace", "clang-format"]
+let g:ale_fixers["c"]   = [
+      \ "remove_trailing_lines", "trim_whitespace", "clang-format",
+      \ ]
+let g:ale_fixers["cpp"] = [
+      \ "remove_trailing_lines", "trim_whitespace", "clang-format",
+      \ ]
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " ALE: ruby config                                     {{{3
