@@ -30,7 +30,7 @@
 " These *should* be set by the login shell (or by systemd?), but just in case...
 if has("patch-8.2.1794")
   " this syntactic sugar is trivial and unimportant... but I like it better!
-  let $XDG_CACHE_HOME  = $XDG_CONFIG_HOME ?? $HOME.."/.cache"
+  let $XDG_CACHE_HOME  = $XDG_CACHE_HOME  ?? $HOME.."/.cache"
   let $XDG_CONFIG_HOME = $XDG_CONFIG_HOME ?? $HOME.."/.config"
   let $XDG_DATA_HOME   = $XDG_DATA_HOME   ?? $HOME.."/.local/share"
   let $XDG_STATE_HOME  = $XDG_STATE_HOME  ?? $HOME.."/.local/state"
