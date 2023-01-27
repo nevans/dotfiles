@@ -50,6 +50,8 @@
   cached   = diff --cached
   branches = branch -av
 
+  r = "!r() { refbranch=${1:-origin/HEAD} count=${2:-20}; git for-each-ref --sort=-committerdate refs/heads --format='%(refname:short)%09%(if)%(HEAD)%(then)%(color:cyan bold)=>%(else)%(color:yellow)  %(end)%(refname:short) %(color:cyan)%(upstream:track)%09%(color:red)%(objectname:short)%09%(color:bold green)%(committerdate:human)%09%(color:brightblue)%(subject)%09%(color:brightmagenta)%(authorname)%(color:reset)' --color=always --count=${count} | awk -F'\t' -vOFS='\t' -vrefbranch=\"$refbranch\" '{ cmd=\"git rev-list --count \"refbranch\"..\"$1; cmd | getline ahead; close(cmd); cmd=\"git rev-list --count \"$1\"..\"refbranch; cmd | getline behind; close(cmd); if (ahead > 0 && behind > 0) { diff=\"[⏪ \"behind\"|\"ahead\" ⏩]\"; } else if (ahead > 0) diff=\"[\"ahead\" ⏩]\"; else if (behind > 0) diff=\"[⏪ \"behind\"]\"; else diff=\" \"; $1=$2; $2=diff; $5=substr($5, 0, 55) } 1' | column -ts'\t'; }; r"
+
   ###############################################################
   # TODO: convert much of this to "pretty.<name> format strings
   #
