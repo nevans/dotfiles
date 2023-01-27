@@ -272,9 +272,6 @@
 [submodule "xdg_data_home/vim/pack/insert/opt/delimitMate"]
 	path = xdg_data_home/vim/pack/insert/opt/delimitMate
 	url = https://github.com/Raimondi/delimitMate.git
-[submodule "xdg_data_home/vim/pack/insert/start/emmet-vim"]
-	path = xdg_data_home/vim/pack/insert/start/emmet-vim
-	url = https://github.com/mattn/emmet-vim.git
 [submodule "xdg_data_home/vim/pack/insert/start/endwise"]
 	path = xdg_data_home/vim/pack/insert/start/endwise
 	url = https://github.com/tpope/vim-endwise.git
@@ -417,8 +414,11 @@
 	path = xdg_data_home/vim/pack/ui-statuslines/opt/vim-line-no-indicator
 	url = https://github.com/drzel/vim-line-no-indicator.git
 [submodule "xdg_data_home/vim/pack/ui-statuslines/start/vim-airline"]
-	path = xdg_data_home/vim/pack/ui-statuslines/start/vim-airline
+	path = xdg_data_home/vim/pack/ui-statuslines/opt/vim-airline
 	url = https://github.com/vim-airline/vim-airline
 [submodule "xdg_data_home/vim/pack/ui-statuslines/start/vim-airline-themes"]
-	path = xdg_data_home/vim/pack/ui-statuslines/start/vim-airline-themes
+	path = xdg_data_home/vim/pack/ui-statuslines/opt/vim-airline-themes
 	url = https://github.com/vim-airline/vim-airline-themes.git
+[submodule "xdg_data_home/vim/pack/new-2022-10-11/opt/startify"]
+	path = xdg_data_home/vim/pack/new-2022-10-11/opt/startify
+	url = https://github.com/mhinz/vim-startify.git
