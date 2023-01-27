@@ -239,10 +239,13 @@ endif
 let g:ruby_indent_assignment_style = 'variable'
 let ruby_fold                      = 1
 let ruby_foldable_groups           = 'module class def do __END__'
-let ruby_minlines                  = 250
 let ruby_operators                 = 1
 let ruby_pseudo_operators          = 1
-let ruby_space_errors              = 1
+" let ruby_space_errors              = 1 " this is done by other plugins, right?
+
+let ruby_no_expensive              = 1
+" let ruby_fold              = 0
+" unlet ruby_foldable_groups
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " ftplugin: markdown                                       {{{2
