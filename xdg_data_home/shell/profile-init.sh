@@ -1,6 +1,7 @@
-# The default umask is probably set by /etc/profile or /etc/login.defs.
-# Either way, the historical default umask 022 is far too permissive.
-umask 077
+# Using anything other than the default causes strange effects.  :(
+# Many programs aren't expecting to need to set permissions to be more
+# permissive, and using "077" can result in e.g. failed "make install", etc.
+umask 022
 
 # This *really* should be set already.  Just In Case:
 if [ -z "$HOME" ]; then HOME=~; fi

@@ -1,6 +1,6 @@
 # the default umask is probably set by /etc/profile or /etc/login.defs.
 # Either way, the historical default umask 022 is far too permissive.
-umask 077
+umask 022
 
 # I like vim.
 export EDITOR=vim
