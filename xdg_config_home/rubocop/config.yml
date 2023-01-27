@@ -2,21 +2,38 @@
 # Initial configuration, AllCops, inherit_mode, etc                 {{{1
 ########################################################################
 
-inherit_mode:
-  merge:
-    - Exclude
-    # These should be on Style/BlockDelimiters, but that seemed to be broken?
-    - ProceduralMethods
-    - IgnoredMethods
-    - FunctionalMethods
+# require:
+#   - rubocop-rails
+#   - rubocop-performance
+#   - rubocop-rspec
+#   - rubocop-rake
+#
+# inherit_from:
+#   - .rubocop_todo.yml
+#
+# inherit_mode:
+#   merge:
+#     # exclusions in this file are in addition to defaults and TODOs
+#     - Exclude
+#     # These should be on Style/BlockDelimiters, but that seemed to be broken?
+#     - ProceduralMethods
+#     - IgnoredMethods
+#     - AllowedMethods
+#     - FunctionalMethods
 
 AllCops:
   TargetRubyVersion: 2.7  # The oldest officially supported ruby.
   NewCops: enable         # I like to enable/disable when upgrading
   Exclude:
-    - bin/rake
-    - bin/rspec
-    - bin/rubocop
+    - bin/bundle  # generated binstub
+    - bin/rails   # generated binstub
+    - bin/rake    # generated binstub
+    - bin/rspec   # generated binstub
+    - bin/rubocop # generated binstub
+    - bin/yarn    # generated binstub
+    - "node_modules/**/*"
+    - "tmp/**/*"
+    - "vendor/**/*"
 
 ################################################################### }}}1
 ########################################################################
@@ -86,7 +103,7 @@ Metrics/ModuleLength:
 #######################################################################
 
 Layout/LineLength:
-  Max: 90 # should <= 80, but I allow a little wiggle-room
+  Max: 90 # should <= 80, but this allows a *little* wiggle-room
   AllowedPatterns:
     - '^\# +idx_'   # annotate gem can make very long index lines
     - '^\# +index_' # annotate gem can make very long index lines
@@ -146,13 +163,12 @@ Layout/FirstHashElementIndentation:
   EnforcedStyle: consistent
   # EnforcedStyle: special_inside_parentheses
 Layout/HashAlignment:
+  Enabled: false # unfortunately this is still a bit broken... 😞
   EnforcedHashRocketStyle: table # some other rules check these values...
   EnforcedColonStyle:      table #   ...and they don't understand the arrays 😦
   # EnforcedHashRocketStyle: [table, key]
   # EnforcedColonStyle:      [table, key]
   EnforcedLastArgumentHashStyle: ignore_implicit
-  Enabled: false # unfortunately this is still a bit broken... 😞
-  # Enabled: true # unfortunately this is still a bit broken... 😞
 
 Layout/CommentIndentation:
   AllowForAlignment: true
@@ -218,6 +234,15 @@ Style/RescueStandardError:     { Enabled: false }
 Style/SingleLineMethods:       { Enabled: false }
 Style/StabbyLambdaParentheses: { Enabled: false }
 Style/WhenThen:                { Enabled: false }
+
+# Object#yield_self and Object#then are not synonyms!  "then" is *usually* fine.
+# But that's a semantic distinction, like "===" vs "==" vs "eql?" vs "equal?".
+# Rubocop doesn't know which one you intended. (maybe a future version could?)
+Style/ObjectThen: { Enabled: false }
+
+# Equality: it's fine either way.  But strongly prefer "<", "<=" over ">", ">=":
+# http://llewellynfalco.blogspot.com/2016/02/dont-use-greater-than-sign-in.html
+Style/YodaCondition: { Enabled: false }
 
 # If rubocop had an option to only enforce this on constants and literals (e.g.
 # strings, regexp, range), I'd allow it.
@@ -308,8 +333,9 @@ Style/BlockDelimiters:
     - add_periodic_timer # EM
     - add_timer # EM
     - mail # ActionMailer
-  IgnoredMethods:
+  AllowedMethods:
     - silence # logger -- may or may not care about return value...
+    # rspec -- probably procedural, but rspec convention...
     - expect
     - expect_cohort_users
     - its
@@ -317,8 +343,10 @@ Style/BlockDelimiters:
     - specify
     - subject  # always functional for rspec...
     - subject! # always functional for rspec...
+    # others:
     - async    # results are stored in completion, but is often preocedural
     - defer    # results are stored in completion, but is often preocedural
+    - then     # same as above, but maybe promisey
     - with_thread_queue # results are stored in completion... often preocedural
     - redis   # our conn pool helper. may or may not care about return value.
     - callback
@@ -336,8 +364,8 @@ Style/EmptyMethod:
 # TODO ... misc styles                                              {{{2
 ########################################################################
 
-# this is/was buggy... it catches big if/elsif/elsif/else statements
-# fixed in rubocop 1.5?
+# this is buggy... it catches big if/elsif/elsif/else statements
+# fixed in rubocop 1.5
 Style/IfWithSemicolon:
   Enabled: false
 
@@ -364,7 +392,24 @@ Style/NumericLiterals:
 ########################################################################
 
 ########################################################################
-# TODO Performanve, and Rails, and Ruby                             {{{1
+# Performance                                                       {{{1
 ########################################################################
 
+# TODO: ...
+
+################################################################### }}}1
+########################################################################
+# Rails                                                             {{{1
+########################################################################
+
+# TODO: ...
+
+################################################################### }}}1
+########################################################################
+# RSpec                                                             {{{1
+########################################################################
+
+# TODO: ...
+
+################################################################### }}}1
 # vim: foldmethod=marker
