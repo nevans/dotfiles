@@ -111,33 +111,6 @@ let g:ale_fixers["cpp"] = [
       \ ]
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" ALE: ruby config                                     {{{3
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-" by contraining ALE to use bundler, we won't run linters/fixers that aren't
-" configured for the project.
-let g:ale_ruby_brakeman_executable   = 'bundle'
-let g:ale_ruby_reek_executable       = 'bundle'
-let g:ale_ruby_rubocop_executable    = 'bundle'
-let g:ale_ruby_standardrb_executable = 'bundle'
-
-" That said, never run prettier.  It hates me; I hate it.
-let g:ale_linters_ignore["ruby"] = ["prettier"]
-
-let g:ale_linters["ruby"] = [
-      \ 'ruby',
-      \ 'rubocop',
-      \ 'solargraph',
-      \ 'reek',
-      \]
-
-" let g:ale_linters["ruby"] = ['sorbet']
-" let g:ale_linters["ruby"] += ['rails_best_practices']
-
-" let g:ale_fixers["ruby"] += ["remove_trailing_lines", "trim_whitespace"]
-" let g:ale_fixers["ruby"] += ["rubocop"]
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " ALE: javascript config                                     {{{3
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -238,20 +211,6 @@ endif
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" }}}1
 " FT plugin configs (TODO: move to ftplugins)                            {{{1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" ftplugin: ruby-vim                                       {{{2
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:ruby_indent_assignment_style = 'variable'
-let ruby_fold                      = 1
-let ruby_foldable_groups           = 'module class def do __END__'
-let ruby_operators                 = 1
-let ruby_pseudo_operators          = 1
-" let ruby_space_errors              = 1 " this is done by other plugins, right?
-
-let ruby_no_expensive              = 1
-" let ruby_fold              = 0
-" unlet ruby_foldable_groups
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " ftplugin: markdown                                       {{{2
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " syntax highlighting in code blocks:
