@@ -1,0 +1,31 @@
+{
+  "list.previewSplitRight": true,
+  "list.menuAction": true,
+  "list.maxPreviewHeight": 20,
+
+  "diagnostic.displayByAle": true,
+
+  "diagnostic-languageserver.mergeConfig": true,
+  "diagnostic-languageserver.filetypes": {
+    "sh": "shellcheck"
+  },
+  "diagnostic-languageserver.linters": {
+    "shellcheck": {
+      "args": [
+        "--external-sources",
+        "--stdin",
+        "--stdin-filename",
+        "%filepath",
+        "--format",
+        "json"
+      ]
+    }
+  },
+
+  "tsserver.log": "verbose",
+
+  "coc.source.emoji.filetypes": ["gitcommit", "markdown"],
+
+  "solargraph.diagnostics": true,
+  "solargraph.formatting": true
+}
