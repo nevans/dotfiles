@@ -255,6 +255,23 @@ nmap <silent> <unique> <Leader>ttt   :TestFile<CR>
 nmap <silent> <unique> <Leader>t<CR> :TestFile<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" maps     I    => asyncomplete.vim                  <Tab>, <CR>, ... {{{1
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+if !exists("g:vimrc_enable_asyncomplete_maps")
+  let g:vimrc_enable_asyncomplete_maps =
+        \ !empty(get(g:vimrc_packs, "asyncomplete.vim"))
+        \ || get(g:vimrc_packs, "completion", "") == "asyncomplete.vim"
+endif
+if g:vimrc_enable_asyncomplete_maps
+
+  inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+  inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+  inoremap <expr> <cr>    pumvisible() ? asyncomplete#close_popup() : "\<cr>"
+
+endif
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " maps NVSOI    => coc.nvim                  ][ g <Ctrl> <Leader> etc {{{1
 " TODO: plugin is optional; only apply these when the plugin has been loaded
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
