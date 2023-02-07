@@ -1,4 +1,16 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Custom commands
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" TODO: use existing terminal in the tab, moving it to a side window
+" TODO: use existing "sideterminal" window, ensuring it has a terminal buffer
+command SideTerminal
+      \ execute "botright vertical terminal"
+      \| vertical resize 120
+      \| setlocal winfixwidth
+      \| wincmd =
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Custom mappings
 "
 " n.b. different plugins have various approaches to mappings:
