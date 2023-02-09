@@ -103,7 +103,7 @@
     - description: Update coc.nvim
       quiet: true
       command: |
-        dir="vim/pack/compl_lint_lsp_etc/opt/coc.nvim"
+        dir="xdg_data_home/vim/pack/compl_lint_lsp_etc/opt/coc.nvim"
         if [ -r "$dir"/package.json ]; then
           {
             cd "$dir"
