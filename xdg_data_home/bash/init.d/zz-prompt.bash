@@ -1,4 +1,5 @@
 #!/bin/bash
+# vim: foldmethod=marker
 
 # set variable identifying the chroot you work in (used in the prompt below)
 if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
@@ -37,11 +38,11 @@ __set_bg_rgb()
 case "$(tput colors)" in
   256)
     # TODO: use different theme
-    PROMPT_COMMAND=__prompt_combine_segments
+    PROMPT_COMMAND=__prompt_parts_combine
     ;;
   16)
     # TODO: use different theme
-    PROMPT_COMMAND=__prompt_combine_segments
+    PROMPT_COMMAND=__prompt_parts_combine
     ;;
   *)
     # TODO: use different theme
@@ -56,14 +57,14 @@ export GIT_PS1_SHOWSTASHSTATE=yes
 export GIT_PS1_SHOWUNTRACKEDFILES=yes
 
 #########################################################
-# Customize: Prompt segments
+# {{{1 Customize: Prompt segments
 
-PROMPT_LEFT_SEGMENTS=(  userinfo cwd scm )
+PROMPT_LEFT_SEGMENTS=(  ssh userinfo cwd scm )
 PROMPT_RIGHT_SEGMENTS=( clock ruby )
-PROMPT_FINAL_SEGMENTS=( debian_chroot ruby last_status )
+PROMPT_FINAL_SEGMENTS=( sudoer debian_chroot last_status )
 
 #########################################################
-# Customize: Theme "icons" and colors
+# {{{1 Customize: Theme "icons" and colors
 
 # for 256 color chart, see e.g. https://robotmoon.com/256-colors/
 
@@ -71,13 +72,19 @@ declare -gA THEME_BG
 declare -gA THEME_FG
 declare -gA THEME_ICO
 
-THEME_ICO["error_status"]='❌ \$?:'
+THEME_ICO["error_status"]='❌'
 THEME_BG[error_status]="3"
+THEME_FG[error_status]="0"
 
 THEME_ICO[l-cap-hard]=""
 THEME_ICO[l-cap-soft]=""
 THEME_ICO[l-sep-hard]=""
 THEME_ICO[l-sep-soft]=""
+THEME_ICO[f-cap-hard]="▒░"
+THEME_ICO[f-cap-soft]=""
+THEME_ICO[f-sep-hard]=""
+THEME_ICO[f-sep-soft]=""
+
 THEME_ICO[r-cap-hard]=""
 THEME_ICO[r-cap-soft]=""
 THEME_ICO[r-sep-hard]=""
@@ -85,7 +92,8 @@ THEME_ICO[r-sep-soft]=""
 
 THEME_ICO[begin_first]="╭╼"
 THEME_ICO[begin_extra]="├╼"
-THEME_ICO[begin_final]="╰──╼"
+THEME_ICO[begin_final]="╰╼"
+
 THEME_BG[begin]="232"
 THEME_FG[begin]="2"
 
@@ -121,29 +129,39 @@ THEME_BG[scm_unstaged]=92
 THEME_BG[scm]=${THEME_BG[scm_clean]}
 
 #########################################################
-# Build the prompt segments
+# {{{1 Build the prompt segments
 
-function __prompt_userinfo_segment() {
-  local prefix=""
-  local suffix=""
-  local type="userinfo"
+function __prompt_segment_sudoer() {
   if [[ "${PROMPT_CHECK_SUDO:-true}" = true ]]; then
     if sudo -n uptime 2>&1 | grep -q "load"; then
-      type="sudo"
-      prefix+="${THEME_ICO['sudo']} "
+      echo "${THEME_ICO['sudo']}|sudo"
     fi
   fi
+}
+
+function __prompt_segment_debian_chroot() {
+  printf "%s" "${debian_chroot:+-- chroot($debian_chroot|cwd)}"
+}
+
+function __prompt_segment_ssh() {
   if [[ -n "${SSH_CLIENT:-}" ]]; then
-    suffix+=" ${THEME_ICO['ssh']}"
+    printf "%s|cwd" "${THEME_ICO['ssh']}"
   fi
-  echo "${prefix}<${USER}@${HOSTNAME}>${suffix}|${type}"
 }
 
-function __prompt_cwd_segment() {
-  echo "\w" # let bash's PROMPTNG transformation handle it
+function __prompt_segment_userinfo() {
+  if [[ -n "${CODESPACE_NAME:-}" ]]; then
+    echo "codespace: ${CODESPACE_NAME}|userinfo"
+  else
+    echo "<${USER}@${HOSTNAME}>|userinfo"
+  fi
 }
 
-function __prompt_clock_segment() {
+function __prompt_segment_cwd() {
+  printf "%s" "\w" # let bash's PROMPTNG transformation handle it
+}
+
+function __prompt_segment_clock() {
   local date
   local time
   date="\[$(tput setaf "${THEME_FG['date']}")\]\d\[$(tput setaf "${THEME_FG['clock']}")\]"
@@ -151,7 +169,7 @@ function __prompt_clock_segment() {
   echo "[${date}]-(${time})"
 }
 
-function __prompt_ruby_segment() {
+function __prompt_segment_ruby() {
   if [ "$(type -P rbenv)" ]; then
     local ruby_version
     ruby_version=$(rbenv version-name) || return
@@ -162,7 +180,7 @@ function __prompt_ruby_segment() {
 }
 
 # uses ./base.theme.sh, imported from oh-my-bash
-function __prompt_scm_segment() {
+function __prompt_segment_scm() {
   local color="scm"
   local scm_prompt=""
 
@@ -186,14 +204,14 @@ function __prompt_scm_segment() {
   fi
 }
 
-function __prompt_last_status_segment() {
+function __prompt_segment_last_status() {
   if [[ "$PROMPT_LAST_STATUS" -ne 0  ]]; then
-    echo "${THEME_ICO['error_status']}${PROMPT_LAST_STATUS}|error_status"
+    printf "%s" "${THEME_ICO['error_status']} ${PROMPT_LAST_STATUS}|error_status"
   fi
 }
 
 #########################################################
-# Helper functions
+# {{{1 Theme cache functions
 
 # TODO: cache theme colors
 function __prompt_theme_colors() {
@@ -236,21 +254,40 @@ function __prompt_set_fg_bg() {
   echo -e "\[${RESET_ATTRS}${fg}${bg}\]"
 }
 
-function __prompt_build_left_prompt() {
+#########################################################
+# {{{1 Prompt "part" builder functions
+
+PROMPT_RIGHT=
+PROMPT_LEFT=
+PROMPT_FINAL=
+
+function __prompt_build_left_part() {
   __prompt_build_part "left" PROMPT_LEFT PROMPT_LEFT_SEGMENTS
 }
 
+function __prompt_build_right_part() {
+  __prompt_build_part "right" PROMPT_RIGHT PROMPT_RIGHT_SEGMENTS
+}
+
+function __prompt_build_final_part() {
+  __prompt_build_part final PROMPT_FINAL PROMPT_FINAL_SEGMENTS
+  # PROMPT_FINAL=""
+  # __prompt_begin_part final PROMPT_FINAL
+  # __prompt_end_part   final PROMPT_FINAL
+  # :
+}
+
 function __prompt_build_part() {
-  local dir="$1"
-  local -n prompt="$2"
+  local part="$1"
+  local -n prompt_var="$2"
   local -n segments="$3"
-  prompt=""
+  prompt_var=""
   PROMPT_LAST_SEGMENT_BG="-"
-  PROMPT_LAST_SEGMENT="begin-${dir}"
+  PROMPT_LAST_SEGMENT="begin-${part}"
   __prompt_begin_part "$@"
   local segment segment_name
   for segment_name in "${segments[@]}"; do
-    segment="$(__prompt_"${segment_name}"_segment)"
+    segment="$(__prompt_segment_"${segment_name}")"
     if [[ -n "${segment}" ]]; then
       # simple split params on '|'
       local -a params
@@ -260,20 +297,13 @@ function __prompt_build_part() {
   done
   __prompt_end_part "$@"
 
-  # expand the prompt now, so we can count the chars
-  prompt="${prompt@P}"
-}
-
-function __prompt_build_final_prompt() {
-  PROMPT_FINAL=""
-  __prompt_begin_part final PROMPT_FINAL
-  __prompt_end_part   final PROMPT_FINAL
-  :
+  # expand the prompt_var now, so we can count the chars
+  prompt_var="${prompt_var@P}"
 }
 
 function __prompt_begin_part() {
   local part="$1"
-  local -n prompt="$2"
+  local -n prompt_var="$2"
   case "$part" in
     left)
       : # TODO: move begin_first piece into here...
@@ -282,31 +312,37 @@ function __prompt_begin_part() {
       :
       ;;
     final)
-      prompt+=$(__prompt_theme_colors begin)
-      prompt+="${THEME_ICO[begin_final]}"
+      :
       ;;
   esac
 }
 
 function __prompt_end_part() {
   local part="$1"
-  local -n ppart="$2"
+  local -n prompt_var="$2"
   case "$part" in
     left)
-      if [[ -n "${ppart}" ]]; then
-        ppart+="$(__prompt_set_fg_bg ${PROMPT_LAST_SEGMENT_BG} -)"
-        ppart+="${THEME_ICO[l-cap-hard]}\[${RESET_ATTRS}\]"
+      if [[ -n "${prompt_var}" ]]; then
+        prompt_var+="$(__prompt_set_fg_bg ${PROMPT_LAST_SEGMENT_BG} -)"
+        prompt_var+="${THEME_ICO[l-cap-hard]}\[${RESET_ATTRS}\]"
       fi
       ;;
     right)
       :
       ;;
     final)
-      ppart+=$(__prompt_theme_colors prompt)
-      ppart+="${THEME_ICO[prompt]}$_c_reset"
+      if [[ -n "${prompt_var}" ]]; then
+        prompt_var+="$(__prompt_set_fg_bg ${PROMPT_LAST_SEGMENT_BG} -)"
+        prompt_var+="${THEME_ICO[f-cap-hard]}\[${RESET_ATTRS}\]"
+      fi
+      prompt_var+=$(__prompt_theme_colors prompt)
+      prompt_var+="${THEME_ICO[prompt]}$_c_reset"
       ;;
   esac
 }
+
+#########################################################
+# {{{1 Prompt "segment" builder functions
 
 declare -gA __PROMPT_SEP_CACHE
 __PROMPT_SEP_CACHE=( [work_around_old_bash_global_declaration_bugs]='yes'
@@ -333,7 +369,7 @@ function __prompt_ensure_separator() {
   local size="hard"
 
   local sep_fg sep_bg
-  if [ "$dir" = "l" ]; then
+  if [ "$dir" != "r" ]; then
     sep_fg="$last_bg" # arrow comes from left segment
     sep_bg="$next_bg" # background begins right segment
   else
@@ -341,16 +377,7 @@ function __prompt_ensure_separator() {
     sep_bg="$last_bg" # background ends left segment
   fi
 
-  # n.b. "l-beg-*" and "r-nil-soft" icons have nil defaults
-  if [ "$first" ]; then
-    if [[ "$dir" = "l" ]]; then
-      # print "begin" ico
-      type="beg"
-      sep+="$(__prompt_theme_colors begin)${THEME_ICO[begin_first]}"
-    elif [[ "$dir" = "r" ]]; then
-      [[ "$next_bg" != "-" ]] && type="cap" || type="nil"
-    fi
-  fi
+  __prompt_first_separator "$dir" "$first" "$next_bg"
 
   if [[ "$next_bg" = "$last_bg" ]]; then
     size="soft"
@@ -364,6 +391,28 @@ function __prompt_ensure_separator() {
   __PROMPT_SEP_CACHE[$key]="$sep"
 }
 
+function __prompt_first_separator() {
+  local dir="${1:0:1}" # only use the first letter to match icons
+  local first="$2"
+  local next_bg="$3"
+  # n.b. "l-beg-*" and "r-nil-soft" icons have nil defaults
+  if [ "$first" ]; then
+    case "$dir" in
+      l)
+        type="beg"
+        sep+="$(__prompt_theme_colors begin)${THEME_ICO[begin_first]}"
+        ;;
+      r)
+        [[ "$next_bg" != "-" ]] && type="cap" || type="nil"
+        ;;
+      f)
+        type="beg"
+        sep+="$(__prompt_theme_colors begin)${THEME_ICO[begin_final]}"
+        ;;
+    esac
+  fi
+}
+
 function __prompt_append_segment() {
   local -n prompt="$1"
   local dir="${2:0:1}"
@@ -371,6 +420,12 @@ function __prompt_append_segment() {
   local theme="$4"
   local fg="${THEME_FG[$theme]:--}"
   local bg="${THEME_BG[$theme]:--}"
+
+  # (
+  #   declare -p prompt
+  #   declare -p dir
+  #   declare -p theme
+  # ) >&2
 
   # TODO: combine PROMPT_LAST_SEGMENT_BG with "$first"
   local first=""; if [[ "${#prompt}" = 0 ]]; then first="0"; fi
@@ -385,48 +440,47 @@ function __prompt_append_segment() {
   PROMPT_LAST_SEGMENT="$theme"
 }
 
+#########################################################
+# {{{1 Prompt build
+
+# n.b: 'wc -L' only works with GNU coreutils
 function __prompt_len() {
-  local expanded="${1}"
-  local cleaned
-  cleaned=$(echo "${1}" | sed -E 's,(\x01|\x1B\[[0-9;]*[a-zA-Z]|\x02),,g')
-  echo "${#cleaned}"
+  local clean
+  clean="$(printf "%s" "${1}" | sed -E 's,\x01[^\x02]*\x02,,g')"
+  # printf "clean (%i): %q\n" "${#clean}" "$clean" >&2
+  printf "%b" "$clean" | wc -L
 }
 
-function __prompt_combine_segments() {
+function __prompt_parts_combine() {
   PROMPT_LAST_STATUS="$?" # must get this first... before we run anything
 
-  # TODO: create __prompt_debian_chroot_segment function
-  PS1=""
-  PS1+="$_c_reset\${debian_chroot:+-- chroot(\$debian_chroot)\n}"
+  # TODO: create __prompt_segment function
+  PS1="$_c_reset"
 
-  __prompt_build_part "left"  PROMPT_LEFT  PROMPT_LEFT_SEGMENTS
-  __prompt_build_part "right" PROMPT_RIGHT PROMPT_RIGHT_SEGMENTS
-
-  # __prompt_build_part "left"  PROMPT_FINAL PROMPT_FINAL_SEGMENTS
-  __prompt_build_final_prompt
+  __prompt_build_left_part
+  __prompt_build_right_part
+  __prompt_build_final_part
 
   # dynamic spacing between time and the rest...
-  local prompt_len_left prompt_len_right
-  prompt_len_left="$( __prompt_len "$PROMPT_LEFT")"
-  prompt_len_right="$(__prompt_len "$PROMPT_RIGHT")"
-  local cols move_cursor_to_end local move_cursor_left
+  local cols len_left len_right
   cols=$(tput cols)
-  move_cursor_to_end="$(tput cuf "$cols")"
-  move_cursor_left="$(tput cub "$prompt_len_right")"
-  PROMPT_RIGHT="${move_cursor_to_end}${move_cursor_left}${PROMPT_RIGHT}"
+  len_left=$( __prompt_len "$PROMPT_LEFT")
+  len_right=$(__prompt_len "$PROMPT_RIGHT")
+  local aligned_right
+  aligned_right=$(tput hpa $(( cols - len_right )))${PROMPT_RIGHT}
 
   # (
-  # declare -p prompt_len_left
-  # declare -p prompt_len_right
+  # declare -p len_left
+  # declare -p len_right
   # declare -p cols
   # ) >&2
 
-  if (( cols < (prompt_len_left + prompt_len_right) )); then
-    PS1+="${PROMPT_RIGHT}\n"
+  if (( cols < (len_left + len_right) )); then
+    PS1+="${aligned_right}\n"
     PS1+="${PROMPT_LEFT}"
   else
     PS1+="${PROMPT_LEFT}"
-    PS1+="${PROMPT_RIGHT}"
+    PS1+="${aligned_right}"
   fi
 
   PS1+="\n${PROMPT_FINAL}"
