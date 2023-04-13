@@ -30,7 +30,6 @@ let g:ale_linters["ruby"] = [
       \ 'ruby',
       \ 'rubocop',
       \ 'solargraph',
-      \ 'reek',
       \]
 
 " let g:ale_linters["ruby"] = ['sorbet']
