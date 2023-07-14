@@ -110,6 +110,11 @@ let g:ale_fixers["cpp"] = [
       \ "remove_trailing_lines", "trim_whitespace", "clang-format",
       \ ]
 
+let g:ale_virtualtext_column    = 76
+let g:ale_virtualtext_maxcolumn = '100%'
+let g:ale_virtualtext_delay     = 250
+let g:ale_virtualtext_single    = 1
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " ALE: javascript config                                     {{{3
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
