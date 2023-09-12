@@ -45,9 +45,12 @@ if whiptail --yesno "Install build-dep vim?" 10 50; then
   sudo apt install python3
 fi
 
-echo "$(tput setaf 2)Removing $HOME from \$PATH...$(tput sgr0)"
+echo "$(tput setaf 2)Removing $HOME, /usr/local, and /opt from \$PATH...$(tput sgr0)"
 PATH=$(ruby -e '
-  puts ENV["PATH"].split(":").grep_v(/^#{Regexp.quote ENV["HOME"]}/).join ":"
+  puts ENV["PATH"]
+    .split(":")
+    .grep_v(/\A#{Regexp.union ENV["HOME"], "/usr/local/", "/opt/"}/)
+    .join ":"
 ')
 echo "$(tput setaf 2)New \$PATH=$PATH$(tput sgr0)"
 sleep 5
