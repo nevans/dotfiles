@@ -11,4 +11,11 @@
 # bash extension installed (maybe), and the 'rbenv shell' command enabled.
 if command -v rbenv >/dev/null 2>&1; then
   eval "$(rbenv init -)"
+
+  # Clean up devcontainer or codespace that installed both rbenv and rvm
+  path_remove PATH /usr/local/rvm/gems/default/bin
+  path_remove PATH /usr/local/rvm/gems/default@global/bin
+  path_remove PATH /usr/local/rvm/rubies/default/bin
+  unset GEM_PATH
+  unset GEM_HOME
 fi
