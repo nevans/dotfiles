@@ -59,9 +59,9 @@ export GIT_PS1_SHOWUNTRACKEDFILES=yes
 #########################################################
 # {{{1 Customize: Prompt segments
 
-PROMPT_LEFT_SEGMENTS=(  ssh userinfo cwd scm )
+PROMPT_LEFT_SEGMENTS=(  ssh userinfo sudoer cwd scm )
 PROMPT_RIGHT_SEGMENTS=( clock ruby )
-PROMPT_FINAL_SEGMENTS=( sudoer debian_chroot last_status )
+PROMPT_FINAL_SEGMENTS=( debian_chroot last_status )
 
 #########################################################
 # {{{1 Customize: Theme "icons" and colors
@@ -97,7 +97,7 @@ THEME_ICO[begin_final]="╰╼"
 THEME_BG[begin]="232"
 THEME_FG[begin]="2"
 
-THEME_ICO[prompt]=" $ "
+THEME_ICO[prompt]=" $ "
 THEME_BG[prompt]="232"
 THEME_FG[prompt]="2"
 
@@ -109,7 +109,7 @@ THEME_FG[date]="4"
 THEME_FG[cwd]="17"
 THEME_BG[cwd]="111"
 
-THEME_ICO["sudo"]="⚠️ "
+THEME_ICO["sudo"]="⚠ "
 THEME_ICO["ssh"]="☁️ "
 THEME_BG[userinfo]="22"
 THEME_BG[userinfo]="237"
