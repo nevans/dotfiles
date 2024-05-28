@@ -49,7 +49,7 @@ if has('multi_byte') && &encoding ==# 'utf-8'
 endif
 " see also after/plugin/auto-origami
 
-set updatetime=200      " default of 4000 doesn't play as well with coc.nvim
+set updatetime=300      " default of 4000 doesn't play as well with coc.nvim
 
 set hlsearch            " highlight all searches
 set magic               " use vim-style regex excaping
