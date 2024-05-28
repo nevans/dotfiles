@@ -431,3 +431,21 @@
 [submodule "xdg_data_home/vim/pack/commands/start/healthcheck"]
 	path = xdg_data_home/vim/pack/commands/start/healthcheck
 	url = https://github.com/rhysd/vim-healthcheck.git
+[submodule "xdg_data_home/vim/pack/new-2024-05-28/opt/emoji"]
+	path = xdg_data_home/vim/pack/new-2024-05-28/opt/emoji
+	url = https://github.com/junegunn/vim-emoji.git
+[submodule "xdg_data_home/vim/pack/new-2024-05-28/start/emoji-ab"]
+	path = xdg_data_home/vim/pack/new-2024-05-28/start/emoji-ab
+	url = https://gitlab.com/gi1242/vim-emoji-ab.git
+[submodule "xdg_data_home/vim/pack/compl_lint_lsp_etc/opt/asyncomplete-buffer.vim"]
+	path = xdg_data_home/vim/pack/compl_lint_lsp_etc/opt/asyncomplete-buffer.vim
+	url = https://github.com/prabirshrestha/asyncomplete-buffer.vim.git
+[submodule "xdg_data_home/vim/pack/compl_lint_lsp_etc/opt/asyncomplete-emoji.vim"]
+	path = xdg_data_home/vim/pack/compl_lint_lsp_etc/opt/asyncomplete-emoji.vim
+	url = https://github.com/prabirshrestha/asyncomplete-emoji.vim.git
+[submodule "xdg_data_home/vim/pack/compl_lint_lsp_etc/opt/asyncomplete-tags.vim"]
+	path = xdg_data_home/vim/pack/compl_lint_lsp_etc/opt/asyncomplete-tags.vim
+	url = https://github.com/prabirshrestha/asyncomplete-tags.vim.git
+[submodule "xdg_data_home/vim/pack/compl_lint_lsp_etc/opt/asyncomplete-file.vim"]
+	path = xdg_data_home/vim/pack/compl_lint_lsp_etc/opt/asyncomplete-file.vim
+	url = https://github.com/prabirshrestha/asyncomplete-file.vim.git

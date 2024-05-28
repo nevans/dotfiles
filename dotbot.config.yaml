@@ -107,6 +107,6 @@
         if [ -r "$dir"/package.json ]; then
           {
             cd "$dir"
-            yarn install --frozen-lockfile
+            npm install
           }
         fi

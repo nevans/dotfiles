@@ -278,9 +278,105 @@ if !exists("g:vimrc_enable_asyncomplete_maps")
 endif
 if g:vimrc_enable_asyncomplete_maps
 
+  " Tab completion
   inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
   inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
   inoremap <expr> <cr>    pumvisible() ? asyncomplete#close_popup() : "\<cr>"
+
+  " If you prefer the enter key to always insert a new line (even if the popup
+  " menu is visible) then you can amend the above mapping as follows:
+  " inoremap <expr> <cr> pumvisible() ? asyncomplete#close_popup() . "\<cr>" : "\<cr>"
+
+  " Force refresh completion
+  imap <c-space> <Plug>(asyncomplete_force_refresh)
+
+  " By default asyncomplete will automatically show the autocomplete popup menu as
+  " you start typing. If you would like to disable the default behavior set
+  " g:asyncomplete_auto_popup to 0.
+  "
+  " You can use the above <Plug>(asyncomplete_force_refresh) to show the popup
+  " or you can tab to show the autocomplete.
+  "
+  " let g:asyncomplete_auto_popup = 0
+  "
+  " function! s:check_back_space() abort
+  "     let col = col('.') - 1
+  "     return !col || getline('.')[col - 1]  =~ '\s'
+  " endfunction
+  "
+  " inoremap <silent><expr> <TAB>
+  "   \ pumvisible() ? "\<C-n>" :
+  "   \ <SID>check_back_space() ? "\<TAB>" :
+  "   \ asyncomplete#force_refresh()
+  " inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+  " To enable preview window:
+  "
+  " " allow modifying the completeopt variable, or it will
+  " " be overridden all the time
+  " let g:asyncomplete_auto_completeopt = 0
+  "
+  " set completeopt=menuone,noinsert,noselect,preview
+  "
+  " To auto close preview window when completion is done:
+  " autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
+
+  au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#emoji#get_source_options({
+    \ 'name': 'emoji',
+    \ 'allowlist': ['*'],
+    \ 'completor': function('asyncomplete#sources#emoji#completor'),
+    \ }))
+
+  au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#file#get_source_options({
+    \ 'name': 'file',
+    \ 'allowlist': ['*'],
+    \ 'priority': 10,
+    \ 'completor': function('asyncomplete#sources#file#completor')
+    \ }))
+
+endif
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" maps     I    => asyncomplete.vim                  <Tab>, <CR>, ... {{{1
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+if !exists("g:vimrc_enable_vim_lsp_maps")
+  let g:vimrc_enable_vim_lsp_maps =
+        \ !empty(get(g:vimrc_packs, "lsp"))
+        \ || !empty(get(g:vimrc_packs, "vim-lsp"))
+        \ || get(g:vimrc_packs, "lsp_client", "") == "lsp"
+        \ || get(g:vimrc_packs, "lsp_client", "") == "vim-lsp"
+endif
+if g:vimrc_enable_vim_lsp_maps
+
+  function! s:on_lsp_buffer_enabled() abort
+    setlocal omnifunc=lsp#complete
+    setlocal signcolumn=yes
+    if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
+    nmap <buffer> gd <plug>(lsp-definition)
+    nmap <buffer> gs <plug>(lsp-document-symbol-search)
+    nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
+    nmap <buffer> gr <plug>(lsp-references)
+    nmap <buffer> gi <plug>(lsp-implementation)
+    nmap <buffer> gt <plug>(lsp-type-definition)
+    nmap <buffer> <leader>rn <plug>(lsp-rename)
+    nmap <buffer> [g <plug>(lsp-previous-diagnostic)
+    nmap <buffer> ]g <plug>(lsp-next-diagnostic)
+    nmap <buffer> K <plug>(lsp-hover)
+    nnoremap <buffer> <expr><c-f> lsp#scroll(+4)
+    nnoremap <buffer> <expr><c-d> lsp#scroll(-4)
+
+    let g:lsp_format_sync_timeout = 1000
+    autocmd! BufWritePre *.rs,*.go call execute('LspDocumentFormatSync')
+
+    " refer to doc to add more commands
+  endfunction
+
+  augroup lsp_install
+    au!
+    " call s:on_lsp_buffer_enabled only for languages that has the server registered.
+    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+  augroup END
 
 endif
 

@@ -17,14 +17,18 @@ if $VIM_LSP ==? 'ale'
   let g:vimrc_packs['completion'] = 'supertab'
   let g:vimrc_packs['lsp_client'] = 'ale'
 elseif $VIM_LSP ==? 'coc' || $VIM_LSP ==? 'coc.nvim'
-  let g:vimrc_packs['ale']        = { "disable_lsp": v:true }
+  " let g:vimrc_packs['ale']        = { "disable_lsp": v:true }
   let g:vimrc_packs['completion'] = 'coc.nvim'
   let g:vimrc_packs['lsp_client'] = 'coc.nvim'
 elseif $VIM_LSP ==? 'lsp'
   let g:vimrc_packs['lsp_client']          = 'lsp'
-  let g:vimrc_packs['completion']          = 'asyncomplete.vim'
-  let g:vimrc_packs['completion-lsp']      = 'asyncomplete-lsp.vim'
   let g:vimrc_packs['lsp_client-settings'] = 'lsp-settings'
+  let g:vimrc_packs['completion']          = 'asyncomplete.vim'
+  let g:vimrc_packs['completion-buffer']   = 'asyncomplete-buffer.vim'
+  let g:vimrc_packs['completion-emoji']    = 'asyncomplete-emoji.vim'
+  let g:vimrc_packs['completion-file']     = 'asyncomplete-file.vim'
+  let g:vimrc_packs['completion-lsp']      = 'asyncomplete-lsp.vim'
+  let g:vimrc_packs['completion-tags']     = 'asyncomplete-tags.vim'
 else
   " no-op, none configured.  Config in $XDG_CONFIG_HOME/vim/init_packadd.vim
   echom 'No $VIM_LSP configured'
