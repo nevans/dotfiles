@@ -23,7 +23,7 @@ cond_source_script "$CARGO_HOME/env"
 ############################################################################
 # golang                                                                   #{{{1
 if [ -d "$HOME/src/go" ]; then
-  export GOPATH=$HOME/src/go
+  export GOPATH="$HOME/src/go"
 else
   export GOPATH="$XDG_DATA_HOME"/go
 fi
@@ -33,41 +33,34 @@ cond_path_append PATH "$GOPATH/bin"
 # nodejs                                                                   #{{{1
 export NODE_REPL_HISTORY="$XDG_STATE_HOME/node/repl_history"
 export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/npmrc"
-export NPM_PACKAGES="$XDG_DATA_HOME/npm/packages"
 export NVM_DIR="$XDG_DATA_HOME/nvm"
 
-if [ -d "$NPM_PACKAGES" ]; then
-  path_prepend MANPATH "$NPM_PACKAGES/share/man"
-  path_prepend PATH    "$NPM_PACKAGES/bin"
-fi
-if [ -d "$HOME/.yarn" ]; then
-  path_prepend PATH    "$HOME/.yarn/bin"
-fi
+cond_path_prepend MANPATH "$XDG_DATA_HOME/npm/share/man"
+cond_path_prepend PATH    "$XDG_DATA_HOME/npm/bin"
+cond_path_prepend PATH    "$HOME/.yarn/bin"
 
 ############################################################################
 # Ruby                                                                     #{{{1
 
 if [ -d "$XDG_DATA_HOME/rbenv" ]; then
-  export RBENV_ROOT=$XDG_DATA_HOME/rbenv
+  export RBENV_ROOT="$XDG_DATA_HOME/rbenv"
 elif [ -d "$HOME/.rbenv" ]; then
   # fallback for non-XDG_DATA_HOME installs
-  export RBENV_ROOT=$HOME/.rbenv
+  export RBENV_ROOT="$HOME/.rbenv"
 elif [ -z "$RBENV_ROOT" ]; then
   # default to XDG, if neither have been created yet.
-  export RBENV_ROOT=$XDG_DATA_HOME/rbenv
+  export RBENV_ROOT="$XDG_DATA_HOME/rbenv"
 fi
 
-if [ -d "$RBENV_ROOT" ]; then
-  path_prepend PATH "$RBENV_ROOT/bin"
-  path_prepend PATH "$RBENV_ROOT/plugins/ruby-build/bin"
-  # n.b. "rbenv init -" will re-add the shims dir in interactive shells
-  # But this places all of the shims on PATH for non-interactive shells.
-  path_prepend PATH "$RBENV_ROOT/shims"
-fi
+path_prepend PATH "$RBENV_ROOT/bin"
+cond_path_prepend PATH "$RBENV_ROOT/plugins/ruby-build/bin"
+# n.b. "rbenv init -" will re-add the shims dir in interactive shells
+# But this places all of the shims on PATH for non-interactive shells.
+cond_path_prepend PATH "$RBENV_ROOT/shims"
 
 # TODO: also support chruby... maybe switch to it?
 
-export SOLARGRAPH_CACHE=$XDG_CACHE_HOME/solargraph
+export SOLARGRAPH_CACHE="$XDG_CACHE_HOME/solargraph"
 
 # current releases support XDG automatically:
 #   * rubygems
