@@ -58,12 +58,12 @@ path_remove () {
     case $orig in
       $dir:*)
         : removing "$dir":
-        orig=${orig#$dir:}
+        orig=${orig#"$dir":}
         ;;
       *:$dir:*)
-        : removing :"$dir": -- "${orig%%:$dir:*}"
-        updated="${updated}${orig%%:$dir:*}:"
-        orig=${orig#*:$dir:}
+        : removing :"$dir": -- "${orig%%:"$dir":*}"
+        updated="${updated}${orig%%:"$dir":*}:"
+        orig=${orig#*:"$dir":}
         ;;
       *:$dir)
         : removing :"$dir"
@@ -114,12 +114,12 @@ path_prepend () {
   # echo "$ref=$dirs prepended $dir"
 }
 
-cond_path_append ()  { if [ -d "$1" ]; then path_prepend "$1"; fi; }
-cond_path_prepend () { if [ -d "$1" ]; then path_append  "$1"; fi; }
+cond_path_prepend () { if [ -d "$2" ]; then path_prepend "$1" "$2"; fi; }
+cond_path_append ()  { if [ -d "$2" ]; then path_append  "$1" "$2"; fi; }
 
 _xdg_runtime_dir_fallback_assign () {
   if [ -n "${XDG_RUNTIME_DIR:-}" ]; then return 0; fi
-  # shellcheck disable=SC2039
+  # shellcheck disable=SC3028
   uid=${UID:-$(id -un)} # $UID is readonly in bash, but undefined in POSIX
   # try the usual systemd path...
   XDG_RUNTIME_DIR="/run/user/$uid"
