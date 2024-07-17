@@ -12,14 +12,14 @@ fi
 
 img=tmp-download-terminfo
 
-printf "Downloading terminfo into docker image ... "
+echo "Downloading terminfo into docker image ... "
 docker build \
   --pull \
-  --quiet \
   -t "$img" \
-  -f Dockerfile.terminfo . \
-  >/dev/null
-echo "✅"
+  -f Dockerfile.terminfo .
+  # --quiet \
+  # >/dev/null
+echo "Downloaded terminfo ✅"
 
 printf "Preparing container... "
 cid="$(docker create $img true)"
