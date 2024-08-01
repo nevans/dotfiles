@@ -9,6 +9,13 @@ command SideTerminal
       \| vertical resize 120
       \| setlocal winfixwidth
       \| wincmd =
+command ST SideTerminal
+
+command GG
+      \ execute "topleft vert G"
+      \| vertical resize 90
+      \| setlocal winfixwidth
+      \| wincmd =
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Custom mappings
