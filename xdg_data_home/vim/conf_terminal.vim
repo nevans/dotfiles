@@ -44,6 +44,20 @@ if !has('gui_running')
     let &termguicolors = v:true
   endif
 
+  " 0x267b => ♻ and ♻️
+  " 0x270f => ✏ and ✏️
+  " 0x27a1 => ➡ and ➡️
+  " 0x2b05 => ⬅ and ⬅️
+  " 0x2b06 => ⬆ and ⬆️
+  " 0x2b07 => ⬇ and ⬇️
+  call setcellwidths([
+        \ [0x267b, 0x267b, 2],
+        \ [0x270f, 0x270f, 2],
+        \ [0x2763, 0x2764, 2],
+        \ [0x27a1, 0x27a1, 2],
+        \ [0x2b05, 0x2b07, 2],
+        \ ])
+
 endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
