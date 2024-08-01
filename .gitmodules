@@ -449,3 +449,6 @@
 [submodule "xdg_data_home/vim/pack/compl_lint_lsp_etc/opt/asyncomplete-file.vim"]
 	path = xdg_data_home/vim/pack/compl_lint_lsp_etc/opt/asyncomplete-file.vim
 	url = https://github.com/prabirshrestha/asyncomplete-file.vim.git
+[submodule "xdg_data_home/vim/pack/new-2024-07-19/start/oscyank"]
+	path = xdg_data_home/vim/pack/new-2024-07-19/start/oscyank
+	url = https://github.com/ojroques/vim-oscyank.git

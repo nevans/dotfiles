@@ -257,6 +257,15 @@ nmap <leader>d :NERDTreeToggle<CR>
 nmap <leader>D :NERDTree %<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" maps NV       => vim-oscyank                         <Leader>c      {{{1
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Yank to system clipboard over a SSH connection, using terminal OSC52 codes
+nmap <leader>c <Plug>OSCYankOperator
+nmap <leader>cc <leader>c_
+vmap <leader>c <Plug>OSCYankVisual
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " maps N        => vim-test                            <Leader>tt     {{{1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 nmap <silent> <unique> <Leader>ttn   :TestNearest<CR>
