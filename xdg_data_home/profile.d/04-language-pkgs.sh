@@ -24,10 +24,13 @@ cond_source_script "$CARGO_HOME/env"
 # golang                                                                   #{{{1
 if [ -d "$HOME/src/go" ]; then
   export GOPATH="$HOME/src/go"
-else
-  export GOPATH="$XDG_DATA_HOME"/go
 fi
+# if [ -d "$XDG_DATA_HOME/go" ]; then
+#   export GOROOT="$HOME/src/go"
+# fi
 cond_path_append PATH "$GOPATH/bin"
+cond_path_append PATH "$XDG_DATA_HOME/go/bin"
+cond_path_append PATH "/usr/local/go/bin"
 
 ############################################################################
 # nodejs                                                                   #{{{1
